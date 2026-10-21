@@ -1,0 +1,3021 @@
+/* ============================================================
+   Orangecy — Klein Blue × White
+   Migrated surfaces: playback stage + word cards
+   Only #002FA7 / #FFFFFF. Every other tone is an alpha of these.
+   ============================================================ */
+
+:root {
+  --blue: #002FA7;
+  --white: #FFFFFF;
+
+  /* White world — blue inks */
+  --blue-60: rgba(0, 47, 167, 0.60);
+  --blue-40: rgba(0, 47, 167, 0.40);
+  --blue-30: rgba(0, 47, 167, 0.30);
+  --blue-10: rgba(0, 47, 167, 0.10);
+  --blue-08: rgba(0, 47, 167, 0.08);
+
+  /* Blue world — white inks */
+  --white-60: rgba(255, 255, 255, 0.60);
+  --white-45: rgba(255, 255, 255, 0.45);
+  --white-25: rgba(255, 255, 255, 0.25);
+  --white-10: rgba(255, 255, 255, 0.10);
+
+  --font-system: -apple-system, "SF Pro Display", "PingFang SC", "Noto Sans SC", sans-serif;
+  --r-10: 10px;
+  --r-16: 16px;
+  --r-22: 22px;
+  --dur-klein: 250ms;
+  --ease-klein: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring-klein: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* The old serif is retired. */
+  --font-serif: var(--font-system);
+  --font-sans: var(--font-system);
+  color-scheme: light;
+}
+
+/* ---------- two worlds ---------- */
+
+.world-blue,
+.app[data-world="blue"] {
+  --world-bg: var(--blue);
+  --world-ink: var(--white);
+  --world-ink-2: var(--white-60);
+  --world-ink-3: var(--white-25);
+  --world-line: var(--white-10);
+  --world-fill: var(--white-10);
+  --world-fill-hover: var(--white-25);
+  --world-focus: var(--white-60);
+  --world-primary-bg: var(--white);
+  --world-primary-ink: var(--blue);
+  --world-track: var(--white-25);
+  --world-progress: var(--white);
+  --world-shadow: none;
+}
+
+.world-white,
+.app[data-world="white"] {
+  --world-bg: var(--white);
+  --world-ink: var(--blue);
+  --world-ink-2: var(--blue-60);
+  --world-ink-3: var(--blue-30);
+  --world-line: var(--blue-10);
+  --world-fill: var(--blue-08);
+  --world-fill-hover: var(--blue-10);
+  --world-focus: var(--blue-40);
+  --world-primary-bg: var(--blue);
+  --world-primary-ink: var(--white);
+  --world-track: var(--blue-10);
+  --world-progress: var(--blue);
+  --world-shadow: 0 30px 80px var(--blue-08);
+}
+
+/* ---------- base ---------- */
+
+html,
+body {
+  font-family: var(--font-system);
+  background-color: var(--blue);
+  color: var(--white);
+}
+
+html[data-world="white"],
+html[data-world="white"] body,
+body[data-world="white"] {
+  background-color: var(--white);
+  color: var(--blue);
+}
+
+html,
+body,
+body[data-world="white"] {
+  transition:
+    background-color var(--dur-klein) var(--ease-klein),
+    color var(--dur-klein) var(--ease-klein);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+.app {
+  min-height: 100vh;
+  background-color: var(--world-bg);
+  color: var(--world-ink);
+  transition:
+    background-color var(--dur-klein) var(--ease-klein),
+    color var(--dur-klein) var(--ease-klein);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  font-weight: 500;
+}
+
+.app [data-world],
+.world-blue [data-world],
+.world-white [data-world] {
+  color-scheme: light;
+}
+
+.app :focus-visible,
+.world-blue :focus-visible,
+.world-white :focus-visible {
+  outline: 2px solid var(--world-focus);
+  outline-offset: 3px;
+}
+
+.app[data-world="blue"] ::selection {
+  background: var(--white-25);
+  color: var(--white);
+}
+
+.app[data-world="white"] ::selection {
+  background: var(--blue-10);
+  color: var(--blue);
+}
+
+.word-peek ::selection {
+  background: var(--blue-10);
+  color: var(--blue);
+}
+
+.app[data-world="blue"] ::-webkit-scrollbar-thumb,
+.world-blue ::-webkit-scrollbar-thumb {
+  background: var(--white-25);
+}
+
+.app[data-world="white"] ::-webkit-scrollbar-thumb,
+.world-white ::-webkit-scrollbar-thumb {
+  background: var(--blue-30);
+}
+
+.app[data-world="blue"],
+.world-blue {
+  scrollbar-color: var(--white-25) transparent;
+}
+
+.app[data-world="white"],
+.world-white {
+  scrollbar-color: var(--blue-30) transparent;
+}
+
+.app .view-loading {
+  color: var(--world-ink-2);
+}
+
+/* ---------- shared controls ---------- */
+
+.app .icon-button,
+.world-blue .icon-button,
+.world-white .icon-button {
+  color: var(--world-ink-2);
+  border: 0;
+  border-radius: 50%;
+  transition:
+    color var(--dur-klein) var(--ease-klein),
+    background-color var(--dur-klein) var(--ease-klein);
+}
+
+.app .icon-button:hover:not(:disabled),
+.world-blue .icon-button:hover:not(:disabled),
+.world-white .icon-button:hover:not(:disabled) {
+  color: var(--world-ink);
+  background-color: var(--world-fill);
+}
+
+.app .login-button {
+  height: 36px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--world-primary-bg);
+  color: var(--world-primary-ink);
+  box-shadow: none;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition:
+    background-color var(--dur-klein) var(--ease-klein),
+    color var(--dur-klein) var(--ease-klein),
+    transform 200ms var(--spring-klein);
+}
+
+.app .login-button:hover {
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.app .login-button:active {
+  transform: scale(0.985);
+}
+
+.app .ghost-button {
+  height: 38px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--world-fill);
+  color: var(--world-ink);
+  font-size: 11.5px;
+  font-weight: 500;
+  box-shadow: none;
+  transition:
+    background-color 200ms var(--ease-klein),
+    color 200ms var(--ease-klein),
+    transform 200ms var(--spring-klein);
+}
+
+.app .ghost-button:hover {
+  background: var(--world-fill-hover);
+  color: var(--world-ink);
+}
+
+.app .ghost-button:active {
+  transform: scale(0.985);
+}
+
+.app .ghost-button.danger:hover {
+  color: var(--world-ink);
+  background: var(--world-fill-hover);
+}
+
+.app .mini-button {
+  height: 32px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: transparent;
+  color: var(--blue-60);
+  font-size: 10px;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.app .mini-button:hover:not(:disabled) {
+  background: var(--blue-08);
+  color: var(--blue);
+}
+
+.app .mini-button.warm {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.app .mini-button.warm:hover:not(:disabled) {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.app .word-listen {
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--blue);
+  color: var(--white);
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.app .word-listen:hover {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.app .word-dismiss {
+  border: 0;
+  border-radius: var(--r-10);
+  background: transparent;
+  color: var(--blue-60);
+  font-weight: 500;
+}
+
+.app .word-dismiss:hover {
+  background: var(--blue-08);
+  color: var(--blue);
+}
+
+/* ---------- top bar ---------- */
+
+.app .topbar {
+  gap: 20px;
+  padding: 18px clamp(18px, 3.3vw, 44px);
+  border: 0;
+  background: transparent;
+  color: var(--world-ink);
+  transition: color var(--dur-klein) var(--ease-klein);
+}
+
+.app .brand {
+  gap: 10px;
+  min-width: 154px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--world-ink);
+  text-align: left;
+}
+
+.app .brand:hover .brand-text strong {
+  opacity: 0.7;
+}
+
+.app .brand-orbit {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--world-line);
+  border-radius: 50%;
+  transform: none;
+}
+
+.app .brand-orbit::before {
+  content: none;
+  display: none;
+}
+
+.app .brand-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--world-ink);
+  box-shadow: none;
+}
+
+.app .brand-text {
+  gap: 1px;
+}
+
+.app .brand-text strong {
+  color: var(--world-ink);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.app .brand-text small {
+  color: var(--world-ink-2);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.app .nav {
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.app .nav-item {
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--r-10);
+  color: var(--world-ink-2);
+  font-size: 12px;
+  font-weight: 500;
+  transition:
+    color 200ms var(--ease-klein),
+    background-color 200ms var(--ease-klein);
+}
+
+.app .nav-item:hover:not(:disabled) {
+  color: var(--world-ink);
+  background: transparent;
+}
+
+.app .nav-item.is-active {
+  color: var(--world-ink);
+  background: transparent;
+  box-shadow: none;
+}
+
+.app .nav-live {
+  width: 4px;
+  height: 4px;
+  background: var(--world-ink);
+  box-shadow: none;
+}
+
+.app .nav-badge {
+  min-width: 16px;
+  height: 16px;
+  background: var(--world-primary-bg);
+  color: var(--world-primary-ink);
+  box-shadow: none;
+  font-size: 8.5px;
+  font-weight: 500;
+}
+
+.app .icon-badge {
+  top: -1px;
+  right: -1px;
+  background: var(--world-primary-bg);
+  color: var(--world-primary-ink);
+  box-shadow: none;
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.app .topbar-right {
+  gap: 2px;
+}
+
+.app .avatar {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--world-line);
+  background: var(--world-fill);
+  color: var(--world-ink);
+  font-weight: 500;
+}
+
+.app .status-dot {
+  background: var(--world-ink-3);
+}
+
+.app .status-dot.is-live {
+  background: var(--world-ink);
+  box-shadow: none;
+}
+
+.app .platform-chip,
+.app .check-chip {
+  border: 0;
+  background: var(--world-fill);
+  color: var(--world-ink-2);
+  backdrop-filter: none;
+}
+
+.app .check-chip.is-complete {
+  color: var(--world-ink);
+  background: var(--world-fill);
+}
+
+.app .cards-trigger.is-on {
+  color: var(--world-ink);
+  background: var(--world-fill);
+  border: 0;
+}
+
+/* ---------- playback stage ---------- */
+
+.app[data-world="blue"] .stage {
+  position: relative;
+  z-index: 1;
+  grid-template-columns: minmax(320px, 0.92fr) minmax(400px, 1.08fr);
+  align-items: center;
+  gap: clamp(38px, 6vw, 104px);
+  width: min(1320px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 108px clamp(24px, 5vw, 72px) 128px;
+}
+
+.app[data-world="blue"] .art-column {
+  justify-self: end;
+  width: 100%;
+  max-width: 500px;
+}
+
+.app[data-world="blue"] .cover-outer {
+  width: min(100%, 430px, 44vh);
+}
+
+.app[data-world="blue"] .cover-glow,
+.app[data-world="blue"] .cover-ring,
+.app[data-world="blue"] .cover-reflection,
+.app[data-world="blue"] .cover-veil {
+  display: none;
+}
+
+.app[data-world="blue"] .cover-float {
+  animation: none;
+}
+
+.app[data-world="blue"] .cover-button {
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--white-10);
+  border-radius: var(--r-16);
+  overflow: hidden;
+  background: var(--blue);
+  box-shadow: none;
+  transition:
+    border-color 250ms var(--ease-klein),
+    transform 250ms var(--spring-klein);
+}
+
+.app[data-world="blue"] .cover-button:hover {
+  border-color: var(--white-25);
+  box-shadow: none;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.006);
+}
+
+.app[data-world="blue"] .cover-art,
+.app[data-world="blue"] .cover-art-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--r-16) - 1px);
+}
+
+.app[data-world="blue"] .cover-art-placeholder {
+  background: var(--blue);
+}
+
+.app[data-world="blue"] .cover-fallback {
+  width: 100%;
+  height: 100%;
+  background: var(--blue);
+  color: var(--white);
+}
+
+.app[data-world="blue"] .cover-fallback-mark {
+  font-family: var(--font-system);
+  font-size: clamp(82px, 10vw, 126px);
+  font-weight: 300;
+  color: var(--white-60);
+}
+
+.app[data-world="blue"] .cover-play {
+  width: 58px;
+  height: 58px;
+  border: 0;
+  background: var(--white);
+  color: var(--blue);
+  backdrop-filter: none;
+  box-shadow: none;
+  opacity: 0;
+  transform: translate(-50%, -46%) scale(0.94);
+  transition:
+    opacity 200ms var(--ease-klein),
+    transform 250ms var(--spring-klein);
+}
+
+.app[data-world="blue"] .cover-button:hover .cover-play,
+.app[data-world="blue"] .cover-button:focus-visible .cover-play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.app[data-world="blue"] .cover-play .spinner {
+  border-color: var(--blue-30);
+  border-top-color: var(--blue);
+}
+
+.app[data-world="blue"] .cover-expand {
+  right: 14px;
+  bottom: 14px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--white-10);
+  background: var(--white-10);
+  color: var(--white);
+  backdrop-filter: none;
+  border-radius: 50%;
+}
+
+.app[data-world="blue"] .cover-expand:hover {
+  border-color: transparent;
+  background: var(--white);
+  color: var(--blue);
+}
+
+.app[data-world="blue"] .trial-tag {
+  border: 0;
+  background: var(--white);
+  color: var(--blue);
+  backdrop-filter: none;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .track-meta {
+  max-width: 470px;
+  margin-top: 28px;
+}
+
+.app[data-world="blue"] .kicker {
+  margin-bottom: 10px;
+  color: var(--white-60);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+.app[data-world="blue"] .kicker-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--white);
+  box-shadow: none;
+}
+
+.app[data-world="blue"] .track-title {
+  max-width: 480px;
+  color: var(--white);
+  font-size: clamp(38px, 4vw, 58px);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-shadow: none;
+}
+
+.app[data-world="blue"] .track-sub {
+  margin-top: 12px;
+  color: var(--white-60);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.app[data-world="blue"] .track-album {
+  color: var(--white-45);
+}
+
+.app[data-world="blue"] .track-badges,
+.app[data-world="blue"] .check-strip {
+  display: none;
+}
+
+.app[data-world="blue"] .lyrics-panel {
+  justify-self: start;
+  width: 100%;
+  max-width: 650px;
+  height: min(68vh, 650px);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.app[data-world="blue"] .lyrics-head {
+  align-items: center;
+  gap: 14px;
+  padding: 0 4px 14px;
+}
+
+.app[data-world="blue"] .lyrics-head-left {
+  gap: 7px;
+}
+
+.app[data-world="blue"] .lyrics-title {
+  gap: 8px;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.app[data-world="blue"] .lyrics-title em {
+  color: var(--white-25);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .lyrics-live i {
+  width: 2px;
+  background: var(--white);
+  opacity: 0.8;
+}
+
+.app[data-world="blue"] .lyrics-hint {
+  color: var(--white-25);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .wordbook-pill {
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--white-60);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .wordbook-pill:hover {
+  color: var(--white);
+  border: 0;
+}
+
+.app[data-world="blue"] .wordbook-pill.has-words {
+  color: var(--white);
+  border: 0;
+  background: transparent;
+}
+
+.app[data-world="blue"] .lyrics-scroll {
+  padding: 0 4px 84px;
+  scrollbar-width: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.app[data-world="blue"] .lyrics-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.app[data-world="blue"] .lyrics-list {
+  gap: 2px;
+  padding: 25% 0 46%;
+}
+
+.app[data-world="blue"] .lyric-line {
+  gap: 16px;
+  padding: 10px 6px;
+  border-radius: var(--r-10);
+  color: var(--white-25);
+  transition:
+    color 250ms var(--ease-klein),
+    background-color 250ms var(--ease-klein);
+}
+
+.app[data-world="blue"] .lyric-line:hover {
+  color: var(--white-60);
+}
+
+.app[data-world="blue"] .lyric-line.is-active {
+  color: var(--white);
+  transform: none;
+}
+
+.app[data-world="blue"] .lyric-line.is-active:hover {
+  background: transparent;
+}
+
+.app[data-world="blue"] .lyric-time {
+  flex-basis: 32px;
+  padding-top: 7px;
+  color: var(--white-25);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .lyric-line.is-active .lyric-time {
+  color: var(--white-60);
+}
+
+.app[data-world="blue"] .lyric-text {
+  color: inherit;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  text-shadow: none;
+  transition:
+    font-size 250ms var(--ease-klein),
+    color 250ms var(--ease-klein),
+    letter-spacing 250ms var(--ease-klein);
+}
+
+.app[data-world="blue"] .lyric-line.is-active .lyric-text {
+  color: var(--white);
+  font-size: clamp(24px, 2.2vw, 31px);
+  font-weight: 300;
+  line-height: 1.38;
+  letter-spacing: -0.028em;
+  text-shadow: none;
+}
+
+.app[data-world="blue"] .lyric-translation {
+  color: var(--white-25);
+  font-size: 11.5px;
+  font-weight: 400;
+}
+
+.app[data-world="blue"] .lyric-line.is-active .lyric-translation {
+  color: var(--white-45);
+}
+
+.app[data-world="blue"] .lyric-line-progress {
+  left: 6px;
+  right: 6px;
+  width: var(--line-progress, 0%);
+  height: 1px;
+  border-radius: 0;
+  background: var(--white);
+  box-shadow: none;
+}
+
+.app[data-world="blue"] .lyric-word {
+  border-radius: 6px;
+  color: inherit;
+  transition:
+    color 250ms var(--ease-klein),
+    opacity 250ms var(--ease-klein),
+    transform 220ms var(--ease-klein),
+    background-color 220ms var(--ease-klein),
+    text-shadow 250ms var(--ease-klein);
+}
+
+.app[data-world="blue"] .lyric-word::before {
+  content: none;
+  display: none;
+}
+
+.app[data-world="blue"] .lyric-word.is-waiting {
+  color: var(--white-25);
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.app[data-world="blue"] .lyric-word.is-sung {
+  color: var(--white-45);
+  opacity: 1;
+  filter: none;
+  transform: none;
+  text-shadow: none;
+}
+
+.app[data-world="blue"] .lyric-word.is-singing {
+  color: var(--white);
+  opacity: 1;
+  filter: none;
+  transform: scale(1.02);
+  text-shadow:
+    0 0 10px var(--white-60),
+    0 0 28px var(--white-25),
+    0 0 64px var(--white-10);
+}
+
+.app[data-world="blue"] .lyric-word.is-target {
+  color: var(--white-60);
+  border-bottom: 1px solid var(--white-25);
+  cursor: pointer;
+}
+
+.app[data-world="blue"] .lyric-word.is-target.is-waiting {
+  color: var(--white-25);
+}
+
+.app[data-world="blue"] .lyric-word.is-target.is-sung {
+  color: var(--white-45);
+}
+
+.app[data-world="blue"] .lyric-word.is-target.is-singing {
+  color: var(--white);
+}
+
+.app[data-world="blue"] .lyric-line.is-active .lyric-word.is-focus {
+  background: transparent;
+  border-bottom-color: var(--white-25);
+}
+
+.app[data-world="blue"] .lyric-line:not(.is-active) .lyric-word {
+  color: var(--white-25);
+  border-bottom-color: var(--white-10);
+  text-shadow: none;
+}
+
+.app[data-world="blue"] .lyric-line:not(.is-active):hover .lyric-word.is-target {
+  color: var(--white-60);
+  border-bottom-color: var(--white-25);
+}
+
+.app[data-world="blue"] .lyric-word.is-target:hover {
+  background: var(--white-10);
+  border-bottom-color: var(--white-60);
+}
+
+.app[data-world="blue"] .lyric-word-note {
+  display: none;
+}
+
+.app[data-world="blue"] .lyrics-foot {
+  gap: 14px;
+  padding: 14px 4px 16px;
+  border-top: 1px solid var(--white-10);
+  color: var(--white-25);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .lyrics-foot-right {
+  color: var(--white-25);
+}
+
+.app[data-world="blue"] .lyrics-progress {
+  left: 4px;
+  right: 4px;
+  height: 2px;
+  background: var(--white-25);
+}
+
+.app[data-world="blue"] .lyrics-progress i {
+  background: var(--white);
+  box-shadow: none;
+}
+
+.app[data-world="blue"] .lyrics-skeleton span {
+  background: var(--white-10);
+  background-image: none;
+  animation: klein-pulse 1.8s ease-in-out infinite;
+}
+
+.app[data-world="blue"] .lyrics-empty {
+  color: var(--white-25);
+}
+
+.app[data-world="blue"] .lyrics-empty p {
+  color: var(--white-60);
+}
+
+.app[data-world="blue"] .lyrics-empty span {
+  color: var(--white-25);
+}
+
+.app[data-world="blue"] .lyrics-empty .ghost-button {
+  margin-top: 16px;
+}
+
+@keyframes klein-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---------- player bar ---------- */
+
+.app[data-world="blue"] .playerbar {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 35;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(230px, 1fr);
+  gap: 18px;
+  width: 100%;
+  min-height: 78px;
+  padding: 15px clamp(18px, 3.2vw, 40px);
+  border: 0;
+  border-top: 1px solid var(--white-10);
+  border-radius: 0;
+  background: var(--blue);
+  backdrop-filter: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.app[data-world="blue"] .player-progress {
+  top: 0;
+  left: clamp(18px, 3.2vw, 40px);
+  right: clamp(18px, 3.2vw, 40px);
+  height: 16px;
+}
+
+.range-rail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--world-track);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.range-rail i {
+  display: block;
+  width: var(--played, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--world-progress);
+}
+
+.app[data-world="blue"] input[type="range"] {
+  position: relative;
+  z-index: 1;
+  height: 16px;
+  background: transparent;
+}
+
+.app[data-world="blue"] input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+.app[data-world="blue"] input[type="range"]::-moz-range-track {
+  height: 2px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+.app[data-world="blue"] input[type="range"]::-moz-range-progress {
+  height: 2px;
+  background: transparent;
+}
+
+.app[data-world="blue"] input[type="range"]::-webkit-slider-thumb {
+  width: 10px;
+  height: 10px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: none;
+  opacity: 0;
+  transition: opacity 180ms var(--ease-klein);
+}
+
+.app[data-world="blue"] input[type="range"]::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: none;
+  opacity: 0;
+}
+
+.app[data-world="blue"] .playerbar:hover input[type="range"]::-webkit-slider-thumb,
+.app[data-world="blue"] input[type="range"]:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.app[data-world="blue"] .playerbar:hover input[type="range"]::-moz-range-thumb,
+.app[data-world="blue"] input[type="range"]:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+
+.app[data-world="blue"] .player-now {
+  gap: 12px;
+}
+
+.app[data-world="blue"] .mini-cover {
+  flex-basis: 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--white-10);
+  border-radius: var(--r-10);
+  background: var(--white-10);
+  color: var(--white-60);
+  font-family: var(--font-system);
+  font-size: 17px;
+  font-weight: 300;
+}
+
+.app[data-world="blue"] .mini-meta {
+  gap: 3px;
+}
+
+.app[data-world="blue"] .mini-meta strong {
+  color: var(--white);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .mini-meta small {
+  color: var(--white-60);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .player-controls {
+  gap: 12px;
+}
+
+.app[data-world="blue"] .player-controls .control.ghost {
+  display: none;
+}
+
+.app[data-world="blue"] .control {
+  width: 34px;
+  height: 34px;
+  color: var(--white-60);
+  transition:
+    color 200ms var(--ease-klein),
+    background-color 200ms var(--ease-klein),
+    transform 200ms var(--spring-klein);
+}
+
+.app[data-world="blue"] .control:hover:not(:disabled) {
+  color: var(--white);
+  background: transparent;
+}
+
+.app[data-world="blue"] .control:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.app[data-world="blue"] .control:disabled {
+  opacity: 0.25;
+}
+
+.app[data-world="blue"] .play-button {
+  width: 46px;
+  height: 46px;
+  background: var(--white);
+  color: var(--blue);
+  box-shadow: none;
+  transition:
+    transform 220ms var(--spring-klein),
+    background-color var(--dur-klein) var(--ease-klein);
+}
+
+.app[data-world="blue"] .play-button:hover:not(:disabled) {
+  background: var(--white);
+  box-shadow: none;
+  transform: scale(1.045);
+}
+
+.app[data-world="blue"] .play-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.app[data-world="blue"] .play-button:disabled {
+  opacity: 0.35;
+}
+
+.app[data-world="blue"] .spinner {
+  border-color: var(--blue-30);
+  border-top-color: var(--blue);
+}
+
+.app[data-world="blue"] .spinner.dark {
+  border-color: var(--blue-30);
+  border-top-color: var(--blue);
+}
+
+.app[data-world="blue"] .player-side {
+  gap: 14px;
+}
+
+.app[data-world="blue"] .player-time {
+  color: var(--white-60);
+  font-size: 10.5px;
+  font-weight: 400;
+}
+
+.app[data-world="blue"] .volume {
+  width: 92px;
+}
+
+.app[data-world="blue"] .volume .control {
+  width: 28px;
+  height: 28px;
+}
+
+.app[data-world="blue"] .volume input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--white-25);
+}
+
+.app[data-world="blue"] .volume input[type="range"]::-moz-range-track {
+  height: 2px;
+  background: var(--white-25);
+}
+
+.app[data-world="blue"] .queue-chip {
+  height: 30px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: transparent;
+  color: var(--white-60);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .queue-chip:hover {
+  color: var(--white);
+  background: var(--white-10);
+}
+
+/* ---------- white word card (on the blue stage) ---------- */
+
+.word-peek.world-white,
+.word-peek {
+  --world-bg: var(--white);
+  --world-ink: var(--blue);
+  --world-ink-2: var(--blue-60);
+  --world-ink-3: var(--blue-30);
+  --world-line: var(--blue-10);
+  --world-fill: var(--blue-08);
+  --world-fill-hover: var(--blue-10);
+  --world-focus: var(--blue-40);
+  --world-primary-bg: var(--blue);
+  --world-primary-ink: var(--white);
+  --world-track: var(--blue-10);
+  --world-progress: var(--blue);
+
+  left: 50%;
+  right: auto;
+  bottom: 102px;
+  z-index: 45;
+  width: min(540px, calc(100vw - 32px));
+  max-height: min(68vh, 620px);
+  margin: 0;
+  padding: 24px 26px 22px;
+  border: 0;
+  border-radius: var(--r-22);
+  background: var(--white);
+  color: var(--blue);
+  box-shadow: 0 28px 72px var(--blue-08);
+  backdrop-filter: none;
+  transform: translateX(-50%);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.word-peek::-webkit-scrollbar {
+  display: none;
+}
+
+.word-peek .word-peek-head {
+  gap: 14px;
+}
+
+.word-peek .word-peek-kicker {
+  margin-bottom: 5px;
+  color: var(--blue-60);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+.word-peek h3 {
+  color: var(--blue);
+  font-family: var(--font-system);
+  font-size: clamp(34px, 3.4vw, 46px);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+.word-peek .word-phonetic {
+  margin-top: 5px;
+  color: var(--blue-60);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.word-peek .word-peek-actions {
+  gap: 2px;
+}
+
+.word-peek .word-senses {
+  gap: 6px;
+  margin-top: 18px;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.word-peek .word-synonyms {
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.word-peek .word-synonyms > span {
+  margin-right: 2px;
+  color: var(--blue-30);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.word-peek .word-synonyms em {
+  padding: 3px 7px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--blue-08);
+  color: var(--blue-60);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.word-peek .word-example {
+  margin-top: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.word-peek .word-example p {
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.word-peek .word-example small {
+  margin-top: 4px;
+  color: var(--blue-60);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.word-peek .word-source {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--blue-10);
+}
+
+.word-peek .word-source span {
+  color: var(--blue-30);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.word-peek .word-source p {
+  margin-top: 6px;
+  color: var(--blue-60);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.word-peek .word-peek-foot {
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.word-peek .word-listen {
+  height: 38px;
+  border-radius: var(--r-10);
+  background: var(--blue);
+  color: var(--white);
+  box-shadow: none;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.word-peek .word-listen:hover {
+  background: var(--blue);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.word-peek .word-dismiss {
+  height: 38px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: transparent;
+  color: var(--blue-60);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+/* ---------- immersive playback ---------- */
+
+.immersive.world-blue {
+  --world-bg: var(--blue);
+  --world-ink: var(--white);
+  --world-ink-2: var(--white-60);
+  --world-ink-3: var(--white-25);
+  --world-line: var(--white-10);
+  --world-fill: var(--white-10);
+  --world-fill-hover: var(--white-25);
+  --world-focus: var(--white-60);
+  --world-primary-bg: var(--white);
+  --world-primary-ink: var(--blue);
+  --world-track: var(--white-25);
+  --world-progress: var(--white);
+
+  padding: 64px clamp(20px, 5vw, 64px) 38px;
+  background: var(--blue);
+  color: var(--white);
+}
+
+.immersive .immersive-bg,
+.immersive::after {
+  display: none;
+  content: none;
+}
+
+.immersive .immersive-close {
+  top: 24px;
+  right: 24px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--white-10);
+  background: var(--white-10);
+  color: var(--white);
+  backdrop-filter: none;
+}
+
+.immersive .immersive-close:hover {
+  background: var(--white-25);
+  color: var(--white);
+}
+
+.immersive .immersive-content {
+  gap: 12px;
+}
+
+.immersive .immersive-art {
+  width: min(46vh, 420px);
+  border: 1px solid var(--white-10);
+  border-radius: var(--r-16);
+  background: var(--blue);
+  box-shadow: none;
+}
+
+.immersive .immersive-art-fallback {
+  color: var(--white-60);
+  font-family: var(--font-system);
+  font-size: 110px;
+  font-weight: 300;
+}
+
+.immersive .immersive-meta {
+  margin-top: 10px;
+}
+
+.immersive .kicker {
+  color: var(--white-60);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+.immersive .kicker-dot {
+  background: var(--white);
+  box-shadow: none;
+}
+
+.immersive .immersive-meta h2 {
+  color: var(--white);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+.immersive .immersive-meta > p:last-child {
+  color: var(--white-60);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.immersive .immersive-lyric {
+  min-height: 64px;
+  max-width: min(720px, 88vw);
+}
+
+.immersive .immersive-lyric > p {
+  color: var(--white);
+  font-size: clamp(19px, 2vw, 26px);
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+  text-shadow: none;
+}
+
+.immersive .immersive-lyric > span {
+  color: var(--white-45);
+  font-size: 11.5px;
+  font-weight: 400;
+}
+
+.immersive .lyric-word {
+  border-radius: 6px;
+}
+
+.immersive .lyric-word::before {
+  content: none;
+  display: none;
+}
+
+.immersive .lyric-word.is-waiting {
+  color: var(--white-25);
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.immersive .lyric-word.is-sung {
+  color: var(--white-45);
+  opacity: 1;
+  filter: none;
+  transform: none;
+  text-shadow: none;
+}
+
+.immersive .lyric-word.is-singing {
+  color: var(--white);
+  opacity: 1;
+  filter: none;
+  transform: scale(1.02);
+  text-shadow:
+    0 0 10px var(--white-60),
+    0 0 28px var(--white-25),
+    0 0 64px var(--white-10);
+}
+
+.immersive .lyric-word.is-target {
+  color: var(--white-60);
+  border-bottom: 1px solid var(--white-25);
+  text-shadow: none;
+}
+
+.immersive .lyric-word.is-target.is-waiting {
+  color: var(--white-25);
+}
+
+.immersive .lyric-word.is-target.is-sung {
+  color: var(--white-45);
+}
+
+.immersive .lyric-word.is-target.is-singing {
+  color: var(--white);
+}
+
+.immersive .lyric-word.is-focus {
+  background: transparent;
+}
+
+.immersive .immersive-word-note {
+  display: none;
+}
+
+.immersive .immersive-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(560px, 76vw);
+  margin-top: 8px;
+}
+
+.immersive .immersive-progress > span {
+  color: var(--white-60);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.immersive .range-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  height: 16px;
+}
+
+.immersive .range-shell input[type="range"] {
+  position: relative;
+  z-index: 1;
+  height: 16px;
+  background: transparent;
+}
+
+.immersive .range-rail,
+.immersive .range-rail i {
+  color: var(--white);
+}
+
+.immersive .range-shell input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: transparent;
+}
+
+.immersive .range-shell input[type="range"]::-moz-range-track {
+  height: 2px;
+  background: transparent;
+}
+
+.immersive .range-shell input[type="range"]::-webkit-slider-thumb {
+  width: 10px;
+  height: 10px;
+  margin-top: -4px;
+  border: 0;
+  background: var(--white);
+  box-shadow: none;
+}
+
+.immersive .range-shell input[type="range"]::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  background: var(--white);
+  box-shadow: none;
+}
+
+.immersive .range-rail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--white-25);
+  transform: translateY(-50%);
+}
+
+.immersive .range-rail i {
+  display: block;
+  width: var(--played, 0%);
+  height: 100%;
+  background: var(--white);
+}
+
+.immersive .immersive-controls {
+  gap: 18px;
+  margin-top: 6px;
+}
+
+.immersive .immersive-play {
+  width: 54px;
+  height: 54px;
+  background: var(--white);
+  color: var(--blue);
+  box-shadow: none;
+}
+
+.immersive .immersive-play:hover {
+  transform: scale(1.045);
+}
+
+.immersive .immersive-hint {
+  color: var(--white-60);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.immersive .immersive-hint:hover {
+  color: var(--white);
+}
+
+/* ---------- splash + toasts ---------- */
+
+.app .splash {
+  background: var(--blue);
+}
+
+.app .splash-orbit {
+  border: 1px solid var(--white-10);
+  border-top-color: var(--white);
+}
+
+.app .splash-core {
+  color: var(--white);
+  font-family: var(--font-system);
+  font-weight: 300;
+}
+
+.app .splash p {
+  color: var(--white-60);
+  font-weight: 500;
+}
+
+.app .splash small {
+  color: var(--white-25);
+  font-weight: 400;
+}
+
+.app .toasts {
+  bottom: 102px;
+}
+
+.app[data-world="blue"] .toast {
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--white);
+  color: var(--blue);
+  box-shadow: 0 18px 50px var(--blue-08);
+  backdrop-filter: none;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.app[data-world="blue"] .toast svg,
+.app[data-world="blue"] .toast.is-success svg,
+.app[data-world="blue"] .toast.is-error svg {
+  color: var(--blue);
+}
+
+.app[data-world="white"] .toast {
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--blue);
+  color: var(--white);
+  box-shadow: 0 18px 50px var(--blue-08);
+  backdrop-filter: none;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .toast svg,
+.app[data-world="white"] .toast.is-success svg,
+.app[data-world="white"] .toast.is-error svg {
+  color: var(--white);
+}
+
+/* ============================================================
+   Word cards — pure white world
+   ============================================================ */
+
+.app[data-world="white"] .cards-stage {
+  position: relative;
+  z-index: 1;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(480px, 1.2fr);
+  align-items: start;
+  gap: clamp(38px, 6vw, 100px);
+  width: min(1320px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 108px clamp(24px, 5vw, 72px) 76px;
+}
+
+.app[data-world="white"] .cards-stage.cards-empty-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app[data-world="white"] .cards-intro {
+  min-width: 0;
+  padding-top: 6px;
+}
+
+.app[data-world="white"] .kicker {
+  margin-bottom: 15px;
+  color: var(--blue-60);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+.app[data-world="white"] .kicker-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--blue);
+  box-shadow: none;
+}
+
+.app[data-world="white"] .cards-intro h1 {
+  margin: 0;
+  color: var(--blue);
+  font-size: clamp(42px, 4.6vw, 64px);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.app[data-world="white"] .cards-lede {
+  max-width: 390px;
+  margin: 22px 0 0;
+  color: var(--blue-60);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.app[data-world="white"] .cards-song {
+  gap: 12px;
+  margin-top: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.app[data-world="white"] .cards-song-cover {
+  flex-basis: 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-10);
+  background: var(--blue-08);
+  color: var(--blue-60);
+}
+
+.app[data-world="white"] .cards-song strong {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-song small {
+  color: var(--blue-60);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-song-count {
+  color: var(--blue-30);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .card-play-settings {
+  gap: 6px;
+  margin-top: 22px;
+}
+
+.app[data-world="white"] .autoplay-toggle {
+  gap: 9px;
+  margin-top: 0;
+  padding: 2px 0;
+  color: var(--blue-60);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .autoplay-toggle em {
+  margin-left: 2px;
+  color: var(--blue-30);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .autoplay-toggle.is-on {
+  color: var(--blue);
+}
+
+.app[data-world="white"] .toggle-track {
+  width: 30px;
+  height: 17px;
+  background: var(--blue-10);
+  transition: background-color 220ms var(--ease-klein);
+}
+
+.app[data-world="white"] .toggle-thumb {
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  background: var(--blue-60);
+  transition:
+    transform 220ms var(--spring-klein),
+    background-color 220ms var(--ease-klein);
+}
+
+.app[data-world="white"] .autoplay-toggle.is-on .toggle-track {
+  background: var(--blue);
+}
+
+.app[data-world="white"] .autoplay-toggle.is-on .toggle-thumb {
+  transform: translateX(13px);
+  background: var(--white);
+}
+
+.app[data-world="white"] .daily-limit {
+  gap: 8px;
+  margin-top: 16px;
+  color: var(--blue-60);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.app[data-world="white"] .daily-limit select {
+  height: 28px;
+  padding: 0 24px 0 9px;
+  border: 0;
+  border-radius: var(--r-10);
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--blue-08);
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 500;
+  outline: none;
+}
+
+.app[data-world="white"] .select-chevron {
+  position: absolute;
+  right: 7px;
+  color: var(--blue-60);
+  pointer-events: none;
+}
+
+.app[data-world="white"] .daily-limit em {
+  color: var(--blue-30);
+  font-size: 8.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-wordlist {
+  gap: 2px;
+  max-height: 248px;
+  margin-top: 30px;
+  padding-right: 4px;
+}
+
+.app[data-world="white"] .cards-wordlist .search-section-label {
+  padding: 0 0 8px;
+  color: var(--blue-30);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  background: var(--white);
+}
+
+.app[data-world="white"] .cards-word {
+  gap: 9px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--r-10);
+  color: var(--blue-60);
+  transition:
+    color 200ms var(--ease-klein),
+    background-color 200ms var(--ease-klein);
+}
+
+.app[data-world="white"] .cards-word:hover {
+  color: var(--blue);
+  background: var(--blue-08);
+}
+
+.app[data-world="white"] .cards-word span {
+  width: 20px;
+  color: var(--blue-30);
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-word strong {
+  color: var(--blue);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-word em {
+  color: var(--blue-30);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-word.is-done {
+  opacity: 0.3;
+}
+
+.app[data-world="white"] .cards-word.is-active {
+  color: var(--blue);
+  background: var(--blue-08);
+}
+
+.app[data-world="white"] .cards-word.is-active span {
+  color: var(--blue-60);
+}
+
+.app[data-world="white"] .card-stage {
+  justify-self: start;
+  width: 100%;
+  max-width: 620px;
+  min-width: 0;
+}
+
+.app[data-world="white"] .card-stack {
+  position: relative;
+}
+
+.app[data-world="white"] .stack-card {
+  display: none;
+}
+
+.app[data-world="white"] .word-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 620px;
+  max-height: calc(100vh - 190px);
+  padding: 32px 34px 28px;
+  overflow-y: auto;
+  border: 0;
+  border-radius: var(--r-22);
+  background: var(--white);
+  color: var(--blue);
+  box-shadow: 0 30px 80px var(--blue-08);
+  scrollbar-width: none;
+}
+
+.app[data-world="white"] .word-card::-webkit-scrollbar {
+  display: none;
+}
+
+.app[data-world="white"] .word-card::before {
+  content: none;
+  display: none;
+}
+
+.app[data-world="white"] .word-card-head {
+  gap: 10px;
+}
+
+.app[data-world="white"] .card-index {
+  color: var(--blue-60);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.app[data-world="white"] .card-index i {
+  color: var(--blue-30);
+  font-weight: 400;
+}
+
+.app[data-world="white"] .card-wordbook {
+  margin-left: auto;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--blue-08);
+  color: var(--blue-60);
+  font-size: 8.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .card-wordbook.is-review {
+  border: 0;
+  background: var(--blue-08);
+  color: var(--blue-60);
+}
+
+.app[data-world="white"] .card-last-due {
+  margin-top: 12px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--blue-08);
+  color: var(--blue-60);
+  font-size: 8.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .word-card-title {
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.app[data-world="white"] .word-card-title h2 {
+  color: var(--blue);
+  font-family: var(--font-system);
+  font-size: clamp(58px, 6.2vw, 84px);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  text-shadow: none;
+}
+
+.app[data-world="white"] .word-phonetic {
+  color: var(--blue-60);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .word-card-senses {
+  gap: 6px;
+  margin-top: 20px;
+  color: var(--blue);
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.app[data-world="white"] .word-synonyms {
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.app[data-world="white"] .word-synonyms > span {
+  color: var(--blue-30);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.app[data-world="white"] .word-synonyms em {
+  padding: 3px 7px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--blue-08);
+  color: var(--blue-60);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .word-example,
+.app[data-world="white"] .card-example {
+  margin-top: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.app[data-world="white"] .word-example p {
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.app[data-world="white"] .word-example small {
+  color: var(--blue-60);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .word-exam {
+  margin-top: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.app[data-world="white"] .word-exam span {
+  color: var(--blue-30);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.app[data-world="white"] .word-exam p {
+  margin-top: 6px;
+  color: var(--blue-60);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.app[data-world="white"] .card-lyric {
+  margin-top: 26px;
+  padding: 18px 18px 16px;
+  overflow: visible;
+  border: 0;
+  border-radius: var(--r-16);
+  background: var(--blue-08);
+  box-shadow: none;
+}
+
+.app[data-world="white"] .card-lyric::before {
+  content: none;
+  display: none;
+}
+
+.app[data-world="white"] .card-lyric-label {
+  color: var(--blue-60);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .card-lyric-label b {
+  color: var(--blue);
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .card-lyric-wave i {
+  background: var(--blue);
+}
+
+.app[data-world="white"] .card-lyric > p {
+  color: var(--blue);
+  font-size: clamp(18px, 1.7vw, 22px);
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-shadow: none;
+}
+
+.app[data-world="white"] .card-lyric mark {
+  color: var(--blue);
+  background: transparent;
+  border-bottom: 1px solid var(--blue-40);
+  font-weight: 500;
+  text-shadow: none;
+  animation: none;
+}
+
+.app[data-world="white"] .card-lyric-actions {
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.app[data-world="white"] .card-lyric.is-empty-source {
+  margin-top: 26px;
+  padding: 18px;
+}
+
+.app[data-world="white"] .word-card-actions {
+  gap: 8px;
+  margin-top: 28px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.app[data-world="white"] .rate {
+  height: 52px;
+  gap: 7px;
+  border: 0;
+  border-radius: var(--r-10);
+  background: var(--blue-08);
+  color: var(--blue);
+  font-size: 11.5px;
+  font-weight: 500;
+  transition:
+    transform 180ms var(--spring-klein),
+    background-color 200ms var(--ease-klein),
+    opacity 200ms var(--ease-klein);
+}
+
+.app[data-world="white"] .rate:hover:not(:disabled) {
+  background: var(--blue-10);
+  color: var(--blue);
+  transform: translateY(-1px);
+}
+
+.app[data-world="white"] .rate:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.app[data-world="white"] .rate:disabled {
+  opacity: 0.3;
+}
+
+.app[data-world="white"] .rate .rate-icon {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  background: transparent;
+  opacity: 1;
+}
+
+.app[data-world="white"] .rate kbd {
+  top: 7px;
+  right: 8px;
+  color: var(--blue-30);
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .rate-days {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--blue-30);
+  font-size: 8.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .rate-again:hover,
+.app[data-world="white"] .rate-hard:hover,
+.app[data-world="white"] .rate-good:hover {
+  color: var(--blue);
+  background: var(--blue-10);
+}
+
+.app[data-world="white"] .card-rated-note {
+  margin-top: 10px;
+  color: var(--blue-30);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .card-toolbar {
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.app[data-world="white"] .card-toolbar .icon-button:disabled {
+  opacity: 0.25;
+}
+
+.app[data-world="white"] .card-dots {
+  gap: 6px;
+}
+
+.app[data-world="white"] .card-dots span {
+  width: 4px;
+  height: 4px;
+  background: var(--blue-10);
+  transition:
+    width 200ms var(--ease-klein),
+    background-color 200ms var(--ease-klein);
+}
+
+.app[data-world="white"] .card-dots span.is-active {
+  width: 16px;
+  background: var(--blue);
+}
+
+.app[data-world="white"] .cards-complete {
+  min-height: 620px;
+  padding: 34px;
+  border: 0;
+  border-radius: var(--r-22);
+  background: var(--white);
+  box-shadow: 0 30px 80px var(--blue-08);
+  color: var(--blue);
+}
+
+.app[data-world="white"] .cards-complete > svg {
+  color: var(--blue);
+}
+
+.app[data-world="white"] .cards-complete h2 {
+  color: var(--blue);
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+.app[data-world="white"] .cards-complete p {
+  color: var(--blue-60);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-complete small {
+  color: var(--blue-30);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-complete-actions {
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.app[data-world="white"] .cards-empty {
+  color: var(--blue-60);
+}
+
+.app[data-world="white"] .cards-empty svg {
+  color: var(--blue);
+}
+
+.app[data-world="white"] .cards-empty h2 {
+  color: var(--blue);
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+.app[data-world="white"] .cards-empty p {
+  color: var(--blue-60);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.app[data-world="white"] .cards-empty .login-button {
+  margin-top: 14px;
+}
+
+.app[data-world="white"] .mobile-rate-bar {
+  display: none;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1180px) {
+  .app[data-world="blue"] .stage {
+    grid-template-columns: minmax(300px, 0.86fr) minmax(360px, 1.14fr);
+    gap: 40px;
+  }
+
+  .app[data-world="blue"] .cover-outer {
+    width: min(100%, 356px, 39vh);
+  }
+
+  .app[data-world="blue"] .lyrics-panel {
+    height: min(64vh, 590px);
+  }
+
+  .app[data-world="white"] .cards-stage {
+    grid-template-columns: minmax(280px, 0.78fr) minmax(440px, 1.22fr);
+    gap: 40px;
+  }
+}
+
+@media (max-width: 980px) {
+  .app .topbar {
+    padding: 16px 22px;
+  }
+
+  .app .brand {
+    min-width: 0;
+  }
+
+  .app .brand-text small {
+    display: none;
+  }
+
+  .app .nav {
+    display: none;
+  }
+
+  .app .cards-trigger,
+  .app .review-trigger {
+    display: inline-grid;
+  }
+
+  .app[data-world="blue"] .stage {
+    grid-template-columns: 1fr;
+    gap: 38px;
+    width: min(760px, 100%);
+    padding: 102px 24px 132px;
+  }
+
+  .app[data-world="blue"] .art-column {
+    justify-self: stretch;
+    display: grid;
+    grid-template-columns: minmax(210px, 300px) minmax(220px, 1fr);
+    grid-template-areas:
+      "cover meta"
+      "cover checks";
+    align-items: end;
+    column-gap: 30px;
+    max-width: 100%;
+  }
+
+  .app[data-world="blue"] .cover-outer {
+    grid-area: cover;
+    width: min(100%, 300px);
+    align-self: start;
+  }
+
+  .app[data-world="blue"] .track-meta {
+    grid-area: meta;
+    align-self: end;
+    margin-top: 0;
+  }
+
+  .app[data-world="blue"] .check-strip {
+    grid-area: checks;
+    display: flex;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .app[data-world="blue"] .check-strip .check-chip:not(.recommend-chip) {
+    display: none;
+  }
+
+  .app[data-world="blue"] .check-strip .recommend-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 11px;
+    border: 0;
+    border-radius: var(--r-10);
+    background: var(--white-10);
+    color: var(--white-60);
+    font-size: 10.5px;
+    font-weight: 500;
+  }
+
+  .app[data-world="blue"] .check-strip .recommend-chip:hover {
+    background: var(--white-25);
+    color: var(--white);
+  }
+
+  .app[data-world="blue"] .lyrics-panel {
+    max-width: 100%;
+    height: 50vh;
+    min-height: 360px;
+  }
+
+  .app[data-world="blue"] .lyrics-list {
+    padding: 24% 0 42%;
+  }
+
+  .app[data-world="white"] .cards-stage {
+    grid-template-columns: 1fr;
+    width: min(720px, 100%);
+    gap: 30px;
+    padding: 96px 24px 84px;
+  }
+
+  .app[data-world="white"] .cards-intro h1 {
+    font-size: 42px;
+  }
+
+  .app[data-world="white"] .cards-intro {
+    padding-top: 0;
+  }
+
+  .app[data-world="white"] .cards-lede {
+    max-width: 100%;
+  }
+
+  .app[data-world="white"] .cards-wordlist {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 8px;
+    max-height: 170px;
+  }
+
+  .app[data-world="white"] .cards-wordlist .search-section-label {
+    grid-column: 1 / -1;
+  }
+
+  .app[data-world="white"] .card-stage {
+    max-width: 100%;
+  }
+
+  .app[data-world="white"] .word-card {
+    min-height: 560px;
+    max-height: none;
+  }
+
+  .app[data-world="white"] .cards-complete {
+    min-height: 520px;
+  }
+}
+
+@media (max-width: 760px) {
+  .app .topbar {
+    padding: 12px 16px;
+  }
+
+  .app .brand-orbit {
+    width: 28px;
+    height: 28px;
+  }
+
+  .app .brand-text strong {
+    font-size: 15px;
+  }
+
+  .app .topbar-right {
+    gap: 1px;
+  }
+
+  .app .topbar .platform-trigger {
+    display: none !important;
+  }
+
+  .app .cards-trigger,
+  .app .review-trigger {
+    width: 34px;
+    height: 34px;
+  }
+
+  .app .icon-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .app .login-button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+  }
+
+  .app .login-label {
+    display: none;
+  }
+
+  .app .avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .app[data-world="blue"] .stage {
+    gap: 28px;
+    padding: 84px 16px 126px;
+  }
+
+  .app[data-world="blue"] .art-column {
+    grid-template-columns: 158px minmax(0, 1fr);
+    grid-template-areas:
+      "cover meta"
+      "checks checks";
+    gap: 8px 18px;
+    align-items: center;
+  }
+
+  .app[data-world="blue"] .cover-outer {
+    width: 158px;
+  }
+
+  .app[data-world="blue"] .track-meta {
+    margin-top: 0;
+    align-self: center;
+  }
+
+  .app[data-world="blue"] .kicker {
+    margin-bottom: 8px;
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+  }
+
+  .app[data-world="blue"] .kicker-platform {
+    display: none;
+  }
+
+  .app[data-world="blue"] .track-title {
+    font-size: 26px;
+    line-height: 1.06;
+  }
+
+  .app[data-world="blue"] .track-sub {
+    margin-top: 8px;
+    font-size: 11.5px;
+  }
+
+  .app[data-world="blue"] .check-strip {
+    margin-top: 8px;
+  }
+
+  .app[data-world="blue"] .cover-expand {
+    right: 10px;
+    bottom: 10px;
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+    transform: none;
+  }
+
+  .app[data-world="blue"] .cover-play {
+    width: 48px;
+    height: 48px;
+  }
+
+  .app[data-world="blue"] .lyrics-panel {
+    height: 44vh;
+    min-height: 300px;
+  }
+
+  .app[data-world="blue"] .lyrics-head {
+    padding: 0 2px 10px;
+  }
+
+  .app[data-world="blue"] .lyrics-hint {
+    display: none;
+  }
+
+  .app[data-world="blue"] .lyrics-scroll {
+    padding: 0 2px 68px;
+  }
+
+  .app[data-world="blue"] .lyrics-list {
+    padding: 28% 0 42%;
+  }
+
+  .app[data-world="blue"] .lyric-text {
+    font-size: 16px;
+  }
+
+  .app[data-world="blue"] .lyric-line.is-active .lyric-text {
+    font-size: 22px;
+  }
+
+  .app[data-world="blue"] .lyric-time {
+    flex-basis: 28px;
+    font-size: 8px;
+  }
+
+  .app[data-world="blue"] .lyric-line {
+    gap: 10px;
+    padding: 8px 4px;
+  }
+
+  .app[data-world="blue"] .lyrics-foot {
+    padding: 11px 2px 13px;
+    font-size: 8.5px;
+  }
+
+  .app[data-world="blue"] .lyrics-foot-right {
+    display: none;
+  }
+
+  .app[data-world="blue"] .playerbar {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    min-height: 68px;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  .app[data-world="blue"] .player-progress {
+    left: 14px;
+    right: 14px;
+    height: 14px;
+  }
+
+  .app[data-world="blue"] .mini-cover {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .app[data-world="blue"] .mini-meta strong {
+    font-size: 11.5px;
+  }
+
+  .app[data-world="blue"] .mini-meta small {
+    font-size: 9.5px;
+  }
+
+  .app[data-world="blue"] .player-controls {
+    gap: 1px;
+  }
+
+  .app[data-world="blue"] .control {
+    width: 28px;
+    height: 28px;
+  }
+
+  .app[data-world="blue"] .play-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .app[data-world="blue"] .volume,
+  .app[data-world="blue"] .player-time,
+  .app[data-world="blue"] .queue-chip {
+    display: none;
+  }
+
+  .app .toasts {
+    bottom: 96px;
+  }
+
+  .word-peek,
+  .word-peek.world-white {
+    left: 8px;
+    right: 8px;
+    bottom: 84px;
+    width: auto;
+    max-width: none;
+    max-height: min(64vh, 560px);
+    margin: 0;
+    padding: 20px;
+    border-radius: var(--r-16);
+    transform: none;
+  }
+
+  .immersive.world-blue {
+    padding: 58px 16px 26px;
+  }
+
+  .immersive .immersive-art {
+    width: min(70vw, 310px);
+  }
+
+  .immersive .immersive-close {
+    top: 14px;
+    right: 14px;
+  }
+
+  .immersive .immersive-meta h2 {
+    font-size: 26px;
+  }
+
+  .immersive .immersive-lyric > p {
+    font-size: 19px;
+  }
+
+  .immersive .immersive-progress {
+    width: 88vw;
+  }
+
+  .app[data-world="white"] .cards-stage {
+    gap: 22px;
+    padding: 82px 16px 114px;
+  }
+
+  .app[data-world="white"] .kicker {
+    margin-bottom: 10px;
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+  }
+
+  .app[data-world="white"] .cards-intro h1 {
+    font-size: 36px;
+  }
+
+  .app[data-world="white"] .cards-lede {
+    margin-top: 14px;
+    font-size: 11px;
+    line-height: 1.65;
+  }
+
+  .app[data-world="white"] .cards-song {
+    margin-top: 18px;
+  }
+
+  .app[data-world="white"] .card-play-settings {
+    margin-top: 14px;
+  }
+
+  .app[data-world="white"] .daily-limit {
+    margin-top: 10px;
+  }
+
+  .app[data-world="white"] .cards-wordlist {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    overflow-x: auto;
+    gap: 5px;
+    margin-top: 18px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .app[data-world="white"] .cards-wordlist::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app[data-world="white"] .cards-wordlist .search-section-label {
+    display: none;
+  }
+
+  .app[data-world="white"] .cards-word {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border: 0;
+  }
+
+  .app[data-world="white"] .cards-word em {
+    display: none;
+  }
+
+  .app[data-world="white"] .card-stage {
+    width: 100%;
+  }
+
+  .app[data-world="white"] .word-card {
+    min-height: 0;
+    padding: 22px 20px 78px;
+    border-radius: var(--r-22);
+  }
+
+  .app[data-world="white"] .word-card-title {
+    margin-top: 22px;
+  }
+
+  .app[data-world="white"] .word-card-title h2 {
+    font-size: 50px;
+  }
+
+  .app[data-world="white"] .word-card-senses {
+    font-size: 14px;
+  }
+
+  .app[data-world="white"] .card-example,
+  .app[data-world="white"] .word-example {
+    margin-top: 18px;
+  }
+
+  .app[data-world="white"] .card-lyric {
+    margin-top: 20px;
+  }
+
+  .app[data-world="white"] .card-lyric > p {
+    font-size: 17px;
+  }
+
+  .app[data-world="white"] .word-card-actions {
+    display: none;
+  }
+
+  .app[data-world="white"] .mobile-rate-bar {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    z-index: 42;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    padding: 6px;
+    border: 0;
+    border-radius: var(--r-16);
+    background: var(--white);
+    box-shadow: 0 18px 50px var(--blue-08);
+    backdrop-filter: none;
+  }
+
+  .app[data-world="white"] .mobile-rate-bar .rate {
+    height: 44px;
+    border-radius: var(--r-10);
+    background: var(--blue-08);
+    font-size: 11px;
+  }
+
+  .app[data-world="white"] .mobile-rate-bar .rate kbd {
+    display: none;
+  }
+
+  .app[data-world="white"] .mobile-rate-bar .rate-days {
+    font-size: 8px;
+  }
+
+  .app[data-world="white"] .rate {
+    height: 44px;
+    font-size: 11px;
+  }
+
+  .app[data-world="white"] .rate kbd {
+    display: none;
+  }
+
+  .app[data-world="white"] .cards-complete {
+    min-height: 420px;
+    padding: 26px;
+  }
+
+  .app[data-world="white"] .cards-complete h2 {
+    font-size: 26px;
+  }
+
+  .app[data-world="white"] .cards-complete-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .app[data-world="white"] .cards-complete-actions .login-button,
+  .app[data-world="white"] .cards-complete-actions .ghost-button {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .app[data-world="blue"] .art-column {
+    grid-template-columns: 136px minmax(0, 1fr);
+    gap: 8px 14px;
+  }
+
+  .app[data-world="blue"] .cover-outer {
+    width: 136px;
+  }
+
+  .app[data-world="blue"] .track-title {
+    font-size: 22px;
+  }
+
+  .app[data-world="blue"] .lyrics-panel {
+    height: 42vh;
+    min-height: 280px;
+  }
+
+  .app .brand {
+    gap: 7px;
+  }
+
+  .app .brand-text strong {
+    font-size: 14px;
+  }
+
+  .app[data-world="white"] .cards-intro h1 {
+    font-size: 32px;
+  }
+
+  .app[data-world="white"] .word-card {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+@media (max-width: 760px) and (hover: none) {
+  .app[data-world="blue"] .cover-play {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app,
+  body,
+  .app[data-world],
+  .app .login-button,
+  .app .ghost-button,
+  .app .icon-button,
+  .app .nav-item,
+  .app[data-world="blue"] .lyric-word,
+  .app[data-world="blue"] .lyric-line,
+  .word-peek,
+  .app[data-world="white"] .rate {
+    transition: none;
+  }
+
+  .app[data-world="blue"] .lyrics-skeleton span {
+    animation: none;
+  }
+}

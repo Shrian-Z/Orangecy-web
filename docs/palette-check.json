@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-10-21T14:57:53.057Z",
+  "url": "http://localhost:5173",
+  "sourceViolations": [],
+  "violations": [],
+  "gradients": [],
+  "states": [
+    {
+      "state": "desktop / player",
+      "paintedElements": 1552,
+      "uniquePaintValues": 6,
+      "violations": 0
+    },
+    {
+      "state": "desktop / word-peek",
+      "paintedElements": 1582,
+      "uniquePaintValues": 11,
+      "violations": 0
+    },
+    {
+      "state": "desktop / immersive",
+      "paintedElements": 1594,
+      "uniquePaintValues": 7,
+      "violations": 0
+    },
+    {
+      "state": "desktop / word-cards",
+      "paintedElements": 192,
+      "uniquePaintValues": 8,
+      "violations": 0
+    },
+    {
+      "state": "mobile-390 / player",
+      "paintedElements": 1533,
+      "uniquePaintValues": 6,
+      "violations": 0
+    },
+    {
+      "state": "mobile-390 / word-peek",
+      "paintedElements": 1563,
+      "uniquePaintValues": 11,
+      "violations": 0
+    },
+    {
+      "state": "mobile-390 / immersive",
+      "paintedElements": 1575,
+      "uniquePaintValues": 7,
+      "violations": 0
+    },
+    {
+      "state": "mobile-390 / word-cards",
+      "paintedElements": 178,
+      "uniquePaintValues": 9,
+      "violations": 0
+    },
+    {
+      "state": "mobile-320 / player",
+      "paintedElements": 1533,
+      "uniquePaintValues": 6,
+      "violations": 0
+    },
+    {
+      "state": "mobile-320 / word-peek",
+      "paintedElements": 1563,
+      "uniquePaintValues": 11,
+      "violations": 0
+    },
+    {
+      "state": "mobile-320 / immersive",
+      "paintedElements": 1575,
+      "uniquePaintValues": 7,
+      "violations": 0
+    },
+    {
+      "state": "mobile-320 / word-cards",
+      "paintedElements": 178,
+      "uniquePaintValues": 9,
+      "violations": 0
+    }
+  ],
+  "paletteTokensSeen": [
+    "rgb(0, 47, 167)",
+    "rgb(255, 255, 255)",
+    "rgba(0, 47, 167, 0.08)",
+    "rgba(0, 47, 167, 0.1)",
+    "rgba(0, 47, 167, 0.3)",
+    "rgba(0, 47, 167, 0.4)",
+    "rgba(0, 47, 167, 0.6)",
+    "rgba(255, 255, 255, 0.1)",
+    "rgba(255, 255, 255, 0.25)",
+    "rgba(255, 255, 255, 0.45)",
+    "rgba(255, 255, 255, 0.6)"
+  ]
+}
