@@ -265,9 +265,8 @@ for (const viewport of viewports) {
     await page.waitForTimeout(200);
   }
 
-  const navCard = page.locator('.nav-item', { hasText: '词卡' }).first();
+  const navCard = page.locator('.nav-item[aria-label="词卡"]').first();
   if (await navCard.isVisible().catch(() => false)) await navCard.click();
-  else await page.locator('.cards-trigger').first().click({ force: true });
   await page.waitForTimeout(1_000);
   results.push(await scanState(page, `${viewport.name} / word-cards`));
 

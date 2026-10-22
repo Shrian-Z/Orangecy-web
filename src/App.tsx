@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { api } from '@/api';
 import { player } from '@/player';
@@ -63,7 +63,53 @@ export default function App() {
   const lines = usePlayerStore((state) => state.lines);
   const wordbook = usePlayerStore((state) => state.wordbook);
   const reduceMotion = usePlayerStore((state) => state.reduceMotion);
+  const playing = usePlayerStore((state) => state.playing);
   const bootedOnce = useRef(false);
+
+  // 舞台 chrome：闲置 5 秒自动隐去；点歌词区可切换；播放状态变化时临时浮现。
+  const [stageChrome, setStageChrome] = useState(true);
+  const [chromeWake, setChromeWake] = useState(0);
+  const chromeHold = useRef(false);
+  const previousPlaying = useRef(false);
+
+  const wakeChrome = useCallback(() => {
+    setStageChrome(true);
+    setChromeWake((value) => value + 1);
+  }, []);
+
+  const toggleChrome = useCallback(() => {
+    setStageChrome((visible) => !visible);
+    setChromeWake((value) => value + 1);
+  }, []);
+
+  const setChromeHold = useCallback((hold: boolean) => {
+    chromeHold.current = hold;
+    if (!hold) setChromeWake((value) => value + 1);
+  }, []);
+
+  useEffect(() => {
+    if (view !== 'player' || !stageChrome) return;
+    const timer = window.setTimeout(() => {
+      if (chromeHold.current) return;
+      setStageChrome(false);
+    }, 5000);
+    return () => window.clearTimeout(timer);
+  }, [chromeWake, stageChrome, view]);
+
+  useEffect(() => {
+    if (previousPlaying.current !== playing) {
+      wakeChrome();
+      previousPlaying.current = playing;
+    }
+  }, [playing, wakeChrome]);
+
+  useEffect(() => {
+    if (song?.id) wakeChrome();
+  }, [song?.id, wakeChrome]);
+
+  useEffect(() => {
+    if (view === 'player') wakeChrome();
+  }, [view, wakeChrome]);
 
   const studyMatches = useMemo(
     () => (wordbook && lines.length ? buildSongMatches(lines, wordbook) : null),
@@ -213,7 +259,7 @@ export default function App() {
       {view === 'player' ? (
         <main className="stage">
           <CoverStage />
-          <LyricsStage />
+          <LyricsStage chromeVisible={stageChrome} onToggleChrome={toggleChrome} />
         </main>
       ) : (
         <Suspense
@@ -233,7 +279,13 @@ export default function App() {
           )}
         </Suspense>
       )}
-      {view === 'player' || view === 'recommend' ? <PlayerBar /> : null}
+      {view === 'player' || view === 'recommend' ? (
+        <PlayerBar
+          visible={view !== 'player' || stageChrome}
+          onWake={wakeChrome}
+          onHoldChange={setChromeHold}
+        />
+      ) : null}
       <Suspense fallback={null}>
         <Once open={drawer === 'search'}>
           <SearchDrawer />

@@ -65,6 +65,8 @@ try {
   check('每日推荐', recCards === 10, `${recCards} 张 / ${recFilters} 个平台筛选`);
   await page.locator('.rec-card').first().click();
   await page.waitForTimeout(2500);
+  await page.locator('.capsule-more').click();
+  await page.waitForTimeout(300);
   await page.locator('.queue-chip').click();
   await page.waitForTimeout(600);
   const queueRows = await page.locator('.queue-row').count();
@@ -76,7 +78,7 @@ try {
   await page.locator('.nav-item').nth(2).click();
   await page.waitForTimeout(1800);
   const cardsVisible = await page.locator('.cards-stage').isVisible();
-  const playerBarInCards = await page.locator('.playerbar').count();
+  const playerBarInCards = await page.locator('.playercapsule').count();
   check('词卡模式隐藏播放条', cardsVisible && playerBarInCards === 0);
 
   await page.locator('.nav-item').nth(3).click();
@@ -104,11 +106,15 @@ try {
       scrollWidth: document.documentElement.scrollWidth,
       innerWidth: window.innerWidth,
       platformTrigger: Boolean(document.querySelector('.platform-trigger')),
-      queueChip: Boolean(document.querySelector('.queue-chip')),
+      navItems: document.querySelectorAll('.nav-item').length,
+      capsule: Boolean(document.querySelector('.playercapsule')),
     }));
     check(
       `移动端 ${width}px`,
-      metrics.scrollWidth === metrics.innerWidth && metrics.platformTrigger && metrics.queueChip,
+      metrics.scrollWidth === metrics.innerWidth &&
+        metrics.platformTrigger &&
+        metrics.navItems === 4 &&
+        metrics.capsule,
       JSON.stringify(metrics),
     );
     await mobile.close();

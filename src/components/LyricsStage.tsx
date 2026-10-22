@@ -88,6 +88,7 @@ function LineView({
   entries,
   onSelect,
   onWord,
+  onToggleChrome,
   register,
   focus,
   progress,
@@ -98,6 +99,7 @@ function LineView({
   entries?: Map<string, WordbookWord>;
   onSelect: () => void;
   onWord: (surface: string, entry: WordbookWord) => void;
+  onToggleChrome: () => void;
   register: (node: HTMLDivElement | null) => void;
   focus?: { surface: string; entry: WordbookWord } | null;
   progress: number;
@@ -117,6 +119,7 @@ function LineView({
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
         onSelect();
+        onToggleChrome();
       }}
       aria-current={active ? 'true' : undefined}
       title={`从 ${formatTime(line.time)} 播放`}
@@ -156,7 +159,13 @@ const Line = memo(
   },
 );
 
-export function LyricsStage() {
+export function LyricsStage({
+  chromeVisible,
+  onToggleChrome,
+}: {
+  chromeVisible: boolean;
+  onToggleChrome: () => void;
+}) {
   const lines = usePlayerStore((state) => state.lines);
   const currentTime = usePlayerStore((state) => state.currentTime);
   const duration = usePlayerStore((state) => state.duration);
@@ -217,11 +226,6 @@ export function LyricsStage() {
     hasScrolled.current = true;
   }, [active, lines.length]);
 
-  const progress = useMemo(() => {
-    if (!duration) return 0;
-    return Math.max(0, Math.min(100, (currentTime / duration) * 100));
-  }, [currentTime, duration]);
-
   const markInteraction = () => {
     lastInteraction.current = Date.now();
   };
@@ -246,7 +250,10 @@ export function LyricsStage() {
   };
 
   return (
-    <section className="lyrics-panel" aria-label="歌词">
+    <section
+      className={`lyrics-panel ${chromeVisible ? 'is-chrome' : ''}`}
+      aria-label="歌词"
+    >
       <header className="lyrics-head">
         <div className="lyrics-head-left">
           <div className="lyrics-title">
@@ -265,15 +272,17 @@ export function LyricsStage() {
             title={wordbook ? '切换词书' : '选择词书'}
           >
             <BookOpen size={12} strokeWidth={1.9} />
-            {wordbook ? (
-              <>
-                {wordbook.name}
-                <i>·</i>
-                {matches ? `命中 ${matches.count} 词` : '正在匹配'}
-              </>
-            ) : (
-              '选词书'
-            )}
+            <span className="wordbook-copy">
+              {wordbook ? (
+                <>
+                  {wordbook.name}
+                  <i>·</i>
+                  {matches ? `命中 ${matches.count} 词` : '正在匹配'}
+                </>
+              ) : (
+                '选词书'
+              )}
+            </span>
           </button>
         </div>
         <p className="lyrics-hint">
@@ -286,6 +295,7 @@ export function LyricsStage() {
       <div
         className="lyrics-scroll"
         ref={scrollRef}
+        onClick={onToggleChrome}
         onWheel={markInteraction}
         onTouchMove={markInteraction}
         onPointerDown={markInteraction}
@@ -315,6 +325,7 @@ export function LyricsStage() {
                   void player.seekTo(line.time, { play: true });
                 }}
                 onWord={(surface, entry) => focusWord(line, index, surface, entry)}
+                onToggleChrome={onToggleChrome}
               />
             ))}
           </div>
@@ -323,7 +334,14 @@ export function LyricsStage() {
             {loading ? <Loader2 className="spin" size={22} /> : null}
             <p>{loadError ?? '这首歌还没有带时间戳的歌词'}</p>
             <span>换一首有歌词的歌，或稍后再试。</span>
-            <button type="button" className="ghost-button" onClick={() => openDrawer('search')}>
+            <button
+              type="button"
+              className="ghost-button"
+              onClick={(event) => {
+                event.stopPropagation();
+                openDrawer('search');
+              }}
+            >
               <Search size={15} />
               去搜歌
             </button>
@@ -338,9 +356,6 @@ export function LyricsStage() {
           当前 {formatTime(currentTime)}
         </span>
         <span className="lyrics-foot-right">不切片 · 直接 seek 原曲</span>
-        <span className="lyrics-progress" aria-hidden="true">
-          <i style={{ width: `${progress}%` }} />
-        </span>
       </footer>
     </section>
   );

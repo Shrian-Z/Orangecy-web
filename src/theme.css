@@ -307,7 +307,10 @@ button {
 /* ---------- top bar ---------- */
 
 .app .topbar {
-  gap: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
   padding: 18px clamp(18px, 3.3vw, 44px);
   border: 0;
   background: transparent;
@@ -316,8 +319,9 @@ button {
 }
 
 .app .brand {
+  justify-self: start;
   gap: 10px;
-  min-width: 154px;
+  min-width: 0;
   padding: 0;
   border: 0;
   background: transparent;
@@ -361,6 +365,7 @@ button {
 }
 
 .app .brand-text small {
+  display: none;
   color: var(--world-ink-2);
   font-size: 9.5px;
   font-weight: 500;
@@ -369,7 +374,12 @@ button {
 }
 
 .app .nav {
+  display: flex;
+  grid-column: 2;
+  justify-self: center;
+  align-items: center;
   gap: 2px;
+  margin: 0;
   padding: 0;
   border: 0;
   background: transparent;
@@ -377,9 +387,13 @@ button {
 }
 
 .app .nav-item {
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: var(--r-10);
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
   color: var(--world-ink-2);
   font-size: 12px;
   font-weight: 500;
@@ -395,8 +409,18 @@ button {
 
 .app .nav-item.is-active {
   color: var(--world-ink);
-  background: transparent;
+  background: var(--world-fill);
   box-shadow: none;
+}
+
+.app .nav-due {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--world-ink);
 }
 
 .app .nav-live {
@@ -427,7 +451,46 @@ button {
 }
 
 .app .topbar-right {
+  justify-self: end;
   gap: 2px;
+  margin-left: 0;
+}
+
+.app .account-trigger {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--world-ink-2);
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    color 200ms var(--ease-klein),
+    background-color 200ms var(--ease-klein),
+    border-color 200ms var(--ease-klein);
+}
+
+.app .account-trigger:hover {
+  color: var(--world-ink);
+  background: var(--world-fill);
+  border-color: var(--world-line);
+}
+
+.app .account-trigger.has-avatar {
+  border-color: var(--world-line);
+  background: var(--world-fill);
+  color: var(--world-ink);
+}
+
+.app .account-trigger img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .app .avatar {
@@ -659,10 +722,38 @@ button {
   overflow: hidden;
 }
 
+/* 闲置态：歌词区只留歌词本身；时间戳、命中词数、提示与底栏小字全部收起。 */
+.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyrics-head,
+.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyrics-foot {
+  display: none;
+}
+
+.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyric-time {
+  display: none;
+}
+
+.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyric-line {
+  gap: 0;
+}
+
+.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyric-body {
+  flex: 1;
+}
+
+.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyrics-scroll {
+  padding-bottom: 16px;
+}
+
 .app[data-world="blue"] .lyrics-head {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
   align-items: center;
   gap: 14px;
   padding: 0 4px 14px;
+  background: var(--blue);
 }
 
 .app[data-world="blue"] .lyrics-head-left {
@@ -741,6 +832,10 @@ button {
   transition:
     color 250ms var(--ease-klein),
     background-color 250ms var(--ease-klein);
+}
+
+.app[data-world="blue"] .lyric-body {
+  flex: 1;
 }
 
 .app[data-world="blue"] .lyric-line:hover {
@@ -896,9 +991,15 @@ button {
 }
 
 .app[data-world="blue"] .lyrics-foot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
   gap: 14px;
   padding: 14px 4px 16px;
   border-top: 1px solid var(--white-10);
+  background: var(--blue);
   color: var(--white-25);
   font-size: 9.5px;
   font-weight: 500;
@@ -2420,7 +2521,7 @@ button {
   }
 
   .app .nav {
-    display: none;
+    gap: 0;
   }
 
   .app .cards-trigger,
@@ -2460,10 +2561,7 @@ button {
   }
 
   .app[data-world="blue"] .check-strip {
-    grid-area: checks;
-    display: flex;
-    gap: 6px;
-    margin-top: 16px;
+    display: none;
   }
 
   .app[data-world="blue"] .check-strip .check-chip:not(.recommend-chip) {
@@ -2565,10 +2663,6 @@ button {
     gap: 1px;
   }
 
-  .app .topbar .platform-trigger {
-    display: none !important;
-  }
-
   .app .cards-trigger,
   .app .review-trigger {
     width: 34px;
@@ -2638,10 +2732,6 @@ button {
   .app[data-world="blue"] .track-sub {
     margin-top: 8px;
     font-size: 11.5px;
-  }
-
-  .app[data-world="blue"] .check-strip {
-    margin-top: 8px;
   }
 
   .app[data-world="blue"] .cover-expand {
@@ -3023,4 +3113,291 @@ button {
   .app[data-world="blue"] .lyrics-skeleton span {
     animation: none;
   }
+}
+
+/* ---------- idle-hiding floating playback capsule ---------- */
+
+.app[data-world="blue"] .playercapsule {
+  position: fixed;
+  left: 50%;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 36;
+  display: flex;
+  flex-direction: column;
+  width: 212px;
+  max-width: calc(100vw - 24px);
+  padding: 8px 12px 13px;
+  border: 1px solid var(--white-10);
+  border-radius: 999px;
+  background: var(--white-10);
+  box-shadow: none;
+  backdrop-filter: none;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 240ms var(--ease-klein),
+    transform 280ms var(--ease-klein),
+    visibility 0s linear;
+}
+
+.app[data-world="blue"] .playercapsule.is-expanded {
+  border-radius: 22px;
+}
+
+.app[data-world="blue"] .playercapsule.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 14px);
+  pointer-events: none;
+  transition:
+    opacity 220ms var(--ease-klein),
+    transform 260ms var(--ease-klein),
+    visibility 0s linear 260ms;
+}
+
+.playercapsule .capsule-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.app[data-world="blue"] .playercapsule .control {
+  width: 32px;
+  height: 32px;
+  color: var(--white-60);
+}
+
+.app[data-world="blue"] .playercapsule .control:hover:not(:disabled) {
+  color: var(--white);
+  background: transparent;
+}
+
+.app[data-world="blue"] .playercapsule .play-button {
+  width: 40px;
+  height: 40px;
+  margin: 0 2px;
+}
+
+.app[data-world="blue"] .capsule-more {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 1px;
+  border-radius: 50%;
+  color: var(--white-45);
+  transition:
+    color 200ms var(--ease-klein),
+    background-color 200ms var(--ease-klein);
+}
+
+.app[data-world="blue"] .capsule-more:hover,
+.app[data-world="blue"] .capsule-more.is-on {
+  color: var(--white);
+  background: var(--white-10);
+}
+
+.app[data-world="blue"] .capsule-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: 5px;
+  padding: 1px 0 8px;
+  border-bottom: 1px solid var(--white-10);
+  color: var(--white-45);
+}
+
+.app[data-world="blue"] .capsule-time {
+  color: var(--white-45);
+  font-size: 9.5px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.app[data-world="blue"] .capsule-time i {
+  margin: 0 4px;
+  font-style: normal;
+  opacity: 0.5;
+}
+
+.app[data-world="blue"] .capsule-volume {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 82px;
+}
+
+.app[data-world="blue"] .capsule-volume .control {
+  width: 22px;
+  height: 22px;
+  color: var(--white-45);
+}
+
+.app[data-world="blue"] .capsule-volume input[type="range"] {
+  height: 12px;
+}
+
+.app[data-world="blue"] .capsule-volume input[type="range"]::-webkit-slider-runnable-track {
+  height: 1.5px;
+  background: var(--white-25);
+}
+
+.app[data-world="blue"] .capsule-volume input[type="range"]::-moz-range-track {
+  height: 1.5px;
+  background: var(--white-25);
+}
+
+.app[data-world="blue"] .capsule-secondary .queue-chip {
+  height: 24px;
+  padding: 0 5px;
+  border: 0;
+  background: transparent;
+  color: var(--white-45);
+}
+
+.app[data-world="blue"] .capsule-secondary .queue-chip:hover {
+  color: var(--white);
+  background: var(--white-10);
+}
+
+.app[data-world="blue"] .capsule-progress {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 4px;
+  height: 12px;
+}
+
+.app[data-world="blue"] .capsule-progress .range-rail {
+  height: 1.5px;
+  background: var(--white-25);
+}
+
+.app[data-world="blue"] .capsule-progress .range-rail i {
+  background: var(--white);
+}
+
+.app[data-world="blue"] .capsule-progress input[type="range"] {
+  height: 12px;
+}
+
+.app[data-world="blue"] .playercapsule:hover input[type="range"]::-webkit-slider-thumb,
+.app[data-world="blue"] .playercapsule:focus-within input[type="range"]::-webkit-slider-thumb,
+.app[data-world="blue"] .playercapsule input[type="range"]:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.app[data-world="blue"] .playercapsule:hover input[type="range"]::-moz-range-thumb,
+.app[data-world="blue"] .playercapsule:focus-within input[type="range"]::-moz-range-thumb,
+.app[data-world="blue"] .playercapsule input[type="range"]:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+
+@media (max-width: 760px) {
+  .app .topbar {
+    gap: 8px;
+    padding: 12px 14px;
+  }
+
+  .app .brand {
+    gap: 7px;
+  }
+
+  .app .brand-orbit {
+    width: 28px;
+    height: 28px;
+  }
+
+  .app .brand-text strong {
+    font-size: 15px;
+  }
+
+  .app .nav-item {
+    width: 30px;
+    height: 30px;
+  }
+
+  .app .nav-due {
+    top: 6px;
+    right: 6px;
+  }
+
+  .app .topbar-right {
+    gap: 0;
+  }
+
+  .app .icon-button,
+  .app .account-trigger {
+    width: 32px;
+    height: 32px;
+  }
+
+  .app[data-world="blue"] .playercapsule {
+    bottom: max(14px, env(safe-area-inset-bottom));
+    width: 196px;
+    padding: 7px 10px 12px;
+  }
+
+  .app[data-world="blue"] .playercapsule .control {
+    width: 30px;
+    height: 30px;
+  }
+
+  .app[data-world="blue"] .playercapsule .play-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .app[data-world="blue"] .capsule-secondary {
+    gap: 7px;
+  }
+
+  .app[data-world="blue"] .capsule-volume {
+    width: 64px;
+  }
+
+  .app[data-world="blue"] .capsule-progress {
+    left: 14px;
+    right: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .app .topbar {
+    gap: 4px;
+    padding: 10px 12px;
+  }
+
+  .app .brand-text {
+    display: none;
+  }
+
+  .app .nav {
+    gap: 0;
+  }
+
+  .app .nav-item {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app[data-world="blue"] .playercapsule {
+    transition: none;
+  }
+}
+
+/* Auxiliary lyric copy floats over the stage without stealing taps from it. */
+.app[data-world="blue"] .lyrics-head,
+.app[data-world="blue"] .lyrics-foot {
+  pointer-events: none;
+}
+
+.app[data-world="blue"] .lyrics-head button {
+  pointer-events: auto;
 }

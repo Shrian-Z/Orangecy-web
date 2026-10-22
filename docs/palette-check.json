@@ -1,91 +1,73 @@
 {
-  "generatedAt": "2026-10-21T15:15:37.797Z",
-  "url": "http://127.0.0.1:8790",
+  "generatedAt": "2026-10-22T14:37:28.909Z",
+  "url": "http://localhost:5173",
   "sourceViolations": [],
   "violations": [],
   "gradients": [],
   "states": [
     {
       "state": "desktop / player",
-      "paintedElements": 1552,
+      "paintedElements": 1399,
       "uniquePaintValues": 6,
       "violations": 0
     },
     {
-      "state": "desktop / player-playing",
-      "paintedElements": 1554,
-      "uniquePaintValues": 7,
-      "violations": 0
-    },
-    {
       "state": "desktop / word-peek",
-      "paintedElements": 1582,
-      "uniquePaintValues": 11,
+      "paintedElements": 1566,
+      "uniquePaintValues": 10,
       "violations": 0
     },
     {
       "state": "desktop / immersive",
-      "paintedElements": 1594,
+      "paintedElements": 1578,
       "uniquePaintValues": 7,
       "violations": 0
     },
     {
       "state": "desktop / word-cards",
-      "paintedElements": 192,
+      "paintedElements": 195,
       "uniquePaintValues": 8,
       "violations": 0
     },
     {
       "state": "mobile-390 / player",
-      "paintedElements": 1541,
+      "paintedElements": 1398,
       "uniquePaintValues": 6,
       "violations": 0
     },
     {
-      "state": "mobile-390 / player-playing",
-      "paintedElements": 1543,
-      "uniquePaintValues": 7,
-      "violations": 0
-    },
-    {
       "state": "mobile-390 / word-peek",
-      "paintedElements": 1571,
+      "paintedElements": 1563,
       "uniquePaintValues": 11,
       "violations": 0
     },
     {
       "state": "mobile-390 / immersive",
-      "paintedElements": 1583,
+      "paintedElements": 1575,
       "uniquePaintValues": 7,
       "violations": 0
     },
     {
       "state": "mobile-390 / word-cards",
-      "paintedElements": 178,
+      "paintedElements": 180,
       "uniquePaintValues": 9,
       "violations": 0
     },
     {
       "state": "mobile-320 / player",
-      "paintedElements": 1541,
+      "paintedElements": 1396,
       "uniquePaintValues": 6,
       "violations": 0
     },
     {
-      "state": "mobile-320 / player-playing",
-      "paintedElements": 1543,
-      "uniquePaintValues": 7,
-      "violations": 0
-    },
-    {
       "state": "mobile-320 / word-peek",
-      "paintedElements": 1571,
+      "paintedElements": 1561,
       "uniquePaintValues": 11,
       "violations": 0
     },
     {
       "state": "mobile-320 / immersive",
-      "paintedElements": 1583,
+      "paintedElements": 1573,
       "uniquePaintValues": 7,
       "violations": 0
     },
