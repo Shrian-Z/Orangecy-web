@@ -723,24 +723,24 @@ button {
 }
 
 /* 闲置态：歌词区只留歌词本身；时间戳、命中词数、提示与底栏小字全部收起。 */
-.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyrics-head,
-.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyrics-foot {
+.app[data-world="blue"] .lyrics-panel:not(.is-aux) .lyrics-head,
+.app[data-world="blue"] .lyrics-panel:not(.is-aux) .lyrics-foot {
   display: none;
 }
 
-.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyric-time {
+.app[data-world="blue"] .lyrics-panel:not(.is-aux) .lyric-time {
   display: none;
 }
 
-.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyric-line {
+.app[data-world="blue"] .lyrics-panel:not(.is-aux) .lyric-line {
   gap: 0;
 }
 
-.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyric-body {
+.app[data-world="blue"] .lyrics-panel:not(.is-aux) .lyric-body {
   flex: 1;
 }
 
-.app[data-world="blue"] .lyrics-panel:not(.is-chrome) .lyrics-scroll {
+.app[data-world="blue"] .lyrics-panel:not(.is-aux) .lyrics-scroll {
   padding-bottom: 16px;
 }
 

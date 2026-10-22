@@ -160,10 +160,10 @@ const Line = memo(
 );
 
 export function LyricsStage({
-  chromeVisible,
+  auxVisible,
   onToggleChrome,
 }: {
-  chromeVisible: boolean;
+  auxVisible: boolean;
   onToggleChrome: () => void;
 }) {
   const lines = usePlayerStore((state) => state.lines);
@@ -251,7 +251,7 @@ export function LyricsStage({
 
   return (
     <section
-      className={`lyrics-panel ${chromeVisible ? 'is-chrome' : ''}`}
+      className={`lyrics-panel ${auxVisible ? 'is-aux' : ''}`}
       aria-label="歌词"
     >
       <header className="lyrics-head">

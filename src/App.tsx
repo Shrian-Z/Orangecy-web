@@ -68,17 +68,29 @@ export default function App() {
 
   // 舞台 chrome：闲置 5 秒自动隐去；点歌词区可切换；播放状态变化时临时浮现。
   const [stageChrome, setStageChrome] = useState(true);
+  const [auxVisible, setAuxVisible] = useState(false);
   const [chromeWake, setChromeWake] = useState(0);
   const chromeHold = useRef(false);
+  const auxVisibleRef = useRef(false);
   const previousPlaying = useRef(false);
+
+  const hideChrome = useCallback(() => {
+    auxVisibleRef.current = false;
+    setAuxVisible(false);
+    setStageChrome(false);
+  }, []);
 
   const wakeChrome = useCallback(() => {
     setStageChrome(true);
     setChromeWake((value) => value + 1);
   }, []);
 
+  // 歌词辅助字只在点按时出现；暂停等状态变化只唤出胶囊。
   const toggleChrome = useCallback(() => {
-    setStageChrome((visible) => !visible);
+    const next = !auxVisibleRef.current;
+    auxVisibleRef.current = next;
+    setAuxVisible(next);
+    setStageChrome(next);
     setChromeWake((value) => value + 1);
   }, []);
 
@@ -91,10 +103,10 @@ export default function App() {
     if (view !== 'player' || !stageChrome) return;
     const timer = window.setTimeout(() => {
       if (chromeHold.current) return;
-      setStageChrome(false);
+      hideChrome();
     }, 5000);
     return () => window.clearTimeout(timer);
-  }, [chromeWake, stageChrome, view]);
+  }, [chromeWake, hideChrome, stageChrome, view]);
 
   useEffect(() => {
     if (previousPlaying.current !== playing) {
@@ -108,7 +120,12 @@ export default function App() {
   }, [song?.id, wakeChrome]);
 
   useEffect(() => {
-    if (view === 'player') wakeChrome();
+    if (view === 'player') {
+      wakeChrome();
+      return;
+    }
+    auxVisibleRef.current = false;
+    setAuxVisible(false);
   }, [view, wakeChrome]);
 
   const studyMatches = useMemo(
@@ -259,7 +276,7 @@ export default function App() {
       {view === 'player' ? (
         <main className="stage">
           <CoverStage />
-          <LyricsStage chromeVisible={stageChrome} onToggleChrome={toggleChrome} />
+          <LyricsStage auxVisible={auxVisible} onToggleChrome={toggleChrome} />
         </main>
       ) : (
         <Suspense
