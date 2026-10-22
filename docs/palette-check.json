@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-21T14:57:53.057Z",
-  "url": "http://localhost:5173",
+  "generatedAt": "2026-10-21T15:15:37.797Z",
+  "url": "http://127.0.0.1:8790",
   "sourceViolations": [],
   "violations": [],
   "gradients": [],
@@ -9,6 +9,12 @@
       "state": "desktop / player",
       "paintedElements": 1552,
       "uniquePaintValues": 6,
+      "violations": 0
+    },
+    {
+      "state": "desktop / player-playing",
+      "paintedElements": 1554,
+      "uniquePaintValues": 7,
       "violations": 0
     },
     {
@@ -31,19 +37,25 @@
     },
     {
       "state": "mobile-390 / player",
-      "paintedElements": 1533,
+      "paintedElements": 1541,
       "uniquePaintValues": 6,
       "violations": 0
     },
     {
+      "state": "mobile-390 / player-playing",
+      "paintedElements": 1543,
+      "uniquePaintValues": 7,
+      "violations": 0
+    },
+    {
       "state": "mobile-390 / word-peek",
-      "paintedElements": 1563,
+      "paintedElements": 1571,
       "uniquePaintValues": 11,
       "violations": 0
     },
     {
       "state": "mobile-390 / immersive",
-      "paintedElements": 1575,
+      "paintedElements": 1583,
       "uniquePaintValues": 7,
       "violations": 0
     },
@@ -55,19 +67,25 @@
     },
     {
       "state": "mobile-320 / player",
-      "paintedElements": 1533,
+      "paintedElements": 1541,
       "uniquePaintValues": 6,
       "violations": 0
     },
     {
+      "state": "mobile-320 / player-playing",
+      "paintedElements": 1543,
+      "uniquePaintValues": 7,
+      "violations": 0
+    },
+    {
       "state": "mobile-320 / word-peek",
-      "paintedElements": 1563,
+      "paintedElements": 1571,
       "uniquePaintValues": 11,
       "violations": 0
     },
     {
       "state": "mobile-320 / immersive",
-      "paintedElements": 1575,
+      "paintedElements": 1583,
       "uniquePaintValues": 7,
       "violations": 0
     },

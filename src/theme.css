@@ -363,7 +363,7 @@ button {
 .app .brand-text small {
   color: var(--world-ink-2);
   font-size: 9.5px;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: none;
 }
@@ -1163,7 +1163,7 @@ button {
 .app[data-world="blue"] .player-time {
   color: var(--white-60);
   font-size: 10.5px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .app[data-world="blue"] .volume {
@@ -1465,7 +1465,7 @@ button {
 .immersive .immersive-meta > p:last-child {
   color: var(--white-60);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .immersive .immersive-lyric {
@@ -1678,7 +1678,7 @@ button {
 
 .app .splash small {
   color: var(--white-25);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .app .toasts {
@@ -1844,6 +1844,7 @@ button {
 .app[data-world="white"] .toggle-track {
   width: 30px;
   height: 17px;
+  border-radius: var(--r-10);
   background: var(--blue-10);
   transition: background-color 220ms var(--ease-klein);
 }
@@ -2486,6 +2487,10 @@ button {
   .app[data-world="blue"] .check-strip .recommend-chip:hover {
     background: var(--white-25);
     color: var(--white);
+  }
+
+  .app[data-world="blue"] .check-strip .recommend-chip svg {
+    color: inherit;
   }
 
   .app[data-world="blue"] .lyrics-panel {
