@@ -24,7 +24,7 @@
     4 tab、50/50 完成、320/390/1440 无溢出、console 0 错误。
   - 截图：`docs/screenshots/focus-{desktop,mobile,small}-{collapsed,expanded,playing,muted}.png`；
     第一帧 `focus-first-frame.png`；音频轨迹 `docs/audio-trace.json`。
-- **Git**：`46a7750`（迁移）→ `1ef7ece`（删壳）→ 本轮收工档（见 `git log`）。
+- **Git**：`46a7750`（迁移）→ `1ef7ece`（删壳）→ `f77659b`（FocusCard 收工档）。
 - **下一刀**：复习 / 词书 / 我的三页真内容；真人发音音频包 provider；真机首次音频解锁实测。
 
 > 上一轮导航重构（两世界 / 迷你条 / 播放层）已作废，设计稿在 `docs/archive/dual-mode/`。

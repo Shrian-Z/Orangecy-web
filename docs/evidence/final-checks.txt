@@ -9,6 +9,7 @@ Step 2 organ migration: 46a7750
   old shell still mounted; old smoke 12/12 (docs/evidence/step2-smoke.txt)
 Step 3 shell deletion: 1ef7ece
   legacy selectors gone; backend zero diff
+Final implementation: f77659b
 
 Final gates:
   npm run typecheck      PASS
