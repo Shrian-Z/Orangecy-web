@@ -11,7 +11,7 @@
   - `src/lib/lrc.ts` → `src/lyrics/parse.ts`（157 行）；`src/lib/wordTiming.ts` → `src/lyrics/timing.ts`（10 行）；
   - `WordHighlight.tsx` 从旧歌词舞台抽出（84 行）；`browserTts` 从旧词卡抽出（21 行）。
   - 旧壳未改；`typecheck` / `build` / **旧 smoke 12/12**；`srs` / `studyStore` / `wordbook` / `api` / `server` 零 diff。
-- **第 3 步 · 删旧壳** `1ef7ece`：19 个旧组件 / 旧 CSS / 旧导航稿 / 旧截图全部下线并归档，
+- **第 3 步 · 删旧壳** `1ef7ece`：18 个旧组件 / 旧 CSS / 旧导航稿 / 旧截图全部下线并归档，
   `src/` 只剩音频器官、歌词器官、SRS 与 4 tab 空壳；后台零 diff。
 - **第 4 步 · 新卡**：
   - FocusCard + `src/audio/sequence.ts` 新序列器 + `browserTts` provider + 4 tab + 空态。
