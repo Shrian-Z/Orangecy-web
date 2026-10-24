@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-10-24T14:51:41.240Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "label": "连接网易云音乐",
+      "state": "qr"
+    },
+    {
+      "label": "连接QQ 音乐",
+      "state": "qr"
+    },
+    {
+      "label": "连接酷狗音乐",
+      "state": "qr"
+    },
+    {
+      "label": "连接波点音乐",
+      "state": "qr"
+    }
+  ],
+  "errors": []
+}

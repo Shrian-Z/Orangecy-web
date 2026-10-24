@@ -446,13 +446,258 @@ button {
   color: var(--ink-18);
 }
 
+.icon-action {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-40);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.icon-action:hover {
+  color: var(--ink-80);
+}
+
+.my-page {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: min(var(--content), 100% - (var(--page-pad) * 2));
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4px;
+}
+
+.my-head {
+  flex: 0 0 auto;
+  height: var(--status-h);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.my-add {
+  color: var(--ink-55);
+}
+
+.my-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.my-empty {
+  color: var(--ink-18);
+}
+
+.platform-list {
+  width: min(360px, 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.platform-row {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--ink-08);
+}
+
+.platform-row:first-child {
+  border-top: 0;
+}
+
+.platform-icon {
+  width: var(--tap);
+  height: var(--tap);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+
+.platform-logout {
+  color: var(--ink-40);
+}
+
+.platform-logout:hover {
+  color: var(--ink-70);
+}
+
+.sheet-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: var(--ink-18);
+}
+
+.platform-sheet {
+  width: min(360px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: 8px 16px 20px;
+  border: 1px solid var(--ink-18);
+  border-radius: 20px;
+  background: var(--white);
+}
+
+.sheet-nav {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.platform-choice {
+  position: relative;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--ink-18);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--ink-55);
+  cursor: pointer;
+}
+
+.platform-choice:hover {
+  color: var(--ink);
+  border-color: var(--ink-28);
+}
+
+.platform-choice.is-connected {
+  color: var(--ink);
+  border-color: var(--ink-28);
+  cursor: default;
+}
+
+.platform-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+
+.qr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0 8px;
+}
+
+.qr-platform {
+  width: var(--tap);
+  height: var(--tap);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+
+.qr-frame {
+  position: relative;
+  width: 216px;
+  height: 216px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--ink-18);
+  border-radius: 16px;
+  background: var(--white);
+}
+
+.qr-frame.is-scanned {
+  border-color: var(--ink-40);
+}
+
+.qr-image {
+  display: block;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  background: var(--white);
+}
+
+.qr-retry {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--ink-18);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-55);
+  cursor: pointer;
+}
+
+.qr-retry:hover {
+  color: var(--ink);
+  border-color: var(--ink-28);
+}
+
+.qr-success {
+  color: var(--ink);
+}
+
+.qr-badge {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink-18);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.platform-spin {
+  color: var(--ink-40);
+  animation: platform-spin 1s linear infinite;
+}
+
+@keyframes platform-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .focus-card:focus-visible,
 .lyrics:focus-visible,
 .word-block:focus-visible,
 .mute:focus-visible,
 .actions button:focus-visible,
 .tab:focus-visible,
-.replay-all:focus-visible {
+.replay-all:focus-visible,
+.icon-action:focus-visible,
+.platform-choice:focus-visible,
+.qr-retry:focus-visible {
   outline: 2px solid var(--ink-40);
   outline-offset: 2px;
 }

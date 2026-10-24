@@ -1,0 +1,168 @@
+{
+  "generatedAt": "2026-10-24T15:05:56.950Z",
+  "url": "http://127.0.0.1:8787",
+  "auth": {
+    "mode": "existing local session (data/sessions.json)",
+    "platform": "netease",
+    "loggedIn": true,
+    "nickname": "Shrian_",
+    "sessionPrefix": "03de4e",
+    "connectedRows": 1,
+    "myPageHasVisibleText": false,
+    "qrLiveScan": false,
+    "note": "Two live QR attempts expired without a phone confirmation; connected state and 5-card playback verified with the pre-existing local netease session."
+  },
+  "cards": [
+    {
+      "index": 1,
+      "word": "lose",
+      "trackId": "1850175684",
+      "title": "Counting Stars",
+      "seek": 0.59,
+      "seekCheck": {
+        "at": 1722.7,
+        "event": "seek-check",
+        "present": true,
+        "requested": 0.59,
+        "actual": 0.657295,
+        "passed": true,
+        "playing": true
+      },
+      "fragment": {
+        "at": 521.6,
+        "event": "fragment-start",
+        "start": 0.59,
+        "end": 9.19,
+        "duration": 8.6,
+        "autoPronounce": true
+      },
+      "activeLines": [
+        "line is-past",
+        "line is-active"
+      ],
+      "target": true,
+      "lyricFollow": true
+    },
+    {
+      "index": 2,
+      "word": "dream",
+      "trackId": "1850175684",
+      "title": "Counting Stars",
+      "seek": 5.29,
+      "seekCheck": {
+        "at": 1722.3,
+        "event": "seek-check",
+        "present": true,
+        "requested": 5.29,
+        "actual": 5.368811,
+        "passed": true,
+        "playing": true
+      },
+      "fragment": {
+        "at": 520.9,
+        "event": "fragment-start",
+        "start": 5.29,
+        "end": 14.16,
+        "duration": 8.87,
+        "autoPronounce": true
+      },
+      "activeLines": [
+        "line is-past",
+        "line is-active"
+      ],
+      "target": true,
+      "lyricFollow": true
+    },
+    {
+      "index": 3,
+      "word": "baby",
+      "trackId": "1850175684",
+      "title": "Counting Stars",
+      "seek": 9.19,
+      "seekCheck": {
+        "at": 1722.5,
+        "event": "seek-check",
+        "present": true,
+        "requested": 9.19,
+        "actual": 9.260026,
+        "passed": true,
+        "playing": true
+      },
+      "fragment": {
+        "at": 520.9,
+        "event": "fragment-start",
+        "start": 9.19,
+        "end": 16.16,
+        "duration": 6.97,
+        "autoPronounce": true
+      },
+      "activeLines": [
+        "line is-past",
+        "line is-active"
+      ],
+      "target": true,
+      "lyricFollow": true
+    },
+    {
+      "index": 4,
+      "word": "count",
+      "trackId": "1850175684",
+      "title": "Counting Stars",
+      "seek": 14.16,
+      "seekCheck": {
+        "at": 1723,
+        "event": "seek-check",
+        "present": true,
+        "requested": 14.16,
+        "actual": 14.227257,
+        "passed": true,
+        "playing": true
+      },
+      "fragment": {
+        "at": 522.1,
+        "event": "fragment-start",
+        "start": 14.16,
+        "end": 19.08,
+        "duration": 4.92,
+        "autoPronounce": true
+      },
+      "activeLines": [
+        "line is-past",
+        "line is-active"
+      ],
+      "target": true,
+      "lyricFollow": true
+    },
+    {
+      "index": 5,
+      "word": "give",
+      "trackId": "33187386",
+      "title": "Viva La Vida (Live)",
+      "seek": 22.27,
+      "seekCheck": {
+        "at": 1724.5,
+        "event": "seek-check",
+        "present": true,
+        "requested": 22.27,
+        "actual": 22.352102,
+        "passed": true,
+        "playing": true
+      },
+      "fragment": {
+        "at": 523.3,
+        "event": "fragment-start",
+        "start": 22.27,
+        "end": 29.3,
+        "duration": 7.03,
+        "autoPronounce": true
+      },
+      "activeLines": [
+        "line is-past",
+        "line is-active"
+      ],
+      "target": true,
+      "lyricFollow": true
+    }
+  ],
+  "errors": []
+}

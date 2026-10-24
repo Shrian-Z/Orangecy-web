@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BottomTabs } from '@/components/BottomTabs';
 import { PlaceholderView } from '@/components/PlaceholderView';
 import { LearnScreen } from '@/screens/LearnScreen';
+import { MyScreen } from '@/screens/MyScreen';
 import { useAppStore } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
 
@@ -21,7 +22,7 @@ export default function App() {
         </div>
         {view !== 'learn' ? (
           <div className="stage-layer">
-            <PlaceholderView view={view} />
+            {view === 'me' ? <MyScreen /> : <PlaceholderView view={view} />}
           </div>
         ) : null}
       </main>

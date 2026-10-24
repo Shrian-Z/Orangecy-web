@@ -6,8 +6,23 @@
 ## 一个业务屏
 
 - 启动直达学习页第一张卡；无 splash、无品牌语。
-- 底部 4 个纯图标 tab：学习 / 复习 / 词书 / 我的；后三个为空态图标。
+- 底部 4 个纯图标 tab：学习 / 复习 / 词书 / 我的；复习 / 词书为空态，
+  「我的」是音源连接页。
 - 学习页 = 全屏单词卡；音乐只以歌词片段、目标词、进度、静音钮出现。
+
+## 我的 · 平台连接（2026-10-24 接回）
+
+- 入口：底部「我的」右上角 `Plus`（aria-label 添加音源）。
+- 添加 → 四个平台图标（网易云 / QQ / 酷狗 / 波点）→ 选中后
+  `api.*.qrKey` 生成二维码 → 每 1.5s 轮询 `api.*.qrCheck` →
+  803 成功后 `api.*.authStatus` 确认 → 本机 session（oc_sid）。
+- 已连接：只显示平台图标 + 断开图标；断开走 `api.*.logout`。
+- 不展示曲库、歌曲、账号资料；平台名只进 aria / title；页面无可见文案。
+- 二维码是唯一功能性图片豁免；`check:palette` 跳过 `<img>`。
+- 本轮 seed 仍全部 `platform: "netease"`；QQ / 酷狗 / 波点入口可连，
+  不改 seed 平台；四平台入口都必须真实调用已有 API，失败显示刷新图标。
+- 复用本仓 `api.ts` / `audio/source.ts`；MIT 库直接用；不复制 Folia
+  AGPL 登录 UI / Omni / 曲库代码。
 
 ## 卡面状态
 
@@ -70,9 +85,12 @@
     src/lyrics/WordHighlight.tsx 词高亮 token 化 / 目标词 / phase
     src/cards.ts               卡数据、SRS 输入适配
     src/state/app.ts           view / muted
+    src/platforms.ts           四平台连接配置（复用 api.ts）
     src/screens/LearnScreen.tsx 卡索引、序列、判断
+    src/screens/MyScreen.tsx   我的：连接态 + 添加入口
     src/components/            FocusCard / LyricFragment / FragmentProgress /
-                               MuteButton / BottomTabs / PlaceholderView
+                               MuteButton / BottomTabs / PlaceholderView /
+                               PlatformConnectSheet
     src/styles/tokens.css      两色 + 明度阶梯
     src/styles/app.css         卡面 / tabs / 动效
 
@@ -87,6 +105,10 @@ npm run smoke
 npm run trace:audio
 npm run shoot:focus
 ```
+
+登录 / 音源接回证据：`docs/evidence/auth-step1.json`（3 首 play/lyric +
+未登录对照）、`docs/evidence/platform-entry.json`（四平台二维码入口）、
+`docs/evidence/auth-ui-e2e.json`（已连接态 + 5 张卡 seek-check）。
 
 旧壳拆除前（tag `checkpoint-pre-ammo-20261024` → commit `a293fca`）的
 旧 smoke 12/12 证据见 `docs/evidence/step2-smoke.txt`。

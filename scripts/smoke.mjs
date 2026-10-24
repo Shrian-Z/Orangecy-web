@@ -11,7 +11,7 @@ import path from 'node:path';
 import { chromium } from 'playwright-core';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const BASE = process.env.SMOKE_URL || 'http://127.0.0.1:8790';
+const BASE = process.env.SMOKE_URL || 'http://127.0.0.1:8787';
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const DECK = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/seed-50.json'), 'utf8')).cards;
 const WORDS = DECK.map((card) => card.w);
@@ -210,12 +210,30 @@ try {
     (await page.locator('.focus-card').getAttribute('data-expanded')) === 'false',
   );
 
-  for (const label of ['复习', '词书', '我的']) {
+  for (const label of ['复习', '词书']) {
     await page.locator(`.tab[aria-label="${label}"]`).click();
     await page.waitForTimeout(200);
     check(`${label} is an icon-only empty state`, (await page.locator('.placeholder svg').count()) === 1);
     check(`${label} hides the card`, !(await page.locator('.focus-card').isVisible().catch(() => false)));
   }
+
+  await page.locator('.tab[aria-label="我的"]').click();
+  await page.waitForSelector('.my-page');
+  await page.waitForTimeout(600);
+  check('my page is icon-only', (await page.locator('.my-page').innerText()).trim() === '');
+  check('my add button exists', await page.locator('.my-add').isVisible());
+  check('my tab hides the card', !(await page.locator('.focus-card').isVisible().catch(() => false)));
+  await page.locator('.my-add').click();
+  await page.waitForSelector('.platform-sheet');
+  check('four platform choices', (await page.locator('.platform-choice').count()) === 4);
+  check('add sheet is icon-only', (await page.locator('.platform-sheet').innerText()).trim() === '');
+  await page.locator('.platform-choice[aria-label="连接网易云音乐"]').click();
+  await page.waitForSelector('.qr-image');
+  check('netease qr renders', (await page.locator('.qr-image').count()) === 1);
+  await page.locator('.platform-sheet .icon-action[aria-label="关闭"]').click();
+  await page.waitForTimeout(200);
+  check('connect sheet closes', (await page.locator('.platform-sheet').count()) === 0);
+
   await page.locator('.tab[aria-label="学习"]').click();
   await page.waitForTimeout(300);
   check('learning tab returns to the card', await page.locator('.focus-card').isVisible());

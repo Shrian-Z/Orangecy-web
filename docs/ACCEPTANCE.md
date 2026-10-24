@@ -1,8 +1,8 @@
 # Orangecy 验收清单（弹药时代 · 2026-10-24）
 
 更新日期：2026-10-24  
-验收入口：`http://127.0.0.1:8790`（静态生产预览）或 `http://localhost:5173`（Vite）  
-API：`http://127.0.0.1:8787`（`check:cards` 用）  
+验收入口：`http://127.0.0.1:8787`（API + dist 同源）；`http://localhost:5173`（Vite）  
+API：`http://127.0.0.1:8787`  
 设计对照：`docs/design/focus-card-v3.md` + 四态 PNG
 
 ## 一键回归
@@ -24,15 +24,16 @@ npm run shoot:focus
 | typecheck | PASS | 无输出 |
 | check:cards | 484/484 | `docs/cards-check.json` |
 | build | PASS | `dist/` |
-| check:palette | 15 状态 0 违规 / 0 渐变 / 0 阴影 | `docs/palette-check.json` |
-| smoke | 58/58 | 终端输出 |
+| check:palette | 24 状态 0 违规 / 0 渐变 / 0 阴影 | `docs/palette-check.json` |
+| smoke | 63/63 | 终端输出 |
 | trace:audio | 13/13 | `docs/audio-trace.json` |
 | shoot:focus | 3 视口 × 4 态 | `docs/screenshots/focus-*.png` |
 
 ## 产品验收
 
 1. **启动**：打开即一张卡，无 splash、无品牌语、无说明字。
-2. **唯一业务屏**：只有学习卡；底部 4 个无字图标 tab；后三个只有居中图标。
+2. **唯一业务屏**：只有学习卡；底部 4 个无字图标 tab；复习 / 词书空态，
+   「我的」是音源连接页（也不展示曲库 / 账号资料）。
 3. **卡面**：`01 / 50` + 静音钮；1–2 句歌词；目标词蓝 + 下划线；进度细线；
    单词 + 音标；词义初始收起。
 4. **展开**：点卡片空白，380ms 展开释义 / 知识 / 例句；模糊 / 认识浮现；
@@ -46,6 +47,48 @@ npm run shoot:focus
 8. **范围**：`server/`、`data/catalog.json`、`public/wordbooks/`、`src/lib/srs.ts`、
    `src/studyStore.ts`、`src/lib/wordbook.ts`、`src/api.ts` 对
    `checkpoint-pre-ammo-20261024` 零 diff。
+
+
+## 音源接回验收（2026-10-24）
+
+### 第 1 步 · 无 UI 证明
+
+- 复用本机已落盘网易会话 `03de4e`（`Shrian_`）：`/api/auth/status` 200，
+  `loggedIn: true`。
+- seed 3 个不同 trackId：
+
+| trackId | 曲目 | play | lyric 行 | 首/末时间戳 |
+| --- | --- | --- | --- | --- |
+| 1850175684 | Counting Stars | `available:true` / 128k | 96 | 0.59 / 252.4 |
+| 33187386 | Viva La Vida (Live) | `available:true` / 128k | 45 | 18.72 / 223.33 |
+| 2619953693 | Yesterday Once More | `available:true` / 128k | 58 | 1.746 / 229.439 |
+
+- 未登录对照也写了 `available/reason`；这三首免费曲未登录同样可播。
+- 证据：`docs/evidence/auth-step1.json`。
+
+### 第 2 步 · 我的 · 添加
+
+- 空态：右上 Plus + 居中 User 图标；无可见文案。
+- 选平台：四个图标（网易 / QQ / 酷狗 / 波点），无可见文案；四平台
+  `qrKey` 实测都能生成二维码（`docs/evidence/platform-entry.json`）。
+- 扫码：1.5s 轮询 `qrCheck`；803 后 `authStatus` 确认；已连接列表只显示
+  平台图标 + 断开图标；断开走 `api.*.logout`。
+- 截图：`docs/screenshots/my-empty.png`、`my-chooser.png`、`my-qr-live.png`、
+  `my-connected.png`。
+- 口径：二维码是唯一功能性图片豁免；不展示曲库 / 曲名 / 账号资料。
+
+### 第 3 步 · 词卡可播
+
+- 用本机已落盘网易会话实测 seed 前 5 张：
+  **5/5 `seek-check.passed`，`playing:true`**；5/5 第二行歌词均正常点亮；
+  1–4 同一曲目，第 5 张切到 Viva La Vida 仍可播。
+- 证据：`docs/evidence/auth-ui-e2e.json`。
+
+### 未完成 / 待人工
+
+- 两次实时二维码在 240s 内没有收到手机确认，已过期；「经新 UI 真实扫码」
+  仍需要手机确认。已连接态与 5 卡可播用本机已落盘会话验证。
+- 断开按钮已接 `api.*.logout`；为保住已落盘会话，验收时未真正退出。
 
 ## 双端布局
 

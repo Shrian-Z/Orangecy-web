@@ -2,7 +2,32 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
-## 最新（2026-10-24 晚）弹药时代 · 全屏学习卡已落地
+## 最新（2026-10-24 深夜）音源接回 · 我的·添加
+
+- **开工存档**：`checkpoint-pre-auth-reconnect-20261024` → tag `2a3ff2d` / commit `add0be2`。
+- **第 1 步 · 无 UI 证明旧链路**：复用本机已落盘网易会话 `03de4e`（`Shrian_`），
+  `authStatus` 返回 `loggedIn: true`；seed 的 3 个不同 trackId 均 `available: true`，
+  歌词 45 / 58 / 96 行带真实时间戳；未登录对照也写入证据。
+  见 `docs/evidence/auth-step1.json`。服务：`node server/index.mjs` @ 8787。
+- **第 2 步 · 「我的」连平台**：把 me 的 Placeholder 换成 `MyScreen` +
+  `PlatformConnectSheet`。右上 `Plus` → 四平台图标（网易 / QQ / 酷狗 / 波点）→
+  `api.*.qrKey` 生成二维码 → 每 1.5s 轮询 `api.*.qrCheck` → 803 后
+  `authStatus` 确认 → 已连接平台图标 + 断开图标。页面与 sheet 无可见文案；
+  二维码是唯一功能性图片豁免。四平台二维码实测均可生成
+  （`docs/evidence/platform-entry.json`）。
+- **第 3 步 · 词卡可播**：用已落盘网易会话实测 seed 前 5 张：
+  **5/5 `seek-check.passed`**，`playing: true`；5/5 第二行歌词均正常点亮；
+  1–4 同为 Counting Stars，第 5 张切到 Viva La Vida 仍可播。
+  见 `docs/evidence/auth-ui-e2e.json`。
+- **门槛**：`typecheck` / `build` / `check:cards` 484/484；`check:palette`
+  24 状态 0 违规 / 0 渐变 / 0 阴影；`smoke` 63/63；`trace:audio` 13/13；
+  `shoot:focus` 三视口四态重跑。截图：`docs/screenshots/my-empty.png`、
+  `my-chooser.png`、`my-qr-live.png`、`my-connected.png`。
+- **未完成（唯一）**：两次实时二维码在 240s 内没收到手机确认，已过期；
+  「经新 UI 真实扫码」仍需你手机确认。连接态与 5 卡可播已用本机已落盘会话验证。
+- **下一刀**：补一次真实扫码 E2E；复习 / 词书真内容；真机音频解锁实测。
+
+## 上一轮（2026-10-24 晚）弹药时代 · 全屏学习卡已落地
 
 - **保尸**：`checkpoint-pre-ammo-20261024` → tag `87375de` / commit `a293fca`（旧壳可回滚点）。
 - **第 2 步 · 器官迁移** `46a7750`：

@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-10-24T14:30:07.672Z",
+  "api": "http://127.0.0.1:8787",
+  "session": {
+    "source": "data/sessions.json (pre-existing, loaded by server)",
+    "sessionIdPrefix": "03de4e",
+    "authHttp": 200,
+    "loggedIn": true,
+    "platform": "netease",
+    "profileNickname": "Shrian_"
+  },
+  "authenticated": [
+    {
+      "trackId": "1850175684",
+      "title": "Counting Stars",
+      "playHttp": 200,
+      "available": true,
+      "trial": null,
+      "br": 128000,
+      "reason": null,
+      "lyricHttp": 200,
+      "lyricChars": 3775,
+      "lyricLines": 96,
+      "firstLine": {
+        "time": 0.59,
+        "text": "Lately I've been I've been losing sleep"
+      },
+      "lastLine": {
+        "time": 252.4,
+        "text": "The lessons I've learned"
+      }
+    },
+    {
+      "trackId": "33187386",
+      "title": "Viva La Vida (Live)",
+      "playHttp": 200,
+      "available": true,
+      "trial": null,
+      "br": 128000,
+      "reason": null,
+      "lyricHttp": 200,
+      "lyricChars": 1956,
+      "lyricLines": 45,
+      "firstLine": {
+        "time": 18.72,
+        "text": "I used to rule the world"
+      },
+      "lastLine": {
+        "time": 223.33,
+        "text": "But that was when I ruled the world"
+      }
+    },
+    {
+      "trackId": "2619953693",
+      "title": "Yesterday Once More",
+      "playHttp": 200,
+      "available": true,
+      "trial": null,
+      "br": 128000,
+      "reason": null,
+      "lyricHttp": 200,
+      "lyricChars": 2008,
+      "lyricLines": 58,
+      "firstLine": {
+        "time": 1.746,
+        "text": "When I was young"
+      },
+      "lastLine": {
+        "time": 229.439,
+        "text": "So fine"
+      }
+    }
+  ],
+  "unauthenticated": [
+    {
+      "trackId": "1850175684",
+      "title": "Counting Stars",
+      "playHttp": 200,
+      "available": true,
+      "trial": null,
+      "reason": null
+    },
+    {
+      "trackId": "33187386",
+      "title": "Viva La Vida (Live)",
+      "playHttp": 200,
+      "available": true,
+      "trial": null,
+      "reason": null
+    },
+    {
+      "trackId": "2619953693",
+      "title": "Yesterday Once More",
+      "playHttp": 200,
+      "available": true,
+      "trial": null,
+      "reason": null
+    }
+  ]
+}

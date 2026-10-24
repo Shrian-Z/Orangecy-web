@@ -1,0 +1,47 @@
+Orangecy · auth reconnect final checks
+Date: 2026-10-24 (Asia/Shanghai)
+
+Checkpoint before this round:
+  checkpoint-pre-auth-reconnect-20261024
+  tag object: 2a3ff2daf177f7e15500bba4399ed02e65cbd84f
+  commit:     add0be2cf1437fa44b3afed7c0b4e3842f11e203
+
+Step 1 (no UI, existing local netease session 03de4e / Shrian_):
+  /api/auth/status -> 200 loggedIn true
+  1850175684 Counting Stars       play available true, 128k, lyric 96 lines
+  33187386   Viva La Vida (Live)  play available true, 128k, lyric 45 lines
+  2619953693 Yesterday Once More  play available true, 128k, lyric 58 lines
+  unauth control: all three available true (free tracks); reasons null
+  evidence: docs/evidence/auth-step1.json
+
+Step 2 (My -> Add):
+  four platform entries all generate a real QR:
+    netease qr, qq qr, kugou qr, bodian qr
+  evidence: docs/evidence/platform-entry.json
+  my screenshots: my-empty / my-chooser / my-qr-live / my-connected
+  page + sheet visible text: empty
+  palette: 24 states, 0 source / 0 runtime violations, 0 gradients, 0 shadows
+  QR image exemption: third-party platform login QR only; check:palette skips <img>
+
+Step 3 (FocusCard playback, existing session):
+  5/5 cards seek-check.passed = true, playing = true
+  1 lose    requested 0.59  actual 0.669  track 1850175684
+  2 dream   requested 5.29  actual 5.397  track 1850175684
+  3 baby    requested 9.19  actual 9.275  track 1850175684
+  4 count   requested 14.16 actual 14.246 track 1850175684
+  5 give    requested 22.27 actual 22.351 track 33187386 (track switch)
+  all 5 cards: second lyric line became is-active (lyricFollow true)
+  evidence: docs/evidence/auth-ui-e2e.json
+
+Final gates:
+  npm run typecheck       PASS
+  npm run build           PASS (check:cards 484/484 with CARDS_COOKIE session 03de4e)
+  npm run check:palette   24 states; 0 violations; ladder 8/18/28/34/40/48/55/70/80/100, missing none
+  npm run smoke           63/63
+  npm run trace:audio     13/13 (21 events)
+  npm run shoot:focus     3 viewports x 4 states
+
+Open item:
+  Two live QR attempts expired after 240s without a phone confirmation.
+  The new-UI real QR login still needs a manual phone confirmation; connected
+  state and playback above were verified with the pre-existing local session.

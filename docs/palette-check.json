@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-24T12:51:47.695Z",
-  "url": "http://127.0.0.1:8790",
+  "generatedAt": "2026-10-24T14:53:43.948Z",
+  "url": "http://127.0.0.1:8787",
   "sourceFiles": [
     "src/App.tsx",
     "src/api.ts",
@@ -15,13 +15,16 @@
     "src/components/LyricFragment.tsx",
     "src/components/MuteButton.tsx",
     "src/components/PlaceholderView.tsx",
+    "src/components/PlatformConnectSheet.tsx",
     "src/lib/srs.ts",
     "src/lib/wordbook.ts",
     "src/lyrics/WordHighlight.tsx",
     "src/lyrics/parse.ts",
     "src/lyrics/timing.ts",
     "src/main.tsx",
+    "src/platforms.ts",
     "src/screens/LearnScreen.tsx",
+    "src/screens/MyScreen.tsx",
     "src/state/app.ts",
     "src/studyStore.ts",
     "src/styles/app.css",
@@ -145,6 +148,9 @@
       "muteColor": "rgb(0, 47, 167)"
     }
   ],
+  "notes": [
+    "Platform login QR images are functional third-party assets; <img> is skipped by the runtime paint scan. No other images are allowed."
+  ],
   "paletteTokensSeen": [
     "rgb(0, 47, 167)",
     "rgb(255, 255, 255)",
@@ -228,6 +234,30 @@
       "shadows": 0
     },
     {
+      "state": "desktop / my",
+      "paintedElements": 35,
+      "uniquePaintValues": 5,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / connect-sheet",
+      "paintedElements": 60,
+      "uniquePaintValues": 6,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / connect-qr",
+      "paintedElements": 50,
+      "uniquePaintValues": 5,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
       "state": "mobile-390 / collapsed",
       "paintedElements": 79,
       "uniquePaintValues": 8,
@@ -268,6 +298,30 @@
       "shadows": 0
     },
     {
+      "state": "mobile-390 / my",
+      "paintedElements": 35,
+      "uniquePaintValues": 5,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / connect-sheet",
+      "paintedElements": 60,
+      "uniquePaintValues": 6,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / connect-qr",
+      "paintedElements": 50,
+      "uniquePaintValues": 5,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
       "state": "mobile-320 / collapsed",
       "paintedElements": 79,
       "uniquePaintValues": 8,
@@ -303,6 +357,30 @@
       "state": "mobile-320 / placeholder",
       "paintedElements": 28,
       "uniquePaintValues": 4,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / my",
+      "paintedElements": 35,
+      "uniquePaintValues": 5,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / connect-sheet",
+      "paintedElements": 60,
+      "uniquePaintValues": 6,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / connect-qr",
+      "paintedElements": 50,
+      "uniquePaintValues": 5,
       "violations": 0,
       "gradients": 0,
       "shadows": 0

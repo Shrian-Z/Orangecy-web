@@ -11,14 +11,14 @@
  *
  * Run the built app first (or the dev server):
  *   npm run build
- *   APP_URL=http://127.0.0.1:8790 npm run check:palette
+ *   APP_URL=http://127.0.0.1:8787 npm run check:palette
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const APP_URL = process.env.APP_URL || 'http://127.0.0.1:8790';
+const APP_URL = process.env.APP_URL || 'http://127.0.0.1:8787';
 const CHROME_PATH =
   process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const BLUE = [0, 47, 167];
@@ -321,6 +321,18 @@ try {
     await placeholder.locator('.tab[aria-label="复习"]').click();
     await placeholder.waitForTimeout(300);
     results.push(await scanState(placeholder, `${viewport.name} / placeholder`));
+
+    await placeholder.locator('.tab[aria-label="我的"]').click();
+    await placeholder.waitForSelector('.my-page');
+    await placeholder.waitForTimeout(500);
+    results.push(await scanState(placeholder, `${viewport.name} / my`));
+    await placeholder.locator('.my-add').click();
+    await placeholder.waitForSelector('.platform-sheet');
+    results.push(await scanState(placeholder, `${viewport.name} / connect-sheet`));
+    await placeholder.locator('.platform-choice[aria-label="连接网易云音乐"]').click();
+    await placeholder.waitForSelector('.qr-image', { timeout: 20_000 });
+    results.push(await scanState(placeholder, `${viewport.name} / connect-qr`));
+    await placeholder.locator('.platform-sheet .icon-action[aria-label="关闭"]').click();
     await placeholderContext.close();
   }
 } finally {
@@ -378,6 +390,9 @@ const report = {
   gradients,
   shadows,
   musicTraces,
+  notes: [
+    'Platform login QR images are functional third-party assets; <img> is skipped by the runtime paint scan. No other images are allowed.',
+  ],
   paletteTokensSeen,
   ladder,
   browserErrors,

@@ -15,7 +15,7 @@ import path from 'node:path';
 import { chromium } from 'playwright-core';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const URL = process.env.APP_URL || 'http://127.0.0.1:8790';
+const URL = process.env.APP_URL || 'http://127.0.0.1:8787';
 const CHROME =
   process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const REPORT = path.join(ROOT, 'docs/audio-trace.json');

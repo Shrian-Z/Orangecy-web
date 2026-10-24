@@ -12,11 +12,34 @@ Orangecy 是一台纯粹的背单词机器。一轮 50 词，一屏一词：
 - 展开后只有两个判断：**模糊**（hard）/ **认识**（good），直接交给已有 `review()`。
 - 点歌词只重播片段；点单词只重听发音；两者不展开词义、不切卡。
 - 50 词走完停在 50/50，居中一个重播图标，无文字。
-- 底部 4 个纯图标 tab：学习 / 复习 / 词书 / 我的；后三个本轮为空态。
+- 底部 4 个纯图标 tab：学习 / 复习 / 词书 / 我的；复习 / 词书为空态，
+  「我的」是音源连接页。
 
-界面上没有歌单、歌曲、播放器、浏览、搜索、抽屉、推荐、弹窗。音乐只以
+学习卡上没有歌单、歌曲、播放器、浏览、搜索、抽屉、推荐、弹窗。音乐只以
 歌词、目标词、片段进度、静音钮四种痕迹出现。全站只有 `#002FA7` 与
 `#FFFFFF` 及透明度派生；白底蓝字，无渐变、无阴影、无第三色。
+
+
+## 我的 · 音源连接
+
+- 底部「我的」右上角 `Plus`（aria-label 添加音源）→ 四个平台图标
+  （网易云 / QQ / 酷狗 / 波点）→ 选中平台生成二维码 → 手机扫码确认 →
+  已连接平台图标 + 断开图标。
+- 每 1.5s 轮询 `api.*.qrCheck`；803 成功后 `api.*.authStatus` 确认，
+  session 落本机服务。四个入口都真实调用已有 API。
+- 页面与 sheet 没有可见文案；平台名只进 aria / title。二维码是唯一
+  功能性图片豁免；不展示曲库、歌曲、账号资料。
+- 登录只是音源能力：seed 50 卡目前全部网易云；QQ / 酷狗 / 波点入口可连，
+  但本轮不改 seed 平台。复用本仓 `api.ts` / `audio/source.ts`，MIT 库直接用；
+  不复制 Folia AGPL 登录 UI / Omni / 曲库代码。
+
+| 我的 · 空态 | 我的 · 已连接 |
+| --- | --- |
+| ![我的空态](docs/screenshots/my-empty.png) | ![已连接](docs/screenshots/my-connected.png) |
+
+| 添加 · 选平台 | 添加 · 扫码（示例码已过期） |
+| --- | --- |
+| ![选平台](docs/screenshots/my-chooser.png) | ![扫码](docs/screenshots/my-qr-live.png) |
 
 ## 预览
 
@@ -75,14 +98,14 @@ type FocusCardData = {
 npm run typecheck
 npm run check:cards     # 需要本地 API 在 8787
 npm run build           # 已包含 check:cards
-npm run check:palette   # 15 状态 / 0 违规 / 0 渐变 / 0 阴影
-npm run smoke           # 58 项
+npm run check:palette   # 24 状态 / 0 违规 / 0 渐变 / 0 阴影
+npm run smoke           # 63 项
 npm run trace:audio     # 0.2s 淡入淡出 / 0.5s 安静 / 发音直出
 npm run shoot:focus     # 双端四态截图
 ```
 
-生产预览：`npm start` 后打开 <http://127.0.0.1:8787>；旧版 8790 端口也可继续
-作为静态预览。`npm run dev` 同时起 API 与 Vite。
+生产预览：`npm start` 后打开 <http://127.0.0.1:8787>（API + dist 同源）。
+`npm run dev` 同时起 API 与 Vite。
 
 ## 代码地图
 
@@ -96,9 +119,12 @@ src/lyrics/timing.ts       逐词三态（旧 lib/wordTiming 迁入）
 src/lyrics/WordHighlight.tsx 词高亮 token 化 / 目标词 / phase
 src/cards.ts               卡数据 + SRS 输入适配
 src/state/app.ts           view / muted
+src/platforms.ts           四平台连接配置（复用 api.ts）
 src/screens/LearnScreen.tsx 卡索引、序列、判断、完成态
+src/screens/MyScreen.tsx   我的：连接态 + 添加入口
 src/components/            FocusCard / LyricFragment / FragmentProgress /
-                           MuteButton / BottomTabs / PlaceholderView
+                           MuteButton / BottomTabs / PlaceholderView /
+                           PlatformConnectSheet
 src/styles/tokens.css      两色 + 明度阶梯
 src/styles/app.css         卡面 / tabs / 动效
 public/cards/seed-50.json  真实验收数据
@@ -139,6 +165,6 @@ docs/archive/              旧双模式壳 / 旧导航稿 / 旧 CSS / 旧验收
 
 ## 下一步
 
-1. 复习 / 词书 / 我的三个 tab 的真内容（本轮只做空态）。
-2. 真人发音音频包 provider（可做真 0.2s 增益斜坡）。
+1. 复习 / 词书两个 tab 的真内容（本轮只做空态；「我的」已完成连接）。
+2. 补一次真实扫码 E2E；真人发音音频包 provider（可做真 0.2s 增益斜坡）。
 3. 真机首次音频解锁、锁屏 / 通勤场景实测。

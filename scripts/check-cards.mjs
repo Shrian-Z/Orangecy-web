@@ -15,6 +15,8 @@ import { parseLrc } from '../server/lyrics.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const API = process.env.CARDS_API || 'http://127.0.0.1:8787';
+const COOKIE = process.env.CARDS_COOKIE || '';
+const SESSION_PREFIX = (COOKIE.match(/oc_sid=([^;]+)/)?.[1] ?? '').slice(0, 6);
 const PUBLIC_FILE = path.join(ROOT, 'public/cards/seed-50.json');
 const SRC_FILE = path.join(ROOT, 'src/data/seed-50.json');
 const REPORT = path.join(ROOT, 'docs/cards-check.json');
@@ -32,7 +34,10 @@ function sleep(ms) {
 }
 
 async function requestJson(url) {
-  const response = await fetch(url, { signal: AbortSignal.timeout(30_000) });
+  const response = await fetch(url, {
+    headers: COOKIE ? { Cookie: COOKIE } : undefined,
+    signal: AbortSignal.timeout(30_000),
+  });
   if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
   return response.json();
 }
@@ -109,6 +114,8 @@ async function main() {
   const report = {
     generatedAt: new Date().toISOString(),
     api: API,
+    authCookie: Boolean(COOKIE),
+    sessionPrefix: SESSION_PREFIX || null,
     cards: cards.length,
     tracks: trackIds.length,
     words: cards.map((card) => card.w),
@@ -120,6 +127,7 @@ async function main() {
   fs.writeFileSync(REPORT, `${JSON.stringify(report, null, 2)}\n`);
 
   console.log(`Focus deck: ${cards.length} cards / ${trackIds.length} tracks`);
+  console.log(`Auth cookie: ${COOKIE ? `yes (${SESSION_PREFIX || 'set'})` : 'no'}`);
   console.log(`Checks: ${checks.length - failures.length}/${checks.length}`);
   if (failures.length) {
     console.error('\nFailures:');
