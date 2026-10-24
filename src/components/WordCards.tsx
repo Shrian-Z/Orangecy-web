@@ -17,6 +17,7 @@ import {
 import { player } from '@/player';
 import { usePlayerStore } from '@/store';
 import { useStudyStore } from '@/studyStore';
+import { browserTts } from '@/audio/pronunciation';
 import { formatTime } from '@/lib/lrc';
 import { lookupWord, splitWordSenses } from '@/lib/wordbook';
 import type { WordbookWord } from '@/lib/wordbook';
@@ -28,15 +29,6 @@ type Stats = Record<Grade3, number>;
 const EMPTY_STATS: Stats = { again: 0, hard: 0, good: 0 };
 const AUTOPLAY_KEY = 'orangecy.cardsAutoplay';
 const AUTOSPEAK_KEY = 'orangecy.cardsSpeak';
-
-function speak(word: string) {
-  if (!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(word);
-  utterance.lang = 'en-US';
-  utterance.rate = 0.86;
-  window.speechSynthesis.speak(utterance);
-}
 
 function shortMeaning(meaning: string) {
   const first = splitWordSenses(meaning)[0] ?? '';
@@ -149,7 +141,7 @@ export function WordCards({ mode = 'learn' }: { mode?: 'learn' | 'review' }) {
 
   useEffect(() => {
     if (!card || !autoSpeak) return;
-    const timer = window.setTimeout(() => speak(card.word), 180);
+    const timer = window.setTimeout(() => browserTts.speak(card.word), 180);
     return () => window.clearTimeout(timer);
   }, [card?.word, autoSpeak]);
 
@@ -447,7 +439,7 @@ export function WordCards({ mode = 'learn' }: { mode?: 'learn' | 'review' }) {
                   <button
                     type="button"
                     className="icon-button"
-                    onClick={() => speak(card.entry.w)}
+                    onClick={() => browserTts.speak(card.entry.w)}
                     aria-label="朗读"
                   >
                     <Volume2 size={17} />
