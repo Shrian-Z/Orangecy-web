@@ -1,29 +1,11 @@
 import { create } from 'zustand';
-import type {
-  AuthStatus,
-  DrawerKind,
-  LyricLine,
-  PlayInfo,
-  SeekCheck,
-  Song,
-  Toast,
-} from '@/types';
-import type { Wordbook, WordbookIndex, WordFocus } from '@/lib/wordbook';
+import type { LyricLine, PlayInfo, SeekCheck, Song, Toast } from '@/types';
 
-export type AppView = 'player' | 'cards' | 'review' | 'recommend';
-
-interface PlayerState {
-  booted: boolean;
-  view: AppView;
-  auth: AuthStatus | null;
-  qqAuth: AuthStatus | null;
-  kugouAuth: AuthStatus | null;
-  bodianAuth: AuthStatus | null;
+interface AudioState {
   song: Song | null;
   lines: LyricLine[];
   playInfo: PlayInfo | null;
   loadingSong: boolean;
-  loadError: string | null;
   queue: Song[];
   queueIndex: number;
 
@@ -33,56 +15,34 @@ interface PlayerState {
   volume: number;
   audioReady: boolean;
 
-  drawer: DrawerKind;
-  reduceMotion: boolean;
   seekCheck: SeekCheck | null;
   toasts: Toast[];
 
-  wordbook: Wordbook | null;
-  wordbookIndex: WordbookIndex | null;
-  wordbookPrompt: boolean;
-  wordFocus: WordFocus | null;
-
-  setBooted: (value: boolean) => void;
-  setReduceMotion: (value: boolean) => void;
-  setView: (view: AppView) => void;
-  setAuth: (value: AuthStatus | null) => void;
-  setQQAuth: (value: AuthStatus | null) => void;
-  setKugouAuth: (value: AuthStatus | null) => void;
-  setBodianAuth: (value: AuthStatus | null) => void;
   beginLoad: (song: Song) => void;
   finishLoad: (song: Song, lines: LyricLine[], playInfo: PlayInfo) => void;
-  failLoad: (message: string) => void;
   setQueue: (songs: Song[], index: number) => void;
   setPlaying: (value: boolean) => void;
   setTime: (currentTime: number, duration?: number) => void;
   setDuration: (duration: number) => void;
   setVolume: (value: number) => void;
   setAudioReady: (value: boolean) => void;
-  openDrawer: (drawer: DrawerKind) => void;
   setSeekCheck: (check: SeekCheck) => void;
-  setWordbookIndex: (index: WordbookIndex | null) => void;
-  setWordbook: (book: Wordbook | null) => void;
-  setWordbookPrompt: (open: boolean) => void;
-  setWordFocus: (focus: WordFocus | null) => void;
   pushToast: (text: string, tone?: Toast['tone']) => void;
   dismissToast: (id: number) => void;
 }
 
 let toastId = 0;
 
-export const usePlayerStore = create<PlayerState>((set, get) => ({
-  booted: false,
-  view: 'player',
-  auth: null,
-  qqAuth: null,
-  kugouAuth: null,
-  bodianAuth: null,
+/**
+ * Audio organ store. It keeps the source controller's state exactly as the old
+ * shell had it, minus auth / view / drawer / wordbook state that belonged to
+ * the deleted business shell.
+ */
+export const usePlayerStore = create<AudioState>((set, get) => ({
   song: null,
   lines: [],
   playInfo: null,
   loadingSong: false,
-  loadError: null,
   queue: [],
   queueIndex: -1,
 
@@ -92,46 +52,13 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   volume: 0.85,
   audioReady: false,
 
-  drawer: null,
-  reduceMotion: (() => {
-    try {
-      const stored = localStorage.getItem('orangecy.reduceMotion');
-      if (stored === '1') return true;
-      if (stored === '0') return false;
-    } catch {
-      // 忽略
-    }
-    return typeof window !== 'undefined'
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      : false;
-  })(),
   seekCheck: null,
   toasts: [],
 
-  wordbook: null,
-  wordbookIndex: null,
-  wordbookPrompt: false,
-  wordFocus: null,
-
-  setBooted: (booted) => set({ booted }),
-  setReduceMotion: (reduceMotion) => {
-    try {
-      localStorage.setItem('orangecy.reduceMotion', reduceMotion ? '1' : '0');
-    } catch {
-      // 忽略
-    }
-    set({ reduceMotion });
-  },
-  setView: (view) => set({ view, wordFocus: null }),
-  setAuth: (auth) => set({ auth }),
-  setQQAuth: (qqAuth) => set({ qqAuth }),
-  setKugouAuth: (kugouAuth) => set({ kugouAuth }),
-  setBodianAuth: (bodianAuth) => set({ bodianAuth }),
   beginLoad: (song) =>
     set({
       song,
       loadingSong: true,
-      loadError: null,
       lines: [],
       playInfo: null,
       currentTime: 0,
@@ -139,8 +66,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       seekCheck: null,
     }),
   finishLoad: (song, lines, playInfo) =>
-    set({ song, lines, playInfo, loadingSong: false, loadError: null }),
-  failLoad: (message) => set({ loadingSong: false, loadError: message }),
+    set({ song, lines, playInfo, loadingSong: false }),
   setQueue: (queue, queueIndex) => set({ queue, queueIndex }),
   setPlaying: (playing) => set({ playing }),
   setTime: (currentTime, duration) =>
@@ -158,12 +84,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     }
   },
   setAudioReady: (audioReady) => set({ audioReady }),
-  openDrawer: (drawer) => set({ drawer }),
   setSeekCheck: (seekCheck) => set({ seekCheck }),
-  setWordbookIndex: (wordbookIndex) => set({ wordbookIndex }),
-  setWordbook: (wordbook) => set({ wordbook, wordFocus: null }),
-  setWordbookPrompt: (wordbookPrompt) => set({ wordbookPrompt }),
-  setWordFocus: (wordFocus) => set({ wordFocus }),
   pushToast: (text, tone = 'info') => {
     const id = ++toastId;
     set((state) => ({ toasts: [...state.toasts.slice(-2), { id, text, tone }] }));
@@ -173,7 +94,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     set((state) => ({ toasts: state.toasts.filter((toast) => toast.id !== id) })),
 }));
 
-export function currentLineIndex(lines: LyricLine[], time: number) {
+export function currentLineIndex(lines: { time: number }[], time: number) {
   if (!lines.length) return -1;
   let low = 0;
   let high = lines.length - 1;

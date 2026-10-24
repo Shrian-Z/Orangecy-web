@@ -7,8 +7,8 @@ import { wordPhase } from '@/lyrics/timing';
  * entries are clickable targets, and word-level timestamps produce the
  * waiting / singing / sung phase classes.
  *
- * This is the word-highlight organ extracted verbatim from LyricsStage during
- * the ammo migration; the old stage keeps using it so its DOM stays unchanged.
+ * This is the word-highlight organ extracted verbatim from the legacy lyric
+ * stage during the ammo migration, so its DOM stays unchanged.
  */
 export function WordSpans({
   text,

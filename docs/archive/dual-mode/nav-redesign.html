@@ -1,0 +1,1751 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1600" />
+<title>Orangecy · Navigation Redesign</title>
+<style>
+  :root {
+    --blue: #002FA7;
+    --white: #FFFFFF;
+    --b04: rgba(0, 47, 167, 0.04);
+    --b06: rgba(0, 47, 167, 0.06);
+    --b08: rgba(0, 47, 167, 0.08);
+    --b10: rgba(0, 47, 167, 0.10);
+    --b12: rgba(0, 47, 167, 0.12);
+    --b16: rgba(0, 47, 167, 0.16);
+    --b25: rgba(0, 47, 167, 0.25);
+    --b30: rgba(0, 47, 167, 0.30);
+    --b40: rgba(0, 47, 167, 0.40);
+    --b45: rgba(0, 47, 167, 0.45);
+    --b55: rgba(0, 47, 167, 0.55);
+    --b60: rgba(0, 47, 167, 0.60);
+    --w08: rgba(255, 255, 255, 0.08);
+    --w10: rgba(255, 255, 255, 0.10);
+    --w12: rgba(255, 255, 255, 0.12);
+    --w18: rgba(255, 255, 255, 0.18);
+    --w25: rgba(255, 255, 255, 0.25);
+    --w30: rgba(255, 255, 255, 0.30);
+    --w40: rgba(255, 255, 255, 0.40);
+    --w45: rgba(255, 255, 255, 0.45);
+    --w55: rgba(255, 255, 255, 0.55);
+    --w60: rgba(255, 255, 255, 0.60);
+    --w80: rgba(255, 255, 255, 0.80);
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Noto Sans SC", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--b08); font-family: var(--font); color: var(--blue); }
+  body { -webkit-font-smoothing: antialiased; }
+  button {
+    font-family: inherit;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+  }
+  img { display: block; }
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  .slide {
+    position: relative;
+    width: 1600px;
+    height: 1100px;
+    margin: 0 auto 48px;
+    overflow: hidden;
+    background: var(--white);
+    color: var(--blue);
+  }
+  #s1 { height: 1220px; }
+  #s2 { height: 1120px; }
+  #s3 { height: 1250px; }
+  #s4 { height: 900px; }
+
+  .deck-head {
+    position: absolute;
+    top: 34px;
+    left: 64px;
+    right: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brandline { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; }
+  .brandmark {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--b25);
+    border-radius: 50%;
+  }
+  .brandmark::after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+  .deck-meta { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; color: var(--b45); }
+  .deck-rule {
+    position: absolute;
+    top: 76px;
+    left: 64px;
+    right: 64px;
+    height: 1px;
+    background: var(--b10);
+  }
+
+  .slide-title {
+    position: absolute;
+    top: 114px;
+    left: 64px;
+    margin: 0;
+    font-size: 52px;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+    font-weight: 300;
+  }
+  .slide-title strong { font-weight: 500; }
+  .slide-sub {
+    position: absolute;
+    top: 128px;
+    left: 850px;
+    width: 620px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.8;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: var(--b55);
+  }
+  .index {
+    position: absolute;
+    top: 118px;
+    right: 64px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--b40);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--b45);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+
+  /* ---------- phoneparts ---------- */
+
+  .phone-wrap { position: absolute; top: 328px; width: 390px; }
+  .phone-wrap.left { left: 64px; }
+  .phone-wrap.right { left: 494px; }
+  .phone-cap { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+  .phone-cap .no { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: var(--b40); }
+  .phone-cap .name { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .phone-cap .sub { margin-left: auto; font-size: 10px; color: var(--b40); letter-spacing: 0.02em; }
+  .phone {
+    position: relative;
+    width: 390px;
+    height: 844px;
+    overflow: hidden;
+    border: 1px solid var(--b16);
+    border-radius: 42px;
+    background: var(--blue);
+    isolation: isolate;
+  }
+  .phone.white { background: var(--white); border-color: var(--b10); }
+  .phone-foot {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 10px;
+    line-height: 1.55;
+    color: var(--b45);
+    letter-spacing: 0.01em;
+  }
+  .phone-foot b { font-weight: 500; color: var(--b60); }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .icon.sm { width: 16px; height: 16px; }
+  .icon.lg { width: 24px; height: 24px; }
+
+  /* blue recommendation page */
+  .page-blue {
+    position: absolute;
+    inset: 0;
+    padding: 22px 16px 132px;
+    overflow: hidden;
+    background: var(--blue);
+    color: var(--white);
+  }
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 12px;
+  }
+  .rec-item { min-width: 0; }
+  .rec-cover {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 18px;
+    background: var(--w10);
+    corner-shape: squircle;
+  }
+  .rec-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .rec-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--w10);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .rec-copy { padding: 8px 2px 0; }
+  .rec-title {
+    display: block;
+    overflow: hidden;
+    color: var(--white);
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rec-artist {
+    display: block;
+    overflow: hidden;
+    margin-top: 2px;
+    color: var(--w45);
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* mini player */
+  .mini {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 72px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 8px 0 10px;
+    border: 1px solid var(--w12);
+    border-radius: 19px;
+    color: var(--white);
+    corner-shape: squircle;
+    -webkit-backdrop-filter: blur(28px) saturate(1.08);
+    backdrop-filter: blur(28px) saturate(1.08);
+    background: rgba(0, 47, 167, 0.78);
+  }
+  .mini.solid {
+    background: var(--blue);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .mini-cover {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    flex: none;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--w10);
+    corner-shape: squircle;
+  }
+  .mini-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .mini-note { flex: none; color: var(--w55); }
+  .mini-title {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mini-play {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex: none;
+    border-radius: 50%;
+    color: var(--white);
+    background: transparent;
+  }
+  .mini-play .icon { width: 18px; height: 18px; }
+  .mini.white {
+    border-color: var(--b10);
+    color: var(--blue);
+    background: rgba(255, 255, 255, 0.84);
+  }
+  .mini.white .mini-title { color: var(--blue); }
+  .mini.white .mini-note { color: var(--b40); }
+  .mini.white .mini-play { color: var(--blue); }
+  .mini.white.solid { background: var(--white); -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+  /* tabbar */
+  .tabbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 21;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    height: 62px;
+    padding: 0 10px 4px;
+    color: var(--white);
+    background: rgba(0, 47, 167, 0.82);
+    border-top: 1px solid var(--w12);
+    -webkit-backdrop-filter: blur(30px) saturate(1.08);
+    backdrop-filter: blur(30px) saturate(1.08);
+  }
+  .tabbar.white {
+    color: var(--blue);
+    background: rgba(255, 255, 255, 0.86);
+    border-top-color: var(--b12);
+  }
+  .tab-slot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 46px;
+    color: var(--w45);
+  }
+  .tab-slot.is-on { color: var(--white); }
+  .tabbar.white .tab-slot { color: var(--b40); }
+  .tabbar.white .tab-slot.is-on { color: var(--blue); }
+  .tab-slot .icon { width: 21px; height: 21px; stroke-width: 1.55; }
+  .gate {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 33px;
+    border-radius: 13px;
+    corner-shape: squircle;
+    background: var(--white);
+    color: var(--blue);
+  }
+  .gate .icon { width: 18px; height: 18px; stroke-width: 1.7; }
+  .gate.is-blue { background: var(--blue); color: var(--white); }
+  .due {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+  .tabbar .due { top: 5px; right: 5px; }
+  .tab-slot > .due { top: 8px; right: calc(50% - 15px); }
+  .tabbar.white .tab-slot > .due { background: var(--blue); }
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    opacity: 0.9;
+  }
+  .avatar .icon { width: 15px; height: 15px; }
+
+  /* white word page */
+  .page-white {
+    position: absolute;
+    inset: 0;
+    padding: 28px 20px 140px;
+    overflow: hidden;
+    background: var(--white);
+    color: var(--blue);
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--b40);
+  }
+  .card-count {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
+  }
+  .card-count i { font-style: normal; color: var(--b25); }
+  .card-audio { display: inline-flex; align-items: center; color: var(--b55); }
+  .card-audio .icon { width: 19px; height: 19px; stroke-width: 1.55; }
+  .word-title-row { margin-top: 34px; display: flex; align-items: baseline; gap: 11px; flex-wrap: wrap; }
+  .word-title {
+    margin: 0;
+    color: var(--blue);
+    font-size: 58px;
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+  }
+  .word-phonetic { color: var(--b30); font-size: 11px; font-weight: 500; letter-spacing: 0.02em; }
+  .word-sense {
+    margin-top: 17px;
+    color: var(--blue);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+  }
+  .word-sense em { font-style: normal; color: var(--b40); font-size: 10px; font-weight: 500; margin-right: 8px; letter-spacing: 0.04em; }
+  .word-example {
+    margin-top: 21px;
+    color: var(--b55);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.65;
+  }
+  .word-example small { display: block; margin-top: 2px; color: var(--b30); font-size: 11px; }
+  .lyric-block {
+    margin-top: 24px;
+    padding: 15px 15px 16px;
+    border-radius: 18px;
+    corner-shape: squircle;
+    background: var(--b06);
+  }
+  .lyric-source {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--b55);
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .lyric-source .icon { width: 13px; height: 13px; }
+  .lyric-source b { color: var(--blue); font-weight: 500; }
+  .lyric-line {
+    margin: 10px 0 0;
+    color: var(--blue);
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+  }
+  .lyric-line mark {
+    color: var(--blue);
+    background: transparent;
+    border-bottom: 1px solid var(--b40);
+    font-weight: 500;
+  }
+  .lyric-trans { margin-top: 5px; color: var(--b40); font-size: 11px; font-weight: 400; }
+  .card-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-top: 23px;
+  }
+  .rate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 48px;
+    border-radius: 14px;
+    corner-shape: squircle;
+    background: var(--b06);
+    color: var(--blue);
+  }
+  .rate .icon { width: 16px; height: 16px; stroke-width: 1.9; }
+  .rate-days { color: var(--b30); font-size: 9px; font-weight: 500; }
+  .card-tools { display: flex; align-items: center; gap: 18px; margin-top: 22px; }
+  .card-tools::before, .card-tools::after { content: ""; height: 1px; flex: 1; background: var(--b08); }
+  .card-dots { display: flex; align-items: center; gap: 6px; }
+  .card-dots span { width: 4px; height: 4px; border-radius: 50%; background: var(--b10); }
+  .card-dots span.on { width: 16px; border-radius: 999px; background: var(--blue); }
+  .card-tools .arrow { color: var(--b30); }
+  .card-tools .arrow .icon { width: 16px; height: 16px; }
+
+  /* spec panel */
+  .specs {
+    position: absolute;
+    top: 328px;
+    left: 950px;
+    width: 586px;
+  }
+  .spec {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 12px;
+    padding: 25px 0 24px;
+    border-top: 1px solid var(--b10);
+  }
+  .spec:first-child { border-top: 0; padding-top: 0; }
+  .spec-no {
+    display: grid;
+    place-items: start;
+    padding-top: 1px;
+    color: var(--b30);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+  .spec h3 {
+    margin: 0;
+    color: var(--blue);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+  .spec p {
+    margin: 6px 0 0;
+    color: var(--b45);
+    font-size: 11.5px;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+  }
+  .spec p b { color: var(--b60); font-weight: 500; }
+  .spec-visual { margin-top: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  .chip-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 116px;
+    height: 58px;
+    border-radius: 14px;
+    corner-shape: squircle;
+  }
+  .chip-stage.blue { background: var(--blue); }
+  .chip-stage.white { background: var(--white); border: 1px solid var(--b10); }
+  .chip-stage .gate { width: 52px; height: 37px; border-radius: 14px; }
+  .chip-stage .gate .icon { width: 20px; height: 20px; }
+
+  .state-icons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    padding: 11px 15px;
+    border-radius: 14px;
+    corner-shape: squircle;
+    background: var(--b04);
+  }
+  .state-icons .t { color: var(--b30); font-size: 9px; font-weight: 600; letter-spacing: 0.1em; }
+  .state-icons .set { display: flex; align-items: center; gap: 13px; }
+  .state-icons .set .icon { width: 19px; height: 19px; stroke-width: 1.5; }
+  .set.offline .icon { color: var(--b30); }
+  .set.online .icon { color: var(--blue); }
+
+  .due-detail {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .due-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+    height: 66px;
+    border-radius: 14px;
+    corner-shape: squircle;
+  }
+  .due-tile.blue { background: var(--blue); }
+  .due-tile.white { border: 1px solid var(--b10); background: var(--white); }
+  .due-tile .gate { width: 56px; height: 40px; border-radius: 15px; }
+  .due-tile .gate .due { width: 5px; height: 5px; top: 7px; right: 7px; }
+  .due-tile .rotate { position: relative; display: grid; place-items: center; width: 38px; height: 38px; color: var(--blue); }
+  .due-tile .rotate .icon { width: 25px; height: 25px; }
+  .due-tile .rotate .due { top: 0; right: 0; width: 5px; height: 5px; }
+  .due-caption { width: 74px; display: flex; align-items: center; color: var(--b45); font-size: 9px; line-height: 1.5; letter-spacing: 0.04em; }
+
+  .entry-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    corner-shape: squircle;
+    background: var(--b04);
+    color: var(--b45);
+    font-size: 10.5px;
+    line-height: 1.5;
+  }
+  .entry-line b { color: var(--blue); font-weight: 500; }
+  .entry-line .sep { color: var(--b16); }
+
+  .deck-foot {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--b30);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .deck-foot .keys { display: flex; gap: 20px; }
+  .deck-foot b { color: var(--b55); font-weight: 500; }
+
+  .desktop-inset {
+    position: absolute;
+    top: 828px;
+    left: 950px;
+    width: 586px;
+  }
+  .desktop-inset .inset-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 11px;
+    color: var(--b45);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+  .desktop-inset .inset-head b { color: var(--b60); font-weight: 500; }
+  .desktop-inset .inset-head span { margin-left: auto; color: var(--b30); }
+  .desktop-frame {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    border: 1px solid var(--b10);
+    border-radius: 16px;
+    corner-shape: squircle;
+    background: var(--blue);
+  }
+  .inset-covers {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    padding: 18px 22px 0;
+  }
+  .inset-cover { aspect-ratio: 1; border-radius: 9px; corner-shape: squircle; overflow: hidden; opacity: 0.92; }
+  .inset-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .inset-copy {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 13px 23px 0;
+    color: var(--w55);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  .inset-copy b { color: var(--white); font-size: 9px; font-weight: 500; }
+  .desktop-frame .mini {
+    left: 50%;
+    right: auto;
+    bottom: 52px;
+    width: 300px;
+    height: 36px;
+    gap: 7px;
+    padding: 0 6px 0 6px;
+    border-radius: 13px;
+    transform: translateX(-50%);
+  }
+  .desktop-frame .mini-cover { width: 25px; height: 25px; border-radius: 8px; }
+  .desktop-frame .mini .icon.sm { width: 11px; height: 11px; }
+  .desktop-frame .mini-title { font-size: 10px; }
+  .desktop-frame .mini-play { width: 25px; height: 25px; }
+  .desktop-frame .mini-play .icon { width: 13px; height: 13px; }
+  .desktop-frame .tabbar {
+    height: 44px;
+    padding: 0 10px 3px;
+  }
+  .desktop-frame .tab-slot { height: 34px; }
+  .desktop-frame .tab-slot .icon { width: 16px; height: 16px; }
+  .desktop-frame .gate { width: 34px; height: 24px; border-radius: 10px; }
+  .desktop-frame .gate .icon { width: 14px; height: 14px; }
+  .desktop-frame .avatar { width: 21px; height: 21px; }
+  .desktop-frame .avatar .icon { width: 12px; height: 12px; }
+  .desktop-inset .inset-note {
+    margin: 10px 0 0;
+    color: var(--b45);
+    font-size: 9.5px;
+    line-height: 1.65;
+  }
+  .desktop-inset .inset-note b { color: var(--b60); font-weight: 500; }
+
+  /* ---------- material board ---------- */
+
+  .material-grid {
+    position: absolute;
+    top: 286px;
+    left: 64px;
+    right: 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 34px;
+  }
+  .material-col { min-width: 0; }
+  .material-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .material-head .tag {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+  .material-head .badge {
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: var(--b06);
+    color: var(--b55);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+  .material-head .hint { margin-left: auto; color: var(--b30); font-size: 9px; letter-spacing: 0.04em; }
+  .material-sample {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 152px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    border-radius: 20px;
+    corner-shape: squircle;
+    padding: 0 18px;
+  }
+  .material-sample.blue { background: var(--blue); }
+  .material-sample.white { background: var(--white); border: 1px solid var(--b10); }
+  .sample-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 18px;
+  }
+  .sample-cover { width: 118px; height: 118px; border-radius: 22px; corner-shape: squircle; overflow: hidden; flex: none; opacity: 0.96; }
+  .sample-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .sample-type { min-width: 0; }
+  .sample-type span {
+    display: block;
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+  }
+  .sample-type small { display: block; margin-top: 7px; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; }
+  .material-sample.blue .sample-type span { color: var(--w18); }
+  .material-sample.blue .sample-type small { color: var(--w25); }
+  .material-sample.white .sample-type span { color: var(--b10); }
+  .material-sample.white .sample-type small { color: var(--b16); }
+  .material-sample .mini { left: 36px; right: 36px; bottom: 18px; position: absolute; z-index: 2; }
+  .sample-label {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 3;
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+  .material-sample.blue .sample-label { color: var(--w40); }
+  .material-sample.white .sample-label { color: var(--b30); }
+
+  .material-anatomy {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    top: 842px;
+    padding-top: 24px;
+    border-top: 1px solid var(--b10);
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 52px;
+  }
+  .anat-copy h3 { margin: 0; font-size: 16px; font-weight: 500; letter-spacing: -0.015em; }
+  .anat-copy p { margin: 7px 0 0; color: var(--b45); font-size: 11px; line-height: 1.7; max-width: 620px; }
+  .anat-copy p b { color: var(--b60); font-weight: 500; }
+  .anatomy-bar-wrap { position: relative; margin-top: 20px; }
+  .anatomy-bar .mini { position: relative; left: auto; right: auto; bottom: auto; width: 620px; }
+  .dimension {
+    position: absolute;
+    left: 0;
+    top: -12px;
+    width: 620px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--b30);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .dimension::before, .dimension::after { content: ""; height: 1px; flex: 1; background: var(--b10); margin: 0 10px; }
+  .callout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 17px;
+    color: var(--b40);
+    font-size: 9.5px;
+    line-height: 1.55;
+  }
+  .callout i { display: inline-block; width: 16px; height: 1px; background: var(--b25); flex: none; }
+  .corner-zoom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 17px;
+    border-radius: 16px;
+    corner-shape: squircle;
+    background: var(--b04);
+  }
+  .corner-shape {
+    position: relative;
+    width: 126px;
+    height: 58px;
+    flex: none;
+    border-radius: 19px;
+    corner-shape: squircle;
+    background: var(--blue);
+  }
+  .corner-shape::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    bottom: -7px;
+    left: -7px;
+    border: 1px solid var(--b10);
+    border-radius: 23px;
+    corner-shape: squircle;
+  }
+  .corner-copy { color: var(--b45); font-size: 10px; line-height: 1.65; }
+  .corner-copy b { color: var(--b60); font-weight: 500; }
+  .narrow-bar { margin-top: 18px; }
+  .narrow-bar .mini { position: relative; left: auto; right: auto; bottom: auto; width: 328px; }
+  .narrow-bar .mini-title { max-width: 205px; }
+  .narrow-label { display: flex; justify-content: space-between; width: 328px; margin-top: 7px; color: var(--b30); font-size: 8.5px; letter-spacing: 0.06em; }
+
+  /* ---------- player layer board ---------- */
+
+  .layer-desktop {
+    position: absolute;
+    top: 242px;
+    left: 64px;
+    width: 1010px;
+    height: 844px;
+    overflow: hidden;
+    border: 1px solid var(--b10);
+    border-radius: 24px;
+    corner-shape: squircle;
+    background: var(--blue);
+  }
+  .layer-mobile {
+    position: absolute;
+    top: 242px;
+    left: 1114px;
+    width: 390px;
+    height: 844px;
+    overflow: hidden;
+    border: 1px solid var(--b10);
+    border-radius: 32px;
+    corner-shape: squircle;
+    background: var(--blue);
+  }
+  .layer-title-label {
+    position: absolute;
+    top: 206px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--b30);
+  }
+  .layer-title-label.desktop { left: 64px; }
+  .layer-title-label.mobile { left: 1114px; }
+
+  .stage-desktop { position: absolute; inset: 0; padding: 94px 70px 50px; display: grid; grid-template-columns: 340px 1fr; gap: 64px; align-items: center; }
+  .stage-cover { width: 340px; height: 340px; border-radius: 22px; corner-shape: squircle; overflow: hidden; }
+  .stage-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .stage-meta { margin-top: 26px; }
+  .stage-title { margin: 0; color: var(--white); font-size: 48px; font-weight: 300; line-height: 1.02; letter-spacing: -0.045em; }
+  .stage-artist { margin: 10px 0 0; color: var(--w55); font-size: 13px; font-weight: 400; letter-spacing: 0.01em; }
+  .stage-lyrics { display: flex; flex-direction: column; gap: 22px; }
+  .stage-line { color: var(--w25); font-size: 27px; font-weight: 300; line-height: 1.35; letter-spacing: -0.02em; }
+  .stage-line.on { color: var(--white); }
+  .stage-line.trans { margin-top: -15px; color: var(--w30); font-size: 11px; font-weight: 400; letter-spacing: 0.01em; }
+
+  .chrome-collapse {
+    position: absolute;
+    left: 26px;
+    top: 24px;
+    z-index: 4;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    color: var(--white);
+    opacity: 0.9;
+  }
+  .chrome-collapse .icon { width: 23px; height: 23px; stroke-width: 1.6; }
+  .chrome-gate {
+    position: absolute;
+    right: 26px;
+    top: 24px;
+    z-index: 4;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 34px;
+    border-radius: 13px;
+    corner-shape: squircle;
+    background: var(--white);
+    color: var(--blue);
+  }
+  .chrome-gate .icon { width: 18px; height: 18px; stroke-width: 1.7; }
+  .chrome-gate .due { width: 4px; height: 4px; top: 5px; right: 5px; }
+  .chrome-label {
+    position: absolute;
+    z-index: 5;
+    font-size: 8.5px;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: 0.04em;
+    color: var(--w40);
+    pointer-events: none;
+  }
+  .chrome-label.collapse { left: 20px; top: 76px; color: var(--w55); font-size: 9px; }
+  .chrome-label.gate-note { right: 24px; top: 72px; text-align: right; color: var(--w55); font-size: 9px; }
+
+  .stage-mobile { position: absolute; inset: 0; padding: 86px 18px 28px; display: flex; flex-direction: column; }
+  .mobile-track { display: flex; align-items: flex-end; gap: 14px; }
+  .mobile-cover { width: 126px; height: 126px; border-radius: 17px; corner-shape: squircle; overflow: hidden; flex: none; }
+  .mobile-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .mobile-meta { min-width: 0; padding-bottom: 4px; }
+  .mobile-title { margin: 0; color: var(--white); font-size: 27px; font-weight: 300; line-height: 1.05; letter-spacing: -0.035em; }
+  .mobile-artist { margin: 7px 0 0; color: var(--w55); font-size: 11px; font-weight: 400; }
+  .mobile-lyrics { display: flex; flex-direction: column; gap: 17px; margin-top: 46px; padding: 0 4px; }
+  .mobile-line { color: var(--w25); font-size: 20px; font-weight: 300; line-height: 1.35; letter-spacing: -0.018em; }
+  .mobile-line.on { color: var(--white); }
+  .mobile-line.trans { margin-top: -11px; font-size: 9.5px; color: var(--w30); }
+  .layer-mobile .chrome-collapse { left: 13px; top: 15px; }
+  .layer-mobile .chrome-gate { right: 15px; top: 18px; width: 43px; height: 32px; }
+  .layer-mobile .chrome-label { display: none; }
+
+  .layer-notes {
+    position: absolute;
+    top: 1122px;
+    left: 64px;
+    right: 64px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--b10);
+  }
+  .layer-note { display: flex; gap: 11px; align-items: flex-start; color: var(--b45); font-size: 10px; line-height: 1.6; }
+  .layer-note .num { color: var(--b30); font-size: 9px; font-weight: 600; letter-spacing: 0.1em; padding-top: 1px; }
+  .layer-note b { color: var(--b60); font-weight: 500; }
+  .layer-note .icon { width: 16px; height: 16px; color: var(--b40); }
+
+  .idle-strip {
+    position: absolute;
+    top: 242px;
+    left: 1114px;
+    width: 390px;
+    height: 0;
+    pointer-events: none;
+  }
+
+  /* ---------- motion board ---------- */
+
+  .motion-grid {
+    position: absolute;
+    top: 272px;
+    left: 64px;
+    right: 64px;
+    display: grid;
+    grid-template-columns: 1.16fr 1.12fr 0.98fr;
+    gap: 46px;
+  }
+  .motion-block { min-width: 0; }
+  .motion-kicker { display: flex; align-items: baseline; gap: 9px; margin-bottom: 18px; }
+  .motion-kicker .no { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; color: var(--b30); }
+  .motion-kicker h3 { margin: 0; font-size: 19px; font-weight: 500; letter-spacing: -0.02em; }
+  .motion-kicker .ms { margin-left: auto; color: var(--b30); font-size: 9px; letter-spacing: 0.08em; }
+
+  .flip-stage {
+    position: relative;
+    height: 362px;
+    overflow: hidden;
+    border-radius: 18px;
+    corner-shape: squircle;
+    background: var(--b04);
+  }
+  .flip-frame {
+    position: absolute;
+    top: 42px;
+    width: 142px;
+    height: 276px;
+    overflow: hidden;
+    border-radius: 22px;
+    corner-shape: squircle;
+    border: 1px solid var(--b10);
+    background: var(--blue);
+  }
+  .flip-frame.one { left: 26px; }
+  .flip-frame.two { left: 192px; perspective: 700px; background: transparent; border-color: transparent; }
+  .flip-frame.three { left: 358px; background: var(--white); }
+  .flip-blue-page, .flip-white-page { position: absolute; inset: 0; }
+  .flip-blue-page { background: var(--blue); }
+  .flip-white-page { background: var(--white); }
+  .flip-page-pad { position: absolute; inset: 18px 13px; }
+  .flip-content-line { height: 4px; border-radius: 2px; margin-bottom: 8px; }
+  .flip-blue-page .flip-content-line { background: var(--w18); }
+  .flip-white-page .flip-content-line { background: var(--b10); }
+  .flip-content-line.w1 { width: 85%; }
+  .flip-content-line.w2 { width: 65%; }
+  .flip-content-line.w3 { width: 74%; }
+  .flip-band { position: absolute; left: 12px; right: 12px; top: 95px; height: 44px; border-radius: 10px; background: var(--w08); }
+  .flip-white-page .flip-band { background: var(--b04); }
+  .flip-mini-icons { position: absolute; left: 12px; right: 12px; bottom: 11px; display: flex; justify-content: space-between; align-items: center; }
+  .flip-mini-icons .icon { width: 12px; height: 12px; color: var(--w25); }
+  .flip-white-page .flip-mini-icons .icon { color: var(--b25); }
+  .flip-frame .gate { position: absolute; left: 12px; bottom: 38px; width: 33px; height: 24px; border-radius: 9px; }
+  .flip-frame.three .gate { background: var(--blue); }
+  .flip-frame .gate .icon { width: 13px; height: 13px; }
+  .flip-frame .gate .due { width: 3.5px; height: 3.5px; top: 4px; right: 4px; }
+  .flip-base {
+    position: absolute;
+    inset: 10px 8px;
+    border-radius: 18px;
+    background: var(--blue);
+    opacity: 0.16;
+  }
+  .flip-midface {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    width: 122px;
+    height: 292px;
+    transform-origin: left center;
+    transform: rotateY(-62deg) translateX(32px);
+    border-radius: 20px;
+    corner-shape: squircle;
+    border: 1px solid var(--b16);
+    background: var(--blue);
+    overflow: hidden;
+  }
+  .flip-midface .flip-white-page { transform: scaleX(0.95); }
+  .flip-arrow {
+    position: absolute;
+    top: 174px;
+    color: var(--b25);
+    font-size: 15px;
+    font-weight: 400;
+  }
+  .flip-arrow.a1 { left: 174px; }
+  .flip-arrow.a2 { left: 340px; }
+  .flip-legend { position: absolute; left: 26px; right: 26px; bottom: 17px; display: flex; justify-content: space-between; color: var(--b30); font-size: 8px; letter-spacing: 0.08em; }
+
+  .rise-stage {
+    position: relative;
+    height: 362px;
+    overflow: hidden;
+    border-radius: 18px;
+    corner-shape: squircle;
+    background: var(--b04);
+  }
+  .rise-phone {
+    position: absolute;
+    top: 36px;
+    width: 116px;
+    height: 280px;
+    overflow: hidden;
+    border-radius: 20px;
+    corner-shape: squircle;
+    border: 1px solid var(--b10);
+  }
+  .rise-phone.one { left: 28px; background: var(--white); }
+  .rise-phone.two { left: 158px; background: var(--white); }
+  .rise-phone.three { left: 288px; background: var(--blue); }
+  .rise-under { position: absolute; inset: 0; background: var(--white); }
+  .rise-under .flip-content-line { background: var(--b08); }
+  .rise-sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--blue);
+    border-top: 1px solid var(--w12);
+  }
+  .rise-phone.one .rise-sheet { height: 70px; }
+  .rise-phone.two .rise-sheet { height: 145px; }
+  .rise-phone.three .rise-sheet { height: 100%; border-top: 0; }
+  .rise-sheet .stage-title { margin: 24px 13px 0; font-size: 15px; }
+  .rise-sheet .stage-artist { margin: 3px 13px 0; font-size: 7px; }
+  .rise-sheet .mini-line { position: absolute; left: 13px; right: 13px; bottom: 16px; height: 3px; background: var(--w25); border-radius: 2px; }
+  .rise-phone.three .rise-sheet .stage-title { margin-top: 54px; }
+  .rise-caption { position: absolute; left: 28px; right: 28px; bottom: 15px; display: flex; justify-content: space-between; color: var(--b30); font-size: 8px; letter-spacing: 0.07em; }
+  .rise-phone .rise-chrome { position: absolute; top: 10px; left: 10px; color: var(--white); z-index: 2; }
+  .rise-phone .rise-chrome .icon { width: 12px; height: 12px; }
+  .rise-phone .rise-gate { position: absolute; top: 9px; right: 9px; width: 23px; height: 17px; border-radius: 6px; background: var(--white); color: var(--blue); display: grid; place-items: center; z-index: 2; }
+  .rise-phone .rise-gate .icon { width: 9px; height: 9px; }
+
+  .timing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .timing .track { position: relative; flex: 1; height: 1px; background: var(--b10); }
+  .timing .track::before { content: ""; position: absolute; left: 0; top: 0; width: 58%; height: 1px; background: var(--blue); }
+  .timing .track::after { content: ""; position: absolute; left: 58%; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
+  .timing .time { color: var(--b30); font-size: 8px; letter-spacing: 0.06em; white-space: nowrap; }
+  .motion-note { margin-top: 16px; color: var(--b45); font-size: 10.5px; line-height: 1.7; }
+  .motion-note b { color: var(--b60); font-weight: 500; }
+  .motion-note .pill { display: inline-flex; align-items: center; padding: 3px 7px; margin: 0 2px; border-radius: 6px; background: var(--b06); color: var(--b55); font-size: 8.5px; font-weight: 500; letter-spacing: 0.03em; }
+
+  .settings-sheet {
+    position: relative;
+    min-height: 148px;
+    padding: 20px;
+    border: 1px solid var(--b10);
+    border-radius: 18px;
+    corner-shape: squircle;
+    background: var(--white);
+  }
+  .settings-sheet::before { content: ""; display: block; width: 34px; height: 1px; margin: 0 auto 16px; background: var(--b10); }
+  .startup-chips { display: flex; align-items: center; justify-content: center; gap: 18px; }
+  .startup-chip {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 62px;
+    height: 44px;
+    border-radius: 16px;
+    corner-shape: squircle;
+  }
+  .startup-chip.white { border: 1px solid var(--b16); background: var(--white); color: var(--blue); }
+  .startup-chip.blue { background: var(--blue); color: var(--white); }
+  .startup-chip .icon { width: 22px; height: 22px; stroke-width: 1.65; }
+  .startup-chip.is-on::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border: 1px solid var(--blue);
+    border-radius: 21px;
+    corner-shape: squircle;
+  }
+  .startup-caption { margin-top: 16px; text-align: center; color: var(--b35); font-size: 8.5px; letter-spacing: 0.06em; }
+  .startup-caption b { color: var(--b55); font-weight: 500; }
+  .startup-flow { display: flex; align-items: center; gap: 8px; margin-top: 18px; flex-wrap: wrap; color: var(--b40); font-size: 9px; line-height: 1.5; }
+  .startup-flow .arr { color: var(--b25); }
+  .startup-flow b { color: var(--b60); font-weight: 500; }
+
+  .due-zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .due-zoom {
+    position: relative;
+    height: 72px;
+    border-radius: 14px;
+    corner-shape: squircle;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .due-zoom.blue { background: var(--blue); }
+  .due-zoom.white { background: var(--white); border: 1px solid var(--b10); }
+  .due-zoom .gate { width: 74px; height: 52px; border-radius: 19px; }
+  .due-zoom .gate .icon { width: 27px; height: 27px; }
+  .due-zoom .gate .due { width: 6px; height: 6px; top: 10px; right: 10px; }
+  .due-zoom .rotate { position: relative; color: var(--blue); }
+  .due-zoom .rotate .icon { width: 34px; height: 34px; stroke-width: 1.5; }
+  .due-zoom .rotate .due { top: -1px; right: -2px; width: 6px; height: 6px; }
+  .due-zoom span { position: absolute; left: 10px; bottom: 7px; color: var(--w40); font-size: 7.5px; letter-spacing: 0.06em; }
+  .due-zoom.white span { color: var(--b30); }
+  .due-rule { display: flex; justify-content: space-between; margin-top: 10px; color: var(--b30); font-size: 8.5px; letter-spacing: 0.04em; }
+  .due-rule b { color: var(--b55); font-weight: 500; }
+
+  .subhead {
+    margin: 0 0 8px;
+    color: var(--b55);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .fineprint { color: var(--b30); font-size: 9px; line-height: 1.7; letter-spacing: 0.01em; }
+  .fineprint b { color: var(--b55); font-weight: 500; }
+</style>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.84Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m6 3 14 9-14 9V3z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"/><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============================================================ SLIDE 1 -->
+<section class="slide" id="s1">
+  <header class="deck-head">
+    <div class="brandline"><span class="brandmark"></span>ORANGECY</div>
+    <div class="deck-meta">DESIGN DRAFT 01 · 2026.10.24</div>
+  </header>
+  <div class="deck-rule"></div>
+  <h1 class="slide-title">两扇门，<br><strong>一条音乐。</strong></h1>
+  <p class="slide-sub">底部四槽是两个世界的入口。迷你条是音乐本体，两模式同一条。<br>播放不是第五个页面，是自底升起的全屏层。</p>
+  <span class="index">01 / 04</span>
+
+  <div class="phone-wrap left">
+    <div class="phone-cap"><span class="no">01</span><span class="name">蓝世界 · 歌模式</span><span class="sub">词门 / 推荐 / 搜索 / 头像</span></div>
+    <div class="phone">
+      <div class="page-blue">
+        <div class="rec-grid">
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">Counting Stars</span><span class="rec-artist">OneRepublic</span></div>
+          </article>
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/Fleetwood-Mac-Dreams.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">Dreams</span><span class="rec-artist">Fleetwood Mac</span></div>
+          </article>
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/Glass-Animals-Heat-Waves.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">Heat Waves</span><span class="rec-artist">Glass Animals</span></div>
+          </article>
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/Gotye-Somebody-That-I-Used-To-Know.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">Somebody That I Used to Know</span><span class="rec-artist">Gotye</span></div>
+          </article>
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/The-Weeknd-Blinding-Lights.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">Blinding Lights</span><span class="rec-artist">The Weeknd</span></div>
+          </article>
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">Secrets</span><span class="rec-artist">OneRepublic</span></div>
+          </article>
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/Fleetwood-Mac-Dreams.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">The Chain</span><span class="rec-artist">Fleetwood Mac</span></div>
+          </article>
+          <article class="rec-item">
+            <div class="rec-cover"><img src="assets/Glass-Animals-Heat-Waves.jpg" alt="" /></div>
+            <div class="rec-copy"><span class="rec-title">Space Ghost Coast to Coast</span><span class="rec-artist">Glass Animals</span></div>
+          </article>
+        </div>
+      </div>
+
+      <div class="mini">
+        <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+        <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+        <span class="mini-title">Counting Stars</span>
+        <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+      </div>
+
+      <nav class="tabbar" aria-label="歌模式">
+        <div class="tab-slot"><span class="gate"><svg class="icon"><use href="#i-book"/></svg><i class="due"></i></span></div>
+        <div class="tab-slot is-on"><svg class="icon"><use href="#i-compass"/></svg></div>
+        <div class="tab-slot"><svg class="icon"><use href="#i-search"/></svg></div>
+        <div class="tab-slot"><span class="avatar"><svg class="icon"><use href="#i-user"/></svg></span></div>
+      </nav>
+    </div>
+    <div class="phone-foot"><span><b>门</b> 倒色，永远最左<br><b>到期</b> 词门挂 4px 点</span><span style="text-align:right">镜像后的推荐页<br>无顶栏，内容从最顶开始</span></div>
+  </div>
+
+  <div class="phone-wrap right">
+    <div class="phone-cap"><span class="no">02</span><span class="name">白世界 · 词模式</span><span class="sub">歌门 / 词卡 / 复习 / 头像</span></div>
+    <div class="phone white">
+      <div class="page-white">
+        <div class="card-head">
+          <span class="card-count">01 <i>/ 10</i></span>
+          <span class="card-audio"><svg class="icon"><use href="#i-volume"/></svg></span>
+        </div>
+        <div class="word-title-row">
+          <h2 class="word-title">lately</h2>
+          <span class="word-phonetic">/ˈleɪtli/</span>
+        </div>
+        <div class="word-sense"><em>adv.</em>最近，不久</div>
+        <div class="word-example">What have you been doing lately?<small>你最近在干什么？</small></div>
+        <div class="lyric-block">
+          <div class="lyric-source"><svg class="icon"><use href="#i-headphones"/></svg><span>Counting Stars · 0:14</span></div>
+          <p class="lyric-line"><mark>Lately</mark> I've been, I've been losing sleep</p>
+          <div class="lyric-trans">最近我夜夜难眠</div>
+        </div>
+        <div class="card-actions">
+          <div class="rate"><svg class="icon"><use href="#i-x"/></svg><span class="rate-days">1天</span></div>
+          <div class="rate"><svg class="icon"><use href="#i-minus"/></svg><span class="rate-days">2天</span></div>
+          <div class="rate"><svg class="icon"><use href="#i-check"/></svg><span class="rate-days">4天</span></div>
+        </div>
+        <div class="card-tools">
+          <span class="arrow"><svg class="icon"><use href="#i-arrow-left"/></svg></span>
+          <span class="card-dots"><span class="on"></span><span></span><span></span><span></span><span></span></span>
+          <span class="arrow"><svg class="icon"><use href="#i-arrow-right"/></svg></span>
+        </div>
+      </div>
+
+      <div class="mini white">
+        <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+        <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+        <span class="mini-title">Counting Stars</span>
+        <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+      </div>
+
+      <nav class="tabbar white" aria-label="词模式">
+        <div class="tab-slot"><span class="gate is-blue"><svg class="icon"><use href="#i-music"/></svg></span></div>
+        <div class="tab-slot is-on"><svg class="icon"><use href="#i-layers"/></svg></div>
+        <div class="tab-slot"><svg class="icon"><use href="#i-rotate"/></svg><i class="due"></i></div>
+        <div class="tab-slot"><span class="avatar"><svg class="icon"><use href="#i-user"/></svg></span></div>
+      </nav>
+    </div>
+    <div class="phone-foot"><span><b>门</b> 蓝芯片，歌门升播放层<br><b>到期</b> 复习图标挂 4px 点</span><span style="text-align:right">评分只留 X / − / ✓ + 天数<br>迷你条在标签栏上方，不压手势区</span></div>
+  </div>
+
+  <aside class="specs">
+    <div class="spec">
+      <span class="spec-no">01</span>
+      <div>
+        <h3>门 = 倒色芯片</h3>
+        <p>永远最左。词门去今日词卡，歌门去播放层。门的颜色永远与世界相反。</p>
+        <div class="spec-visual">
+          <span class="chip-stage blue"><span class="gate"><svg class="icon"><use href="#i-book"/></svg></span></span>
+          <span class="chip-stage white"><span class="gate is-blue"><svg class="icon"><use href="#i-music"/></svg></span></span>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <span class="spec-no">02</span>
+      <div>
+        <h3>激活 = 三态语法</h3>
+        <p>当前页全亮，其余同色降明度。纯图标，无文字、无背景胶囊。</p>
+        <div class="spec-visual">
+          <div class="state-icons">
+            <span class="t">ON</span>
+            <span class="set online">
+              <svg class="icon"><use href="#i-compass"/></svg>
+              <svg class="icon"><use href="#i-search"/></svg>
+              <svg class="icon"><use href="#i-user"/></svg>
+            </span>
+            <span class="t" style="margin-left:auto">OFF</span>
+            <span class="set offline">
+              <svg class="icon"><use href="#i-compass"/></svg>
+              <svg class="icon"><use href="#i-search"/></svg>
+              <svg class="icon"><use href="#i-user"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <span class="spec-no">03</span>
+      <div>
+        <h3>到期点 = 4px</h3>
+        <p>无数字，不动画。蓝世界挂词门，白世界挂复习。点本身只用蓝 / 白。</p>
+        <div class="spec-visual due-detail">
+          <span class="due-tile blue"><span class="gate"><svg class="icon"><use href="#i-book"/></svg><i class="due"></i></span></span>
+          <span class="due-tile white"><span class="rotate"><svg class="icon"><use href="#i-rotate"/></svg><i class="due"></i></span></span>
+          <span class="due-caption">实际尺寸<br>4 × 4 px</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="desktop-inset">
+    <div class="inset-head"><b>04 / 桌面同构</b><span>1440 VIEWPORT / SCHEMATIC</span></div>
+    <div class="desktop-frame">
+      <div class="inset-covers">
+        <div class="inset-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+        <div class="inset-cover"><img src="assets/Fleetwood-Mac-Dreams.jpg" alt="" /></div>
+        <div class="inset-cover"><img src="assets/Glass-Animals-Heat-Waves.jpg" alt="" /></div>
+        <div class="inset-cover"><img src="assets/Gotye-Somebody-That-I-Used-To-Know.jpg" alt="" /></div>
+        <div class="inset-cover"><img src="assets/The-Weeknd-Blinding-Lights.jpg" alt="" /></div>
+      </div>
+      <div class="inset-copy"><span><b>Counting Stars</b> · OneRepublic</span><span>3:01</span></div>
+      <div class="mini">
+        <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+        <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+        <span class="mini-title">Counting Stars</span>
+        <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+      </div>
+      <nav class="tabbar" aria-label="歌模式">
+        <div class="tab-slot"><span class="gate"><svg class="icon"><use href="#i-book"/></svg><i class="due"></i></span></div>
+        <div class="tab-slot is-on"><svg class="icon"><use href="#i-compass"/></svg></div>
+        <div class="tab-slot"><svg class="icon"><use href="#i-search"/></svg></div>
+        <div class="tab-slot"><span class="avatar"><svg class="icon"><use href="#i-user"/></svg></span></div>
+      </nav>
+    </div>
+    <p class="inset-note"><b>迷你条居中，标签栏贴底。</b>桌面不另做侧栏；内容列仍从最顶开始。<br>六入口仍在：播放（层 + 条）/ 搜索 / 推荐 / 词卡 / 复习 / 账号。</p>
+  </div>
+
+  <div class="deck-foot">
+    <div>ORANGECY / NAVIGATION SYSTEM</div>
+    <div class="keys"><span><b>CHECKPOINT</b> a293fca</span><span><b>STATUS</b> DESIGN ONLY</span></div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 2 -->
+<section class="slide" id="s2">
+  <header class="deck-head">
+    <div class="brandline"><span class="brandmark"></span>ORANGECY</div>
+    <div class="deck-meta">DESIGN DRAFT 02 · MINI PLAYER</div>
+  </header>
+  <div class="deck-rule"></div>
+  <h1 class="slide-title">一条，<strong>两种材质。</strong></h1>
+  <p class="slide-sub">A 是默认态：模式色高不透明度 + 高斯模糊，内容从下面滚过时只透出模糊的一层。<br>B 是守卫失败时的降级：纯色填充，结构、尺寸、位置不动。两版只换“材质”。</p>
+  <span class="index">02 / 04</span>
+
+  <div class="material-grid">
+    <div class="material-col">
+      <div class="material-head"><span class="tag">A · 材质模糊</span><span class="badge">默认</span><span class="hint">blur 28px</span></div>
+      <div class="material-sample blue">
+        <span class="sample-label">BLUE WORLD</span>
+        <div class="sample-content">
+          <span class="sample-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></span>
+          <span class="sample-type"><span>I see this life</span><small>LIKE A SWINGING VINE</small></span>
+        </div>
+        <div class="mini">
+          <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+          <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+          <span class="mini-title">Counting Stars</span>
+          <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+        </div>
+      </div>
+      <div class="material-sample white">
+        <span class="sample-label">WHITE WORLD</span>
+        <div class="sample-content">
+          <span class="sample-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></span>
+          <span class="sample-type"><span>I see this life</span><small>LIKE A SWINGING VINE</small></span>
+        </div>
+        <div class="mini white">
+          <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+          <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+          <span class="mini-title">Counting Stars</span>
+          <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+        </div>
+      </div>
+      <p class="fineprint"><b>模式色材质</b>：蓝世界蓝底白字，白世界白底蓝字。高不透明度保留可读性，透出只做“内容经过”的证据，不抢内容。</p>
+    </div>
+
+    <div class="material-col">
+      <div class="material-head"><span class="tag">B · 纯色填充</span><span class="badge">降级</span><span class="hint">blur 0</span></div>
+      <div class="material-sample blue">
+        <span class="sample-label">BLUE WORLD / SOLID</span>
+        <div class="sample-content">
+          <span class="sample-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></span>
+          <span class="sample-type"><span>I see this life</span><small>LIKE A SWINGING VINE</small></span>
+        </div>
+        <div class="mini solid">
+          <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+          <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+          <span class="mini-title">Counting Stars</span>
+          <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+        </div>
+      </div>
+      <div class="material-sample white">
+        <span class="sample-label">WHITE WORLD / SOLID</span>
+        <div class="sample-content">
+          <span class="sample-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></span>
+          <span class="sample-type"><span>I see this life</span><small>LIKE A SWINGING VINE</small></span>
+        </div>
+        <div class="mini white solid">
+          <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+          <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+          <span class="mini-title">Counting Stars</span>
+          <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+        </div>
+      </div>
+      <p class="fineprint"><b>守卫裁定</b>：材质模糊 = 模式色 + 豁免内容透出，属合法态。若扫描判不过，自动切 B；不删条、不换结构、不改位置。</p>
+    </div>
+  </div>
+
+  <div class="material-anatomy">
+    <div class="anat-copy">
+      <h3>只露数据：封面 · ♪ · 曲名 · 播放/暂停</h3>
+      <p>条身是唯一的“升起播放层”热区；右侧播放按钮只切播放，不冒泡。窄屏单行，曲名中段截断，不换行、不挤按钮。</p>
+      <div class="anatomy-bar-wrap">
+        <div class="dimension"><span>620</span><span>56 TALL</span></div>
+        <div class="anatomy-bar">
+          <div class="mini white" style="width:620px">
+            <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+            <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+            <span class="mini-title">Counting Stars</span>
+            <button class="mini-play" aria-label="暂停"><svg class="icon"><use href="#i-pause"/></svg></button>
+          </div>
+        </div>
+        <div class="callout"><i></i><span>封面 36 × 36 / 连续曲率；两端留 10–12；播放键 36 圆。</span></div>
+      </div>
+      <div class="narrow-bar">
+        <div class="mini white" style="width:328px">
+          <div class="mini-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+          <svg class="icon sm mini-note"><use href="#i-music"/></svg>
+          <span class="mini-title">Somebody That I Used to Know</span>
+          <button class="mini-play" aria-label="播放"><svg class="icon"><use href="#i-play"/></svg></button>
+        </div>
+        <div class="narrow-label"><span>NARROW / 328</span><span>ONE LINE / TRUNCATE</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="corner-zoom">
+        <span class="corner-shape"></span>
+        <span class="corner-copy"><b>连续曲率</b><br>迷你条 / 门芯片 / 封面缩略<br>同一套 squircle，不用普通圆角。</span>
+      </div>
+      <div class="callout" style="margin-top:18px"><i></i><span>条身上升播放层；按钮除外。收起后回到出发页与原模式。</span></div>
+      <div class="callout"><i></i><span>无曲目时整条不出现；首次播放后出现。标签栏始终保留。</span></div>
+      <div class="callout"><i></i><span>两模式同一条：只换模式色材质，不换位置、尺寸、内容结构。</span></div>
+    </div>
+  </div>
+
+  <div class="deck-foot">
+    <div>ORANGECY / MINI PLAYER</div>
+    <div class="keys"><span><b>A</b> MATERIAL BLUR</span><span><b>B</b> SOLID FALLBACK</span></div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 3 -->
+<section class="slide" id="s3">
+  <header class="deck-head">
+    <div class="brandline"><span class="brandmark"></span>ORANGECY</div>
+    <div class="deck-meta">DESIGN DRAFT 03 · PLAYER LAYER</div>
+  </header>
+  <div class="deck-rule"></div>
+  <h1 class="slide-title">升起之后，<strong>只剩舞台。</strong></h1>
+  <p class="slide-sub">全屏层，不是页面。没有标签栏，没有迷你条，没有顶栏。层导航 chrome 只有两件：左上收起柄，右上词门。<br>点空白唤出；闲置 5 秒，两件一起隐去。</p>
+  <span class="index">03 / 04</span>
+
+  <div class="layer-title-label desktop">DESKTOP / 1010 × 844</div>
+  <div class="layer-title-label mobile">MOBILE / 390 × 844</div>
+
+  <div class="layer-desktop">
+    <div class="stage-desktop">
+      <div>
+        <div class="stage-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+        <div class="stage-meta">
+          <h2 class="stage-title">Counting Stars</h2>
+          <p class="stage-artist">OneRepublic</p>
+        </div>
+      </div>
+      <div class="stage-lyrics">
+        <div class="stage-line on">Lately I've been, I've been losing sleep</div>
+        <div class="stage-line trans">最近我夜夜难眠</div>
+        <div class="stage-line">Dreaming about the things that we could be</div>
+        <div class="stage-line trans">梦想着那些我们本可以成为的样子</div>
+        <div class="stage-line">But baby I've been, I've been praying hard</div>
+        <div class="stage-line">Said no more counting dollars</div>
+        <div class="stage-line">We'll be counting stars</div>
+      </div>
+    </div>
+    <button class="chrome-collapse" aria-label="收起播放层"><svg class="icon"><use href="#i-chevron"/></svg></button>
+    <div class="chrome-gate"><svg class="icon"><use href="#i-book"/></svg><i class="due"></i></div>
+    <div class="chrome-label collapse">⌄ 唯一收起方式<br>不做手势</div>
+    <div class="chrome-label gate-note">词门 → 今日词卡<br>4px 到期点</div>
+  </div>
+
+  <div class="layer-mobile">
+    <div class="stage-mobile">
+      <div class="mobile-track">
+        <div class="mobile-cover"><img src="assets/OneRepublic-Counting-Stars.jpg" alt="" /></div>
+        <div class="mobile-meta">
+          <h2 class="mobile-title">Counting Stars</h2>
+          <p class="mobile-artist">OneRepublic</p>
+        </div>
+      </div>
+      <div class="mobile-lyrics">
+        <div class="mobile-line on">Lately I've been, I've been losing sleep</div>
+        <div class="mobile-line trans">最近我夜夜难眠</div>
+        <div class="mobile-line">Dreaming about the things that we could be</div>
+        <div class="mobile-line">But baby I've been, I've been praying hard</div>
+        <div class="mobile-line">Said no more counting dollars</div>
+        <div class="mobile-line">We'll be counting stars</div>
+      </div>
+    </div>
+    <button class="chrome-collapse" aria-label="收起播放层"><svg class="icon"><use href="#i-chevron"/></svg></button>
+    <div class="chrome-gate"><svg class="icon"><use href="#i-book"/></svg><i class="due"></i></div>
+  </div>
+
+  <div class="layer-notes">
+    <div class="layer-note"><span class="num">01</span><div><b>两项 chrome，各自唯一</b><br>左上 ⌄ 收起；右上词门走今日词卡。点空白唤出，闲置 5 秒一起淡出。</div></div>
+    <div class="layer-note"><span class="num">02</span><div><b>层内胶囊原样</b><br>暂停时既有播放胶囊照旧浮现；它属于舞台内控制，不占“层 chrome”两件名额。</div></div>
+    <div class="layer-note"><span class="num">03</span><div><b>升降 350ms / 仅按钮收起</b><br>自底升起。收起只认左上 ⌄，不做下滑手势，避开歌词滚动。</div></div>
+  </div>
+
+  <div class="deck-foot">
+    <div>ORANGECY / PLAYER LAYER</div>
+    <div class="keys"><span><b>NO BAR</b> NO NAV</span><span><b>CHROME</b> 2 ONLY</span></div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 4 -->
+<section class="slide" id="s4">
+  <header class="deck-head">
+    <div class="brandline"><span class="brandmark"></span>ORANGECY</div>
+    <div class="deck-meta">DESIGN DRAFT 04 · MOTION / STARTUP / DUE</div>
+  </header>
+  <div class="deck-rule"></div>
+  <h1 class="slide-title">翻、升、<strong>点。</strong></h1>
+  <p class="slide-sub">门负责世界翻转，条负责升层。系统“减少动态效果”时全部瞬时；到期点始终安静。<br>启动进入只给两颗微缩门，默认蓝。</p>
+  <span class="index">04 / 04</span>
+
+  <div class="motion-grid">
+    <div class="motion-block">
+      <div class="motion-kicker"><span class="no">01</span><h3>世界翻转</h3><span class="ms">300ms</span></div>
+      <div class="flip-stage">
+        <div class="flip-frame one">
+          <div class="flip-blue-page">
+            <div class="flip-page-pad">
+              <div class="flip-content-line w1"></div><div class="flip-content-line w2"></div><div class="flip-content-line w3"></div>
+              <div class="flip-band"></div>
+            </div>
+            <span class="gate"><svg class="icon"><use href="#i-book"/></svg><i class="due"></i></span>
+            <div class="flip-mini-icons">
+              <svg class="icon"><use href="#i-compass"/></svg><svg class="icon"><use href="#i-search"/></svg><svg class="icon"><use href="#i-user"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="flip-frame two">
+          <div class="flip-base"></div>
+          <div class="flip-midface">
+            <div class="flip-white-page">
+              <div class="flip-page-pad">
+                <div class="flip-content-line w1"></div><div class="flip-content-line w2"></div><div class="flip-content-line w3"></div>
+                <div class="flip-band"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flip-frame three">
+          <div class="flip-white-page">
+            <div class="flip-page-pad">
+              <div class="flip-content-line w1"></div><div class="flip-content-line w2"></div><div class="flip-content-line w3"></div>
+              <div class="flip-band"></div>
+            </div>
+            <span class="gate"><svg class="icon"><use href="#i-music"/></svg></span>
+            <div class="flip-mini-icons">
+              <svg class="icon"><use href="#i-layers"/></svg><svg class="icon"><use href="#i-rotate"/></svg><svg class="icon"><use href="#i-user"/></svg>
+            </div>
+          </div>
+        </div>
+        <span class="flip-arrow a1">›</span><span class="flip-arrow a2">›</span>
+        <div class="flip-legend"><span>0ms / 门侧起翻</span><span>300ms / 落定</span></div>
+      </div>
+      <div class="timing"><span class="track"></span><span class="time">0 → 150 → 300ms</span></div>
+      <div class="motion-note"><b>整屏翻转，从门那一侧进入。</b>轴在左，门不动位置，只把世界与另一扇门换过来。<span class="pill">减少动态 · 0ms</span><br>白 → 蓝经歌门时，翻转与升层同拍；收起时反向落回原页与原模式。</div>
+    </div>
+
+    <div class="motion-block">
+      <div class="motion-kicker"><span class="no">02</span><h3>播放层升降</h3><span class="ms">350ms</span></div>
+      <div class="rise-stage">
+        <div class="rise-phone one">
+          <div class="rise-under">
+            <div class="flip-page-pad">
+              <div class="flip-content-line w1"></div><div class="flip-content-line w2"></div><div class="flip-content-line w3"></div>
+            </div>
+          </div>
+          <div class="rise-sheet"><div class="stage-title">Counting Stars</div><div class="stage-artist">OneRepublic</div><div class="mini-line"></div></div>
+        </div>
+        <div class="rise-phone two">
+          <div class="rise-under">
+            <div class="flip-page-pad">
+              <div class="flip-content-line w1"></div><div class="flip-content-line w2"></div><div class="flip-content-line w3"></div>
+            </div>
+          </div>
+          <div class="rise-sheet"><div class="stage-title">Counting Stars</div><div class="stage-artist">OneRepublic</div><div class="mini-line"></div></div>
+        </div>
+        <div class="rise-phone three">
+          <div class="rise-sheet">
+            <div class="rise-chrome"><svg class="icon"><use href="#i-chevron"/></svg></div>
+            <div class="rise-gate"><svg class="icon"><use href="#i-book"/></svg></div>
+            <div class="stage-title">Counting Stars</div><div class="stage-artist">OneRepublic</div><div class="mini-line"></div>
+          </div>
+        </div>
+        <div class="rise-caption"><span>0ms</span><span>175ms</span><span>350ms / 无栏</span></div>
+      </div>
+      <div class="timing"><span class="track" style="--p:58%"></span><span class="time">自底 350ms</span></div>
+      <div class="motion-note"><b>升：自底 350ms。</b>从迷你条或歌门进入；收起只按 ⌄，不做下滑手势。<br>层内暂停胶囊原样，点词白卡与 chrome 闲置逻辑不碰。</div>
+    </div>
+
+    <div class="motion-block">
+      <div class="motion-kicker"><span class="no">03</span><h3>启动进入 / 到期</h3><span class="ms">DEFAULT BLUE</span></div>
+      <div class="settings-sheet">
+        <div class="startup-chips">
+          <span class="startup-chip white"><svg class="icon"><use href="#i-book"/></svg></span>
+          <span class="startup-chip blue is-on"><svg class="icon"><use href="#i-music"/></svg></span>
+        </div>
+        <div class="startup-flow"><b>有曲</b><span class="arr">→</span>升播放层<span class="arr">/</span><b>无曲</b><span class="arr">→</span>推荐，条隐<span class="arr">/</span><b>白门</b><span class="arr">→</span>词卡</div>
+      </div>
+      <div class="due-zoom-row">
+        <div class="due-zoom blue"><span class="gate"><svg class="icon"><use href="#i-book"/></svg><i class="due"></i></span><span>BLUE / WORD GATE</span></div>
+        <div class="due-zoom white"><span class="rotate"><svg class="icon"><use href="#i-rotate"/></svg><i class="due"></i></span><span>WHITE / REVIEW</span></div>
+      </div>
+      <div class="due-rule"><span><b>4px</b> / 无数字 / 不动画</span><span>SCHEMATIC</span></div>
+      <div class="motion-note"><b>设置面板只放两颗微缩门，默认蓝。</b>选中的那一颗带一圈 1px 蓝环；无标签文字，读屏名称进 aria。<br><span class="pill">减少动态</span> 同时覆盖翻、升、淡出。</div>
+    </div>
+  </div>
+
+  <div class="deck-foot">
+    <div>ORANGECY / MOTION &amp; STATE</div>
+    <div class="keys"><span><b>300</b> FLIP</span><span><b>350</b> RISE</span><span><b>4</b> DUE DOT</span></div>
+  </div>
+</section>
+</body>
+</html>

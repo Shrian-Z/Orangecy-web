@@ -1,6 +1,6 @@
 /**
- * Browser speech-synthesis pronunciation provider, extracted verbatim from
- * WordCards during the ammo migration.
+ * Browser speech-synthesis pronunciation provider, extracted verbatim from the
+ * legacy word-card page during the ammo migration.
  *
  * Browser TTS output cannot be routed through a Web Audio gain node, so this
  * provider cannot do true volume ramps. The focus-card sequence accounts for
