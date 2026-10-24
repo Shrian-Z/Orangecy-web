@@ -1,0 +1,31 @@
+Orangecy · final grep evidence
+
+1. Legacy UI component names in src: 0
+   (RecommendView / SearchDrawer / QueueDrawer / PlayerBar / TopBar / WordCards /
+    LyricsStage / WordPeek / WordbookModal / ImmersivePlayer / CoverStage /
+    CheckDrawer / PlatformDrawer / LoginModal / playercapsule / lyrics-panel /
+    cover-stage / immersive / word-peek)
+
+2. Legacy music main path in src: 0
+   (听歌背单词 / 歌单 / 播放器 / NOW PLAYING)
+   The only occurrences of these words are anti-claims in AGENTS.md / README.md
+   (“界面上不存在…”), not routes or UI.
+
+3. Old CSS: src/styles.css and src/theme.css deleted from src;
+   archived at docs/archive/legacy-shell/{styles,theme}.css.
+
+4. Old components: 19 files deleted in 1ef7ece; no old component imports.
+
+5. src/components now:
+   BottomTabs.tsx  FocusCard.tsx  FragmentProgress.tsx  LyricFragment.tsx
+   MuteButton.tsx  PlaceholderView.tsx
+
+6. Backend / frozen modules: git diff --stat against
+   checkpoint-pre-ammo-20261024 for src/lib/srs.ts, src/studyStore.ts,
+   src/lib/wordbook.ts, src/api.ts, server/, data/, public/wordbooks/ is empty.
+
+7. Visible text audit (smoke): no 听歌背单词 / 歌单 / 播放器 / 推荐 / 搜索 /
+   登录 / NOW PLAYING; all four tab labels are icon-only (empty innerText).
+
+8. Old screenshots / nav design / color audit / old spec / old acceptance:
+   archived under docs/archive/.

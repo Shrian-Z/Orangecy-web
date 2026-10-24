@@ -1,0 +1,19 @@
+Orangecy · step-2 legacy-shell smoke
+commit 46a7750 (organ migration, old shell still mounted)
+command: npm run smoke
+server: http://127.0.0.1:8790
+
+PASS  播放器首屏  · Counting Stars
+PASS  全平台搜索  · 30 条 / 网易云、QQ、酷狗、波点
+PASS  平台账号中心  · 4 行
+PASS  减少动态效果
+PASS  每日推荐  · 10 张 / 5 个平台筛选
+PASS  播放队列  · 共 10 首 · 当前 1/10 | 4 首来自其他平台
+PASS  词卡模式隐藏播放条
+PASS  复习模式
+PASS  沉浸播放器
+PASS  桌面无 console 错误
+PASS  移动端 320px  · {"scrollWidth":320,"innerWidth":320,"platformTrigger":true,"navItems":4,"capsule":true}
+PASS  移动端 390px  · {"scrollWidth":390,"innerWidth":390,"platformTrigger":true,"navItems":4,"capsule":true}
+
+12/12 项通过

@@ -1,0 +1,30 @@
+Orangecy · step-2 organ migration diff summary
+base tag: checkpoint-pre-ammo-20261024 (commit a293fca)
+migration commit: 46a7750
+
+| organ | old path | new path | lines | behavioral diff |
+| --- | --- | --- | --- | --- |
+| audio source | src/player.ts (283) | src/audio/source.ts (283) | 283 | only 2 import paths (lyrics/parse, audio/store) |
+| audio store | src/store.ts (191) | src/audio/store.ts (191) | 191 | moved verbatim first; old path re-export shim |
+| lyric parser | src/lib/lrc.ts (157) | src/lyrics/parse.ts (157) | 157 | 0 content lines |
+| word timing | src/lib/wordTiming.ts (10) | src/lyrics/timing.ts (10) | 10 | 0 content lines |
+| word highlight | LyricsStage.tsx TextWithWords | src/lyrics/WordHighlight.tsx | 84 | function moved verbatim; old stage imports it |
+| TTS | WordCards.tsx speak() | src/audio/pronunciation.ts | 21 | function moved verbatim; WordCards calls browserTts.speak |
+
+Legacy shims left at:
+  src/player.ts        -> re-export from @/audio/source
+  src/store.ts         -> re-export from @/audio/store
+  src/lib/lrc.ts       -> re-export from @/lyrics/parse
+  src/lib/wordTiming.ts-> re-export from @/lyrics/timing
+
+Zero diff against tag:
+  src/lib/srs.ts
+  src/studyStore.ts
+  src/lib/wordbook.ts
+  src/api.ts
+  server/**
+  data/catalog.json
+  public/wordbooks/**
+
+Gate: npm run typecheck PASS; npm run build PASS; old smoke 12/12 PASS.
+The shims were removed only after the legacy shell was deleted in 1ef7ece.

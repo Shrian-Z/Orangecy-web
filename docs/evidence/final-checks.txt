@@ -1,0 +1,50 @@
+Orangecy · final checks (ammo / focus card)
+Date: 2026-10-24 (Asia/Shanghai)
+
+Checkpoint tag: checkpoint-pre-ammo-20261024
+  tag object: 87375deee59ce0d75304062402624af6fad43c12
+  commit:     a293fca4d56ed0a107153458917f39b097459533
+
+Step 2 organ migration: 46a7750
+  old shell still mounted; old smoke 12/12 (docs/evidence/step2-smoke.txt)
+Step 3 shell deletion: 1ef7ece
+  legacy selectors gone; backend zero diff
+
+Final gates:
+  npm run typecheck      PASS
+  npm run check:cards    484/484 checks; 50 cards / 17 tracks
+  npm run build          PASS (includes check:cards)
+  npm run smoke          58/58
+  npm run trace:audio    13/13 checks; 21 trace events
+  npm run check:palette  15 states; 0 source / 0 runtime violations;
+                         0 gradients; 0 shadows; music traces 12/12
+  npm run shoot:focus    3 viewports x 4 states
+
+Audio trace (docs/audio-trace.json):
+  fragment-start         523.3ms
+  fade in                523.7ms -> 725.1ms (201.4ms)
+  fade out               8924.0ms -> 9125.7ms (201.7ms)
+  pause                  9126.0ms
+  quiet                  9126.1ms (500ms)
+  pronounce              9627.5ms  fadeIn=0 fadeOut=0
+  pronounce-end          10548.8ms
+  rest                   10548.8ms
+  seek check             requested 0.59 / actual 0.609 / passed true
+
+Palette ladder observed: 8 / 18 / 28 / 34 / 40 / 48 / 55 / 70 / 80 / 100%
+Palette ladder missing: none
+
+Screenshots:
+  docs/screenshots/focus-first-frame.png
+  docs/screenshots/focus-first-frame-mobile.png
+  docs/screenshots/focus-{desktop,mobile,small}-{collapsed,expanded,playing,muted}.png
+  docs/screenshots/focus-contact-mobile.png
+
+Zero diff against checkpoint-pre-ammo-20261024:
+  src/lib/srs.ts
+  src/studyStore.ts
+  src/lib/wordbook.ts
+  src/api.ts
+  server/**
+  data/catalog.json
+  public/wordbooks/**

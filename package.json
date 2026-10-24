@@ -5,14 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -k -n api,web -c yellow,cyan \"node --watch server/index.mjs\" \"vite\"",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run check:cards && tsc --noEmit && vite build",
     "start": "node server/index.mjs",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && vite build",
     "catalog": "node scripts/build-catalog.mjs",
     "catalog:cross": "node scripts/build-cross-catalog.mjs",
+    "cards": "node scripts/build-cards.mjs",
+    "check:cards": "node scripts/check-cards.mjs",
     "check:palette": "node scripts/check-palette.mjs",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "trace:audio": "node scripts/trace-audio.mjs",
+    "shoot:focus": "node scripts/shoot-focus.mjs"
   },
   "dependencies": {
     "@neteasecloudmusicapienhanced/api": "^4.41.1",

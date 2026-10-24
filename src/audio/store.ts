@@ -64,6 +64,7 @@ export const usePlayerStore = create<AudioState>((set, get) => ({
       currentTime: 0,
       duration: song.durationMs / 1000,
       seekCheck: null,
+      audioReady: false,
     }),
   finishLoad: (song, lines, playInfo) =>
     set({ song, lines, playInfo, loadingSong: false }),

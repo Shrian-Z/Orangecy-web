@@ -1,0 +1,206 @@
+{
+  "generatedAt": "2026-10-24T12:50:37.365Z",
+  "url": "http://127.0.0.1:8790",
+  "card": "lose",
+  "checks": [
+    {
+      "name": "card is lose",
+      "ok": true,
+      "detail": "lose"
+    },
+    {
+      "name": "flip logged",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "fragment starts after flip + 200ms",
+      "ok": true,
+      "detail": "523.3ms"
+    },
+    {
+      "name": "fade-in 200ms",
+      "ok": true,
+      "detail": "200ms"
+    },
+    {
+      "name": "fade-in actually takes ~200ms",
+      "ok": true,
+      "detail": "201.4ms"
+    },
+    {
+      "name": "fade-out 200ms",
+      "ok": true,
+      "detail": "200ms"
+    },
+    {
+      "name": "fade-out actually takes ~200ms",
+      "ok": true,
+      "detail": "201.7ms"
+    },
+    {
+      "name": "fragment pauses at end",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "500ms quiet",
+      "ok": true,
+      "detail": "500ms"
+    },
+    {
+      "name": "pronunciation starts after the quiet",
+      "ok": true,
+      "detail": "501.5ms"
+    },
+    {
+      "name": "pronunciation is direct (no fade)",
+      "ok": true,
+      "detail": "fadeIn=0 fadeOut=0"
+    },
+    {
+      "name": "no fade around pronunciation",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "browser console clean",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "failures": [],
+  "trace": [
+    {
+      "at": 0.1,
+      "event": "sequence-start",
+      "label": "card"
+    },
+    {
+      "at": 0.1,
+      "event": "flip",
+      "flipMs": 320,
+      "introMs": 200
+    },
+    {
+      "at": 0.1,
+      "event": "load-track",
+      "trackId": "1850175684",
+      "title": "Counting Stars"
+    },
+    {
+      "at": 204.6,
+      "event": "track-ready",
+      "trackId": "1850175684",
+      "cached": false,
+      "available": null,
+      "lyricLines": 0
+    },
+    {
+      "at": 523.3,
+      "event": "fragment-start",
+      "start": 0.59,
+      "end": 9.19,
+      "duration": 8.6,
+      "autoPronounce": true
+    },
+    {
+      "at": 523.5,
+      "event": "volume",
+      "value": 0,
+      "stage": "fragment"
+    },
+    {
+      "at": 523.5,
+      "event": "seek",
+      "time": 0.59,
+      "play": true
+    },
+    {
+      "at": 523.7,
+      "event": "play"
+    },
+    {
+      "at": 523.7,
+      "event": "fade",
+      "from": 0,
+      "to": 1,
+      "ms": 200
+    },
+    {
+      "at": 725.1,
+      "event": "fade-end",
+      "to": 1,
+      "ms": 200,
+      "elapsed": 201.4
+    },
+    {
+      "at": 1724,
+      "event": "seek-check",
+      "present": true,
+      "requested": 0.59,
+      "actual": 0.609007,
+      "passed": true,
+      "playing": true
+    },
+    {
+      "at": 8924,
+      "event": "fade-out",
+      "from": 1,
+      "to": 0,
+      "ms": 200
+    },
+    {
+      "at": 8924,
+      "event": "fade",
+      "from": 1,
+      "to": 0,
+      "ms": 200
+    },
+    {
+      "at": 9125.7,
+      "event": "fade-end",
+      "to": 0,
+      "ms": 200,
+      "elapsed": 201.7
+    },
+    {
+      "at": 9125.9,
+      "event": "volume",
+      "value": 0,
+      "stage": "fragment-end"
+    },
+    {
+      "at": 9126,
+      "event": "pause"
+    },
+    {
+      "at": 9126.1,
+      "event": "quiet",
+      "ms": 500
+    },
+    {
+      "at": 9627.5,
+      "event": "pronounce",
+      "word": "lose",
+      "fadeIn": 0,
+      "fadeOut": 0,
+      "provider": "browserTts",
+      "supportsGainRamp": false
+    },
+    {
+      "at": 9638.1,
+      "event": "pronounce-start",
+      "word": "lose"
+    },
+    {
+      "at": 10548.8,
+      "event": "pronounce-end",
+      "word": "lose"
+    },
+    {
+      "at": 10548.8,
+      "event": "rest"
+    }
+  ]
+}

@@ -1,97 +1,311 @@
 {
-  "generatedAt": "2026-10-22T14:43:56.187Z",
-  "url": "http://localhost:5173",
+  "generatedAt": "2026-10-24T12:51:47.695Z",
+  "url": "http://127.0.0.1:8790",
+  "sourceFiles": [
+    "src/App.tsx",
+    "src/api.ts",
+    "src/audio/pronunciation.ts",
+    "src/audio/sequence.ts",
+    "src/audio/source.ts",
+    "src/audio/store.ts",
+    "src/cards.ts",
+    "src/components/BottomTabs.tsx",
+    "src/components/FocusCard.tsx",
+    "src/components/FragmentProgress.tsx",
+    "src/components/LyricFragment.tsx",
+    "src/components/MuteButton.tsx",
+    "src/components/PlaceholderView.tsx",
+    "src/lib/srs.ts",
+    "src/lib/wordbook.ts",
+    "src/lyrics/WordHighlight.tsx",
+    "src/lyrics/parse.ts",
+    "src/lyrics/timing.ts",
+    "src/main.tsx",
+    "src/screens/LearnScreen.tsx",
+    "src/state/app.ts",
+    "src/studyStore.ts",
+    "src/styles/app.css",
+    "src/styles/tokens.css",
+    "src/types.ts",
+    "src/vite-env.d.ts",
+    "index.html",
+    "public/favicon.svg"
+  ],
   "sourceViolations": [],
   "violations": [],
   "gradients": [],
-  "states": [
+  "shadows": [],
+  "musicTraces": [
     {
-      "state": "desktop / player",
-      "paintedElements": 1399,
-      "uniquePaintValues": 6,
-      "violations": 0
+      "state": "desktop / collapsed",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "desktop / word-peek",
-      "paintedElements": 1451,
-      "uniquePaintValues": 12,
-      "violations": 0
+      "state": "desktop / expanded",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "desktop / immersive",
-      "paintedElements": 1463,
-      "uniquePaintValues": 7,
-      "violations": 0
+      "state": "desktop / playing",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "desktop / word-cards",
-      "paintedElements": 195,
-      "uniquePaintValues": 8,
-      "violations": 0
+      "state": "desktop / muted",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgb(0, 47, 167)"
     },
     {
-      "state": "mobile-390 / player",
-      "paintedElements": 1398,
-      "uniquePaintValues": 6,
-      "violations": 0
+      "state": "mobile-390 / collapsed",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "mobile-390 / word-peek",
-      "paintedElements": 1450,
-      "uniquePaintValues": 11,
-      "violations": 0
+      "state": "mobile-390 / expanded",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "mobile-390 / immersive",
-      "paintedElements": 1462,
-      "uniquePaintValues": 7,
-      "violations": 0
+      "state": "mobile-390 / playing",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "mobile-390 / word-cards",
-      "paintedElements": 180,
-      "uniquePaintValues": 9,
-      "violations": 0
+      "state": "mobile-390 / muted",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgb(0, 47, 167)"
     },
     {
-      "state": "mobile-320 / player",
-      "paintedElements": 1396,
-      "uniquePaintValues": 6,
-      "violations": 0
+      "state": "mobile-320 / collapsed",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "mobile-320 / word-peek",
-      "paintedElements": 1448,
-      "uniquePaintValues": 11,
-      "violations": 0
+      "state": "mobile-320 / expanded",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "mobile-320 / immersive",
-      "paintedElements": 1460,
-      "uniquePaintValues": 7,
-      "violations": 0
+      "state": "mobile-320 / playing",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgba(0, 47, 167, 0.55)"
     },
     {
-      "state": "mobile-320 / word-cards",
-      "paintedElements": 178,
-      "uniquePaintValues": 9,
-      "violations": 0
+      "state": "mobile-320 / muted",
+      "target": true,
+      "targetColor": "rgb(0, 47, 167)",
+      "progress": true,
+      "progressColor": "rgb(0, 47, 167)",
+      "mute": true,
+      "muteColor": "rgb(0, 47, 167)"
     }
   ],
   "paletteTokensSeen": [
     "rgb(0, 47, 167)",
     "rgb(255, 255, 255)",
     "rgba(0, 47, 167, 0.08)",
-    "rgba(0, 47, 167, 0.1)",
-    "rgba(0, 47, 167, 0.3)",
+    "rgba(0, 47, 167, 0.18)",
+    "rgba(0, 47, 167, 0.28)",
+    "rgba(0, 47, 167, 0.34)",
     "rgba(0, 47, 167, 0.4)",
-    "rgba(0, 47, 167, 0.6)",
-    "rgba(255, 255, 255, 0.1)",
-    "rgba(255, 255, 255, 0.247)",
-    "rgba(255, 255, 255, 0.25)",
-    "rgba(255, 255, 255, 0.45)",
-    "rgba(255, 255, 255, 0.592)",
-    "rgba(255, 255, 255, 0.6)",
-    "rgba(255, 255, 255, 0.992)"
+    "rgba(0, 47, 167, 0.48)",
+    "rgba(0, 47, 167, 0.55)",
+    "rgba(0, 47, 167, 0.7)",
+    "rgba(0, 47, 167, 0.8)"
+  ],
+  "ladder": {
+    "expected": [
+      0.08,
+      0.18,
+      0.28,
+      0.34,
+      0.4,
+      0.48,
+      0.55,
+      0.7,
+      0.8,
+      1
+    ],
+    "observed": [
+      0.08,
+      0.18,
+      0.28,
+      0.34,
+      0.4,
+      0.48,
+      0.55,
+      0.7,
+      0.8,
+      1
+    ],
+    "missing": []
+  },
+  "browserErrors": [],
+  "states": [
+    {
+      "state": "desktop / collapsed",
+      "paintedElements": 79,
+      "uniquePaintValues": 8,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / expanded",
+      "paintedElements": 82,
+      "uniquePaintValues": 10,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / playing",
+      "paintedElements": 79,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / muted",
+      "paintedElements": 79,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / placeholder",
+      "paintedElements": 28,
+      "uniquePaintValues": 4,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / collapsed",
+      "paintedElements": 79,
+      "uniquePaintValues": 8,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / expanded",
+      "paintedElements": 82,
+      "uniquePaintValues": 10,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / playing",
+      "paintedElements": 79,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / muted",
+      "paintedElements": 79,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / placeholder",
+      "paintedElements": 28,
+      "uniquePaintValues": 4,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / collapsed",
+      "paintedElements": 79,
+      "uniquePaintValues": 8,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / expanded",
+      "paintedElements": 82,
+      "uniquePaintValues": 10,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / playing",
+      "paintedElements": 79,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / muted",
+      "paintedElements": 79,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / placeholder",
+      "paintedElements": 28,
+      "uniquePaintValues": 4,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    }
   ]
 }
