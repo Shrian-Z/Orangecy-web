@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T06:51:05.508Z",
+  "generatedAt": "2026-10-25T08:03:44.570Z",
   "url": "http://127.0.0.1:8787",
   "sourceFiles": [
     "src/App.tsx",
@@ -31,6 +31,7 @@
     "src/screens/LearnScreen.tsx",
     "src/screens/MyScreen.tsx",
     "src/screens/PlaylistWorld.tsx",
+    "src/screens/SettingsScreen.tsx",
     "src/state/app.ts",
     "src/studyStore.ts",
     "src/styles/app.css",
@@ -266,14 +267,14 @@
     },
     {
       "state": "desktop / my",
-      "paintedElements": 40,
-      "uniquePaintValues": 5,
+      "paintedElements": 38,
+      "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
     },
     {
-      "state": "desktop / connect-sheet",
+      "state": "desktop / settings",
       "paintedElements": 65,
       "uniquePaintValues": 6,
       "violations": 0,
@@ -281,9 +282,25 @@
       "shadows": 0
     },
     {
+      "state": "desktop / connect-sheet",
+      "paintedElements": 63,
+      "uniquePaintValues": 8,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
       "state": "desktop / connect-qr",
-      "paintedElements": 55,
-      "uniquePaintValues": 5,
+      "paintedElements": 53,
+      "uniquePaintValues": 7,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / done",
+      "paintedElements": 33,
+      "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -354,14 +371,14 @@
     },
     {
       "state": "mobile-390 / my",
-      "paintedElements": 40,
-      "uniquePaintValues": 5,
+      "paintedElements": 38,
+      "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
     },
     {
-      "state": "mobile-390 / connect-sheet",
+      "state": "mobile-390 / settings",
       "paintedElements": 65,
       "uniquePaintValues": 6,
       "violations": 0,
@@ -369,9 +386,25 @@
       "shadows": 0
     },
     {
+      "state": "mobile-390 / connect-sheet",
+      "paintedElements": 63,
+      "uniquePaintValues": 8,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
       "state": "mobile-390 / connect-qr",
-      "paintedElements": 55,
-      "uniquePaintValues": 5,
+      "paintedElements": 53,
+      "uniquePaintValues": 7,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / done",
+      "paintedElements": 33,
+      "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -442,14 +475,14 @@
     },
     {
       "state": "mobile-320 / my",
-      "paintedElements": 40,
-      "uniquePaintValues": 5,
+      "paintedElements": 38,
+      "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
     },
     {
-      "state": "mobile-320 / connect-sheet",
+      "state": "mobile-320 / settings",
       "paintedElements": 65,
       "uniquePaintValues": 6,
       "violations": 0,
@@ -457,9 +490,25 @@
       "shadows": 0
     },
     {
+      "state": "mobile-320 / connect-sheet",
+      "paintedElements": 63,
+      "uniquePaintValues": 8,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
       "state": "mobile-320 / connect-qr",
-      "paintedElements": 55,
-      "uniquePaintValues": 5,
+      "paintedElements": 53,
+      "uniquePaintValues": 7,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / done",
+      "paintedElements": 33,
+      "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
       "shadows": 0

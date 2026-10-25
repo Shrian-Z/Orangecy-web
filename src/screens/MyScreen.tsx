@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { LogOut, Minus, Plus, User } from 'lucide-react';
+import { ChevronRight, LogOut, Plus, Settings, User } from 'lucide-react';
 import { PlatformConnectSheet } from '@/components/PlatformConnectSheet';
 import { emptyConnections, PLATFORMS, PLATFORM_BY_ID } from '@/platforms';
 import type { PlatformId } from '@/platforms';
-import { useStudyStore } from '@/studyStore';
+import { SettingsScreen } from '@/screens/SettingsScreen';
 
 export function MyScreen() {
-  const newPerDay = useStudyStore((store) => store.state.settings.newPerDay);
-  const setNewPerDay = useStudyStore((store) => store.setNewPerDay);
   const [connected, setConnected] = useState<Record<PlatformId, boolean>>(emptyConnections);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     await Promise.all(
@@ -50,6 +49,10 @@ export function MyScreen() {
   }, []);
 
   const connectedPlatforms = PLATFORMS.filter((platform) => connected[platform.id]);
+
+  if (settingsOpen) {
+    return <SettingsScreen onBack={() => setSettingsOpen(false)} />;
+  }
 
   return (
     <div className="my-page">
@@ -93,27 +96,11 @@ export function MyScreen() {
         )}
       </div>
 
-      <div className="my-quota" role="group" aria-label="每日新词">
-        <button
-          type="button"
-          className="icon-action"
-          onClick={() => setNewPerDay(newPerDay - 5)}
-          disabled={newPerDay <= 5}
-          aria-label="每日新词减少"
-        >
-          <Minus size={18} strokeWidth={1.8} aria-hidden="true" />
-        </button>
-        <b className="my-quota-value">{newPerDay}</b>
-        <button
-          type="button"
-          className="icon-action"
-          onClick={() => setNewPerDay(newPerDay + 5)}
-          disabled={newPerDay >= 30}
-          aria-label="每日新词增加"
-        >
-          <Plus size={18} strokeWidth={1.8} aria-hidden="true" />
-        </button>
-      </div>
+      <button type="button" className="my-settings" onClick={() => setSettingsOpen(true)}>
+        <Settings size={18} strokeWidth={1.8} aria-hidden="true" />
+        <span>设置</span>
+        <ChevronRight size={18} strokeWidth={1.8} aria-hidden="true" />
+      </button>
 
       <PlatformConnectSheet
         open={sheetOpen}

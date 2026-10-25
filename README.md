@@ -26,19 +26,39 @@ Orangecy 是一台纯粹的背单词机器。一屏一词，词书决定队列�
   已连接平台图标 + 断开图标。
 - 每 1.5s 轮询 `api.*.qrCheck`；803 成功后 `api.*.authStatus` 确认，
   session 落本机服务。四个入口都真实调用已有 API。
-- 页面与 sheet 没有可见文案；平台名只进 aria / title。二维码是唯一
-  功能性图片豁免；不展示曲库、歌曲、账号资料。
+- 平台连接本身仍没有可见文案；平台名只进 aria / title。我的页只多一行「设置」。
+  二维码是唯一功能性图片豁免；不展示曲库、歌曲、账号资料。
 - 登录只是音源能力：seed 50 卡目前全部网易云；QQ / 酷狗 / 波点入口可连，
   但本轮不改 seed 平台。复用本仓 `api.ts` / `audio/source.ts`，MIT 库直接用；
   不复制 Folia AGPL 登录 UI / Omni / 曲库代码。
 
-| 我的 · 空态 | 我的 · 已连接 |
+| 我的 · 设置入口 | 我的 · 已连接 |
 | --- | --- |
-| ![我的空态](docs/screenshots/my-empty.png) | ![已连接](docs/screenshots/my-connected.png) |
+| ![我的设置入口](docs/screenshots/my-settings.png) | ![已连接](docs/screenshots/my-connected.png) |
 
 | 添加 · 选平台 | 添加 · 扫码（示例码已过期） |
 | --- | --- |
 | ![选平台](docs/screenshots/my-chooser.png) | ![扫码](docs/screenshots/my-qr-live.png) |
+
+## 学习计划 · 设置
+
+- 入口固定为 **我的 → 设置 → 学习设置**，首页不放设置入口。
+- 每日新词：5–100，默认 10，步长 5；快捷 10 / 20 / 30 / 50 / 100。
+- 每日复习上限：0（不限）/ 100 / 200 / 300 / 500，默认 200。
+- 新词队列走完 → 自动接当天到期复习；两钮「学习 N / 复习 M」仍在，今日完成态收起只留完成卡。
+- N=0 且 M=0 → 「今日完成」+ 今日新学/复习数字 +「再学 10 个」；
+  再学只加今天的额外新词，不改进设置，次日清零。
+- 被复习上限拦下的到期卡显示「X 个到期，明天继续」，不丢。
+
+| 我的 · 设置行 | 学习设置 |
+| --- | --- |
+| ![我的设置行](docs/screenshots/my-settings.png) | ![学习设置](docs/screenshots/study-settings.png) |
+
+| 今日完成 | 继续学习 |
+| --- | --- |
+| ![今日完成](docs/screenshots/study-done.png) | 点「再学 10 个」直接开新一组 |
+
+验收：`npm run smoke` 的 89 项覆盖设置、自动复习、完成态、再学一组、复习上限。
 
 ## 词汇导入 · 高考 3500
 
@@ -121,8 +141,8 @@ type FocusCardData = {
 npm run typecheck
 npm run check:cards     # 需要本地 API 在 8787
 npm run build           # 已包含 check:cards
-npm run check:palette   # 36 状态 / 0 违规 / 0 渐变 / 0 阴影
-npm run smoke           # 80 项
+npm run check:palette   # 42 状态 / 0 违规 / 0 渐变 / 0 阴影
+npm run smoke           # 89 项
 npm run trace:audio     # 0.2s 淡入淡出 / 0.5s 安静 / 发音直出
 npm run shoot:focus     # 双端四态截图
 npm run accept:import   # 3738 词真实配歌 66 项（需登录网易，约 2.5 分钟）
@@ -145,13 +165,14 @@ src/cards.ts               卡数据 + SRS 输入适配（track / fragment 可�
 src/lib/importDeck.ts      词表解析 / 歌词配卡 / 纯词卡 / 卡排序
 src/lib/importStore.ts     IndexedDB 导入书 + 列表 / 读取 hooks
 src/lib/wordImport.ts      歌单→歌词→可播→成卡流水线
-src/state/app.ts           view / muted / bookId
-src/today.ts               N/M 口径、预设书 + 导入书合并
+src/state/app.ts           view / muted / bookId / 学习会话队列 + 自动复习
+src/today.ts               N/M 口径、今日完成数字、预设书 + 导入书合并
 src/platforms.ts           四平台连接配置（复用 api.ts）
-src/screens/LearnHome.tsx  词书条 + 学习 / 复习两钮
+src/screens/LearnHome.tsx  词书条 + 学习 / 复习两钮 + 今日完成
+src/screens/SettingsScreen.tsx 设置 → 学习设置（每日新词 / 复习上限）
 src/screens/BookPicker.tsx 词书列表 + 导入入口
-src/screens/LearnScreen.tsx 卡索引、序列、判断
-src/screens/MyScreen.tsx   我的：连接态 + 添加入口
+src/screens/LearnScreen.tsx 卡索引、序列、判断、自动接复习
+src/screens/MyScreen.tsx   我的：连接态 + 添加 + 设置
 src/components/            FocusCard / LyricFragment / FragmentProgress /
                            MuteButton / BottomTabs / ImportSheet /
                            PlatformConnectSheet
@@ -168,8 +189,9 @@ docs/archive/              旧双模式壳 / 旧导航稿 / 旧 CSS / 旧验收
 ## 关键实现
 
 - **只迁未改**：音源、歌词解析、词高亮、TTS 从旧壳原样抽到
-  `src/audio` / `src/lyrics`；`srs.ts`、`studyStore.ts`、`wordbook.ts`、
-  `api.ts` 与后台零改动。旧壳在新卡建成前仍能跑，旧 smoke 12/12 后才删除。
+  `src/audio` / `src/lyrics`；`wordbook.ts`、`api.ts` 与后台零改动。
+  `srs.ts` / `studyStore.ts` 只为学习设置与每日计数扩展了 settings/daily 字段，
+  FSRS 调度与 `review()` 入口不变。
 - **不切片、不存副本**：`/api/audio/:id` 按浏览器 Range 请求转发原曲，
   服务端只做流式代理；seek 是 `audio.currentTime`。
 - **登录态**：浏览器只拿到 HttpOnly 的 `oc_sid`；平台 cookie 存在服务端，
@@ -199,6 +221,6 @@ docs/archive/              旧双模式壳 / 旧导航稿 / 旧 CSS / 旧验收
 
 ## 下一步
 
-1. 歌词 IndexedDB 缓存 + 增量重导（换歌单只补新歌）。
-2. 其它平台歌单同入口接入；纯词卡配真人发音音频包 provider。
-3. 补一次真实扫码 E2E；真机首次音频解锁、锁屏 / 通勤场景实测。
+1. streak / 每日提醒；按词书设置每日计划。
+2. 歌词 IndexedDB 缓存 + 增量重导（换歌单只补新歌）。
+3. 其它平台歌单同入口接入；纯词卡配真人发音音频包 provider。

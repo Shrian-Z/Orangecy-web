@@ -18,18 +18,38 @@ npm run shoot:focus
 npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
 ```
 
-最近结果（2026-10-25 下午）：
+最近结果（2026-10-25 晚）：
 
 | 项 | 结果 | 证据 |
 | --- | --- | --- |
 | typecheck | PASS | 无输出 |
 | check:cards | 484/484 | `docs/cards-check.json` |
 | build | PASS | `dist/` |
-| check:palette | 36 状态 0 违规 / 0 渐变 / 0 阴影 | `docs/palette-check.json` |
-| smoke | 80/80 | 终端输出 |
+| check:palette | 42 状态 0 违规 / 0 渐变 / 0 阴影 | `docs/palette-check.json` |
+| smoke | 89/89 | 终端输出 |
 | trace:audio | 13/13 | `docs/audio-trace.json` |
 | shoot:focus | 3 视口 × 4 态 | `docs/screenshots/focus-*.png` |
 | accept:import | 66/66 | `docs/evidence/gaokao-import.json` |
+| study-plan | 89/89 内嵌于 smoke | 设置 / 自动复习 / 完成 / 复习上限 |
+
+## 学习计划 / 设置验收（2026-10-25 晚）
+
+主验收在 `npm run smoke` 里（89/89），下面是本轮新增覆盖：
+
+- **设置层级**：我的页有「设置」行 → 设置页显示「学习设置」→ 每日新词/每日复习上限。
+- **每日新词**：默认 10，步长 5，范围 5–100；快捷 10/20/30/50/100；改完立即持久化。
+- **每日复习上限**：默认 200，范围 0–500；0 显示「不限」；M 按
+  `reviewPerDay − 今天已复习数` 扣减。
+- **背完自动复习**：dueFixture 下点「学习 10」→ 10 张新词走完自动进入 `01/02`
+  复习队列；复习完回首页。
+- **今日完成**：N=0 且 M=0 显示「今日完成」+「10 新词 · 2 复习」+「再学 10 个」。
+- **继续学习**：点「再学 10 个」直接开新一组 `01/10`；只加今日额外，不改进设置。
+- **复习上限**：fixture 里 20 上限 + 今天已复习 19 → M=1（不是 2）；超出部分不丢。
+- **回归**：`check:palette` 42 状态 0 违规 / 0 渐变 / 0 阴影；`trace:audio` 13/13；
+  `accept:import` 仍 66/66；build / check:cards 484/484。
+
+截图：`docs/screenshots/my-settings.png`、`study-settings.png`、
+`study-settings-desktop.png`、`study-done.png`。
 
 ## 词汇导入验收（2026-10-25）
 
@@ -49,7 +69,7 @@ npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
 - **纯词卡**：无登录上下文粘贴 1 词 → 无歌词 / 无进度 / 无 seek，
   `data-plain="true"`，flip 后 `pronounce` 直出。
 - **全量可播复核**：1005 首去重曲目逐一 `/api/song/:id/play`，**1005/1005 available**。
-- **耗时**：约 148 秒（2613 首歌词 + 1006 首试听）。
+- **耗时**：约 144 秒（2613 首歌词 + 1006 首试听）。
 - 截图：`docs/screenshots/import-entry.png`、`import-sheet.png`、`import-progress.png`、
   `import-done.png`、`import-home.png`、`import-card.png`、`import-reload.png`、
   `import-picker.png`、`import-plain.png`、`import-sheet-desktop.png`。

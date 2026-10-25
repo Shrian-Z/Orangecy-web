@@ -746,6 +746,54 @@ button {
   gap: 12px;
 }
 
+.home-done {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.home-done-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink-18);
+  border-radius: 50%;
+  color: var(--ink);
+}
+
+.home-done-title {
+  margin: 6px 0 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.home-done-stats,
+.home-done-due,
+.home-done-all {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-40);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-done-more {
+  margin-top: 10px;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 .home-action {
   appearance: none;
   height: 132px;
@@ -1078,21 +1126,129 @@ button {
   margin-top: 12px;
 }
 
-.my-quota {
+.my-settings {
+  appearance: none;
   flex: 0 0 auto;
+  height: 56px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 0 12px;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--ink-08);
+  background: transparent;
+  color: var(--ink-70);
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
 }
 
-.my-quota-value {
-  min-width: 2.5em;
+.my-settings span {
+  flex: 1 1 auto;
+}
+
+.my-settings:hover {
+  color: var(--ink);
+}
+
+/* ── 设置 · 学习设置 ────────────────────────────────────────────────── */
+
+.settings-page {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: min(var(--content), 100% - (var(--page-pad) * 2));
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px 0 40px;
+}
+
+.settings-heading {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink-40);
+}
+
+.settings-row {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--ink-08);
+}
+
+.settings-label {
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.settings-stepper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.settings-stepper b {
+  min-width: 3.2em;
   text-align: center;
   font-size: 15px;
   font-weight: 500;
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
+}
+
+.settings-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0 10px;
+}
+
+.settings-chip {
+  appearance: none;
+  min-width: 48px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--ink-18);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-55);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.settings-chip:hover {
+  border-color: var(--ink-28);
+  color: var(--ink-80);
+}
+
+.settings-chip.is-current {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.settings-hint {
+  max-width: 560px;
+  margin: 0 0 18px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-40);
+}
+
+.settings-divider {
+  height: 1px;
+  margin: 20px 0 8px;
+  background: var(--ink-08);
 }
 
 /* ── 歌单世界 ───────────────────────────────────────────────────────── */
@@ -1449,6 +1605,9 @@ button {
 .qr-retry:focus-visible,
 .book-bar:focus-visible,
 .home-action:focus-visible,
+.home-done-more:focus-visible,
+.my-settings:focus-visible,
+.settings-chip:focus-visible,
 .picker-row:focus-visible,
 .picker-import:focus-visible,
 .picker-delete:focus-visible,

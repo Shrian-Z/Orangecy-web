@@ -15,6 +15,7 @@ export default function App() {
   const picking = useAppStore((state) => state.picking);
   const bookId = useAppStore((state) => state.bookId);
   const endSession = useAppStore((state) => state.endSession);
+  const advanceSession = useAppStore((state) => state.advanceSession);
 
   useEffect(() => {
     useStudyStore.getState().init();
@@ -26,10 +27,13 @@ export default function App() {
         <div className={`stage-layer ${view === 'learn' ? '' : 'is-hidden'}`} aria-hidden={view !== 'learn'}>
           {session ? (
             <LearnScreen
+              key={session.id}
               active={view === 'learn'}
               cards={session.cards}
+              kind={session.kind}
               bookId={bookId ?? ''}
-              onExit={endSession}
+              onBack={endSession}
+              onComplete={advanceSession}
             />
           ) : picking ? (
             <BookPicker />

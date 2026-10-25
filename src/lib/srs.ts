@@ -48,6 +48,10 @@ export interface DailyStudy {
   bookId: string;
   newWords: StudyWord[];
   reviewed: string[];
+  /** Today-only extra new words added from the completion card. */
+  extraNew: number;
+  /** Review cards judged today; the daily review limit counts these. */
+  reviewCount: number;
 }
 
 export interface StudyState {
@@ -56,6 +60,7 @@ export interface StudyState {
   daily: DailyStudy;
   settings: {
     newPerDay: number;
+    reviewPerDay: number;
   };
   logs: StudyLog[];
 }
@@ -73,6 +78,9 @@ export interface ReviewOutcome {
 
 const STORAGE_KEY = 'orangecy.study.v1';
 const DEFAULT_NEW_PER_DAY = 10;
+export const MAX_NEW_PER_DAY = 100;
+const DEFAULT_REVIEW_PER_DAY = 200;
+export const MAX_REVIEW_PER_DAY = 500;
 const MAX_LOGS = 1200;
 
 const scheduler = fsrs({
@@ -91,7 +99,7 @@ export function dayKey(date = new Date()) {
 }
 
 function emptyDaily(today = dayKey()): DailyStudy {
-  return { date: today, bookId: '', newWords: [], reviewed: [] };
+  return { date: today, bookId: '', newWords: [], reviewed: [], extraNew: 0, reviewCount: 0 };
 }
 
 export function createEmptyStudyState(): StudyState {
@@ -99,7 +107,7 @@ export function createEmptyStudyState(): StudyState {
     version: 1,
     cards: {},
     daily: emptyDaily(),
-    settings: { newPerDay: DEFAULT_NEW_PER_DAY },
+    settings: { newPerDay: DEFAULT_NEW_PER_DAY, reviewPerDay: DEFAULT_REVIEW_PER_DAY },
     logs: [],
   };
 }
@@ -132,9 +140,14 @@ function normalizeState(raw: unknown): StudyState {
       ...(input.daily ?? {}),
       newWords: Array.isArray(input.daily?.newWords) ? input.daily.newWords : [],
       reviewed: Array.isArray(input.daily?.reviewed) ? input.daily.reviewed : [],
+      extraNew: Math.max(0, Math.round(Number(input.daily?.extraNew ?? 0)) || 0),
+      reviewCount: Math.max(0, Math.round(Number(input.daily?.reviewCount ?? 0)) || 0),
     },
     settings: {
       newPerDay: clampNewPerDay(Number(input.settings?.newPerDay ?? DEFAULT_NEW_PER_DAY)),
+      reviewPerDay: clampReviewPerDay(
+        Number(input.settings?.reviewPerDay ?? DEFAULT_REVIEW_PER_DAY),
+      ),
     },
     logs: Array.isArray(input.logs) ? input.logs.slice(-MAX_LOGS) : [],
   };
@@ -142,7 +155,14 @@ function normalizeState(raw: unknown): StudyState {
 
 export function clampNewPerDay(value: number) {
   if (!Number.isFinite(value)) return DEFAULT_NEW_PER_DAY;
-  return Math.max(5, Math.min(30, Math.round(value)));
+  return Math.max(5, Math.min(MAX_NEW_PER_DAY, Math.round(value)));
+}
+
+/** 0 means unlimited; otherwise 20–500 reviews per day. */
+export function clampReviewPerDay(value: number) {
+  if (!Number.isFinite(value)) return DEFAULT_REVIEW_PER_DAY;
+  if (value <= 0) return 0;
+  return Math.max(20, Math.min(MAX_REVIEW_PER_DAY, Math.round(value)));
 }
 
 export function loadStudyState(): StudyState {
@@ -170,6 +190,8 @@ export function ensureToday(state: StudyState, now = new Date()) {
       bookId: state.daily.bookId,
       newWords: [],
       reviewed: [],
+      extraNew: 0,
+      reviewCount: 0,
     };
   }
   return state;
@@ -238,6 +260,7 @@ export function reviewWord(
     bookId: string;
     rating: Grade3;
     source?: StudySource;
+    kind?: 'learn' | 'review';
     now?: Date;
   },
 ): ReviewOutcome {
@@ -263,6 +286,7 @@ export function reviewWord(
 
   if (!state.daily.reviewed.includes(input.word.word)) {
     state.daily.reviewed.push(input.word.word);
+    if (input.kind === 'review') state.daily.reviewCount += 1;
   }
 
   state.logs.push({

@@ -26,3 +26,10 @@
 | 2026-10-25 | 没有歌词的词保留「纯词卡」：无 track / fragment，flip 后直接 TTS；`FocusCardData` 的 track / fragment 改可选 | 3738 词一个不丢；纯词卡不画歌词 / 进度 / seek，仍走同一 SRS review() |
 | 2026-10-25 | 导入入口放词书选择页右上 `FileUp` 图标，不新增第四 tab；`ImportSheet` 允许「导入词汇 / 高考 3500 / 导入 / 用这本书 / 进度数字」等功能性文案 | 用户明确要导入入口；焦点卡零废话白名单不变，文案只进工具 sheet，不进学习卡 |
 | 2026-10-25 | 导入验收用真实已登录网易会话跑 `npm run accept:import`，以 1005 曲全可播 + 3059 配歌 + 5 卡 seek 为通过门槛 | 不用假数据补；配歌与可播必须来自用户真实歌单 |
+| 2026-10-25 晚 | 每日新词设置搬进「我的 → 设置 → 学习设置」，5–100、默认 10、步长 5；首页不再放设置入口 | 用户明确要求；[Anki](https://docs.ankiweb.net/deck-options.html)、[百词斩](https://shouyou.3dmgame.com/gl/558662.html)、[墨墨](http://memodocs.maimemo.com/docs/PulqwOB1xi5jV0kb8Y1cPE7ZnKc) 都把每日计划放在设置/计划里 |
+| 2026-10-25 晚 | 加「每日复习上限」0/100/200/300/500，默认 200；M 按 `上限 − 今天已复习数` 扣减，只统计复习会话，超出部分明天继续 | [Anki Maximum Reviews/Day](https://docs.ankiweb.net/deck-options.html) 的口径；削峰但不隐藏、不丢到期卡 |
+| 2026-10-25 晚 | 新词队列走完自动接当天到期复习；首页保留「学习 N / 复习 M」两钮 | 墨墨默认「先复习再新学」，用户明确要「背完就复习」；自动接续让两钮仍可分别进入 |
+| 2026-10-25 晚 | N=0 且 M=0 显示「今日完成」卡片 + 「再学 10 个」；再学只加今日额外，不改进设置，次日清零 | Anki 的 custom study「increase today's limit」+ [Duolingo 把每日目标与 streak 分开](https://blog.duolingo.com/improving-the-streak/)；直接解决「背完 10 个卡死」 |
+| 2026-10-25 晚 | 扩展 `srs.ts` 的 `settings.newPerDay / reviewPerDay` 与 `daily.extraNew / reviewCount`，扩展 `studyStore.ts` 三个 setter；FSRS 调度与 `review()` 入口不动 | 设置要持久化、按天计数；不重写调度器，避免 SRS 数据风险 |
+| 2026-10-25 晚 | 设置页与今日完成卡允许必要文案；FocusCard 零废话白名单不变 | 用户明确要主流 App 的设置层级与完成反馈；文案只进工具/完成态 |
+| 2026-10-25 晚 | 研究依据：Anki deck options（New cards/day + Maximum reviews/day + 完成页提示）、墨墨「每日学习量 = 复习 + 新学」、百词斩「调整计划」、Duolingo streak 与每日目标分离；共同点是限额可见可调、完成有反馈、总能继续 | 先了解再动手；避免只加一个隐藏上限 |

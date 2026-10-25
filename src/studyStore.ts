@@ -4,6 +4,7 @@ import type { Song } from '@/types';
 import type { Grade3, ReviewOutcome, StudyCardView, StudyState, StudyWord } from '@/lib/srs';
 import {
   clampNewPerDay,
+  clampReviewPerDay,
   createEmptyStudyState,
   ensureToday,
   getDueQueue,
@@ -34,8 +35,11 @@ interface StudyStore {
     bookId: string;
     rating: Grade3;
     source?: StudyWord['source'];
+    kind?: 'learn' | 'review';
   }) => ReviewOutcome | null;
   setNewPerDay: (value: number) => void;
+  setReviewPerDay: (value: number) => void;
+  increaseTodayNew: (amount?: number) => void;
   learnQueue: () => StudyCardView[];
   dueQueue: () => StudyCardView[];
   targets: () => string[];
@@ -66,7 +70,7 @@ export const useStudyStore = create<StudyStore>((set, get) => ({
     set({ state, counts: getStudyCounts(state), lastInput: input });
   },
 
-  review: ({ word, bookId, rating, source }) => {
+  review: ({ word, bookId, rating, source, kind }) => {
     const current = get().state;
     const state: StudyState = {
       ...current,
@@ -74,7 +78,7 @@ export const useStudyStore = create<StudyStore>((set, get) => ({
       daily: { ...current.daily, newWords: [...current.daily.newWords], reviewed: [...current.daily.reviewed] },
       logs: [...current.logs],
     };
-    const outcome = reviewWord(state, { word, bookId, rating, source });
+    const outcome = reviewWord(state, { word, bookId, rating, source, kind });
     saveStudyState(state);
     set({ state, counts: getStudyCounts(state) });
     return outcome;
@@ -85,12 +89,36 @@ export const useStudyStore = create<StudyStore>((set, get) => ({
     const state: StudyState = {
       ...current,
       settings: { ...current.settings, newPerDay: clampNewPerDay(value) },
-      daily: { ...current.daily, newWords: [...current.daily.newWords] },
+      daily: { ...current.daily, newWords: [...current.daily.newWords], extraNew: 0 },
     };
+    ensureToday(state);
     saveStudyState(state);
     set({ state, counts: getStudyCounts(state) });
     const input = get().lastInput;
     if (input) get().sync(input);
+  },
+
+  setReviewPerDay: (value) => {
+    const current = get().state;
+    const state: StudyState = {
+      ...current,
+      settings: { ...current.settings, reviewPerDay: clampReviewPerDay(value) },
+    };
+    saveStudyState(state);
+    set({ state, counts: getStudyCounts(state) });
+  },
+
+  increaseTodayNew: (amount = 10) => {
+    const current = get().state;
+    const extra = Math.max(1, Math.min(100, Math.round(amount)));
+    const state: StudyState = {
+      ...current,
+      daily: { ...current.daily, newWords: [...current.daily.newWords] },
+    };
+    ensureToday(state);
+    state.daily.extraNew += extra;
+    saveStudyState(state);
+    set({ state, counts: getStudyCounts(state) });
   },
 
   learnQueue: () => getNewQueue(get().state),

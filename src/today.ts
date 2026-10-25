@@ -95,16 +95,44 @@ export function todayLearnQueue(state: StudyState, deck: FocusCardData[], bookWo
   const learnedToday = Object.values(state.cards).filter(
     (record) => dayKey(new Date(record.addedAt)) === today,
   ).length;
-  const left = Math.max(0, state.settings.newPerDay - learnedToday);
+  const extra = state.daily.date === today ? state.daily.extraNew : 0;
+  const left = Math.max(0, state.settings.newPerDay + extra - learnedToday);
   return deck.filter((card) => bookWords.has(card.w) && !state.cards[card.w]).slice(0, left);
 }
 
-/** M: SRS cards due by the end of today, not yet judged today, that have a playable card. */
+/** M: due by the end of today, not judged today, capped by the daily review limit (0 = unlimited). */
 export function todayReviewQueue(state: StudyState, deck: FocusCardData[]) {
   const byWord = new Map(deck.map((card) => [card.w, card]));
-  return getDueQueue(state, endOfToday())
+  const due = getDueQueue(state, endOfToday())
     .map((item) => byWord.get(item.word))
     .filter((card): card is FocusCardData => Boolean(card));
+  const today = dayKey();
+  const reviewedToday = state.daily.date === today ? state.daily.reviewCount : 0;
+  const limit = state.settings.reviewPerDay;
+  if (!limit) return due;
+  return due.slice(0, Math.max(0, limit - reviewedToday));
+}
+
+/** Numbers for the completion card; dueLeft counts every playable due card, even those hidden by the limit. */
+export function todayStats(state: StudyState, deck: FocusCardData[]) {
+  const today = dayKey();
+  const newLearned = Object.values(state.cards).filter(
+    (record) => dayKey(new Date(record.addedAt)) === today,
+  ).length;
+  const reviewed = state.daily.date === today ? state.daily.reviewCount : 0;
+  const deckWords = new Set(deck.map((card) => card.w));
+  const dueLeft = getDueQueue(state, endOfToday()).filter((item) => deckWords.has(item.word)).length;
+  return { newLearned, reviewed, dueLeft };
+}
+
+/** Unseen cards left in the selected book, regardless of today's quota. */
+export function learnableRemaining(
+  state: StudyState,
+  deck: FocusCardData[],
+  bookWords: Set<string> | null,
+) {
+  if (!bookWords) return 0;
+  return deck.filter((card) => bookWords.has(card.w) && !state.cards[card.w]).length;
 }
 
 export function learnedInBook(state: StudyState, bookWords: Set<string> | null) {

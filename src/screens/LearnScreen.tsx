@@ -7,6 +7,7 @@ import { FocusSequence } from '@/audio/sequence';
 import type { FocusSnapshot } from '@/audio/sequence';
 import { usePlayerStore } from '@/audio/store';
 import { useAppStore } from '@/state/app';
+import type { SessionKind } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
 import { cardToStudyWord, sourceFromCard } from '@/cards';
 import type { FocusCardData } from '@/cards';
@@ -25,13 +26,17 @@ function pad2(value: number) {
 export function LearnScreen({
   active,
   cards: deck,
+  kind,
   bookId,
-  onExit,
+  onBack,
+  onComplete,
 }: {
   active: boolean;
   cards: FocusCardData[];
+  kind: SessionKind;
   bookId: string;
-  onExit: () => void;
+  onBack: () => void;
+  onComplete: () => void;
 }) {
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
@@ -118,21 +123,22 @@ export function LearnScreen({
         bookId,
         rating,
         source: sourceFromCard(card),
+        kind,
       });
       await sequenceRef.current?.stop({ fadeOut: true });
       busyRef.current = false;
       setBusy(false);
-      if (index + 1 >= deck.length) onExit();
+      if (index + 1 >= deck.length) onComplete();
       else setIndex(index + 1);
     },
-    [bookId, card, deck.length, index, onExit],
+    [bookId, card, deck.length, index, kind, onComplete],
   );
 
   return (
     <div className="study">
       <header className="status">
         <span className="status-lead">
-          <button type="button" className="icon-action status-back" onClick={onExit} aria-label="返回">
+          <button type="button" className="icon-action status-back" onClick={onBack} aria-label="返回">
             <ChevronLeft size={22} strokeWidth={1.8} aria-hidden="true" />
           </button>
           <span className="counter">

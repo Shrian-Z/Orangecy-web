@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-10-25T06:49:40.018Z",
+  "generatedAt": "2026-10-25T08:01:03.196Z",
   "api": "http://127.0.0.1:8787",
   "app": "http://127.0.0.1:8787",
   "session": {
     "loggedIn": true,
     "nickname": "Shrian_"
   },
-  "elapsedMs": 148238,
+  "elapsedMs": 144223,
   "preset": {
     "name": "高考 3500",
     "expectedWords": 3738
@@ -24,7 +24,7 @@
       "tracksPlayable": 1005,
       "trackCount": 1005,
       "playlists": 20,
-      "durationMs": 147393
+      "durationMs": 143955
     },
     "stored": {
       "words": 3738,
@@ -41,37 +41,36 @@
       "曲目 7 / 20",
       "曲目 11 / 20",
       "曲目 13 / 20",
-      "曲目 14 / 20",
-      "曲目 17 / 20",
-      "歌词 80 / 2613",
-      "歌词 205 / 2613",
-      "歌词 325 / 2613",
-      "歌词 445 / 2613",
-      "歌词 555 / 2613",
-      "歌词 670 / 2613",
-      "歌词 790 / 2613",
-      "歌词 920 / 2613",
-      "歌词 1045 / 2613",
-      "歌词 1170 / 2613",
-      "歌词 1295 / 2613",
-      "歌词 1415 / 2613",
-      "歌词 1540 / 2613",
-      "歌词 1670 / 2613",
-      "歌词 1795 / 2613",
-      "歌词 1925 / 2613",
-      "歌词 2055 / 2613",
-      "歌词 2185 / 2613",
-      "歌词 2320 / 2613",
-      "歌词 2450 / 2613",
-      "歌词 2580 / 2613",
-      "试听 87 / 1006",
-      "试听 207 / 1006",
-      "试听 330 / 1006",
-      "试听 453 / 1006",
-      "试听 570 / 1006",
-      "试听 690 / 1006",
-      "试听 804 / 1006",
-      "试听 921 / 1006"
+      "曲目 15 / 20",
+      "曲目 19 / 20",
+      "歌词 95 / 2613",
+      "歌词 220 / 2613",
+      "歌词 350 / 2613",
+      "歌词 475 / 2613",
+      "歌词 600 / 2613",
+      "歌词 735 / 2613",
+      "歌词 870 / 2613",
+      "歌词 1005 / 2613",
+      "歌词 1145 / 2613",
+      "歌词 1275 / 2613",
+      "歌词 1405 / 2613",
+      "歌词 1535 / 2613",
+      "歌词 1665 / 2613",
+      "歌词 1790 / 2613",
+      "歌词 1915 / 2613",
+      "歌词 2045 / 2613",
+      "歌词 2175 / 2613",
+      "歌词 2310 / 2613",
+      "歌词 2430 / 2613",
+      "歌词 2560 / 2613",
+      "试听 57 / 1006",
+      "试听 180 / 1006",
+      "试听 297 / 1006",
+      "试听 414 / 1006",
+      "试听 534 / 1006",
+      "试听 654 / 1006",
+      "试听 774 / 1006",
+      "试听 894 / 1006"
     ]
   },
   "samples": [
@@ -292,7 +291,7 @@
         "plain": false
       },
       "fragment": {
-        "at": 522.5,
+        "at": 522.7,
         "event": "fragment-start",
         "start": 1.21,
         "end": 7.21,
@@ -300,11 +299,11 @@
         "autoPronounce": true
       },
       "seek": {
-        "at": 1724.3,
+        "at": 1723.9,
         "event": "seek-check",
         "present": true,
         "requested": 1.21,
-        "actual": 1.218356,
+        "actual": 1.234978,
         "passed": true,
         "playing": true
       },
@@ -346,7 +345,7 @@
         "plain": false
       },
       "fragment": {
-        "at": 521.4,
+        "at": 520.9,
         "event": "fragment-start",
         "start": 7.21,
         "end": 13.42,
@@ -354,11 +353,11 @@
         "autoPronounce": true
       },
       "seek": {
-        "at": 1723.1,
+        "at": 1723.3,
         "event": "seek-check",
         "present": true,
         "requested": 7.21,
-        "actual": 7.229984,
+        "actual": 7.270136,
         "passed": true,
         "playing": true
       },
@@ -400,7 +399,7 @@
         "plain": false
       },
       "fragment": {
-        "at": 520.6,
+        "at": 521.8,
         "event": "fragment-start",
         "start": 13.42,
         "end": 19.57,
@@ -408,11 +407,11 @@
         "autoPronounce": true
       },
       "seek": {
-        "at": 1723.7,
+        "at": 1723,
         "event": "seek-check",
         "present": true,
         "requested": 13.42,
-        "actual": 13.442218,
+        "actual": 13.481421,
         "passed": true,
         "playing": true
       },
@@ -447,14 +446,14 @@
       "target": true,
       "activeLines": 1,
       "flip": {
-        "at": 0,
+        "at": 0.1,
         "event": "flip",
         "flipMs": 320,
         "introMs": 200,
         "plain": false
       },
       "fragment": {
-        "at": 523,
+        "at": 521.7,
         "event": "fragment-start",
         "start": 10.88,
         "end": 13.69,
@@ -462,11 +461,11 @@
         "autoPronounce": true
       },
       "seek": {
-        "at": 1724.4,
+        "at": 1722.5,
         "event": "seek-check",
         "present": true,
         "requested": 10.88,
-        "actual": 10.922929,
+        "actual": 10.957694,
         "passed": true,
         "playing": true
       },
@@ -508,7 +507,7 @@
         "plain": false
       },
       "fragment": {
-        "at": 520.2,
+        "at": 521.5,
         "event": "fragment-start",
         "start": 13.69,
         "end": 20.66,
@@ -516,11 +515,11 @@
         "autoPronounce": true
       },
       "seek": {
-        "at": 1720.9,
+        "at": 1722.4,
         "event": "seek-check",
         "present": true,
         "requested": 13.69,
-        "actual": 13.709857,
+        "actual": 13.760252,
         "passed": true,
         "playing": true
       },
@@ -574,7 +573,7 @@
         "plain": true
       },
       "pronounce": {
-        "at": 521.2,
+        "at": 521.5,
         "event": "pronounce",
         "word": "quixotic",
         "fadeIn": 0,

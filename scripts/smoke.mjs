@@ -293,9 +293,26 @@ try {
   await page.locator('.tab[aria-label="我的"]').click();
   await page.waitForSelector('.my-page');
   await page.waitForTimeout(600);
-  check('my page shows only the daily quota number', (await page.locator('.my-page').innerText()).trim() === '10');
-  await page.locator('.my-quota [aria-label="每日新词增加"]').click();
-  check('quota steps to 15', (await page.locator('.my-quota-value').innerText()) === '15');
+  check('my page has a settings row', (await page.locator('.my-settings').innerText()).trim() === '设置');
+  await page.locator('.my-settings').click();
+  await page.waitForSelector('.settings-page');
+  check('settings opens 学习设置', (await page.locator('.settings-heading').innerText()) === '学习设置');
+  check(
+    'daily new words starts at 10',
+    (await page.locator('.settings-stepper[aria-label="每日新词"] b').innerText()) === '10',
+  );
+  check(
+    'daily review limit starts at 200',
+    (await page.locator('.settings-stepper[aria-label="每日复习上限"] b').innerText()) === '200',
+  );
+  await page.locator('.settings-stepper[aria-label="每日新词"] [aria-label="增加每日新词"]').click();
+  check(
+    'quota steps to 15 inside settings',
+    (await page.locator('.settings-stepper[aria-label="每日新词"] b').innerText()) === '15',
+  );
+  await page.locator('.settings-page .page-head .icon-action[aria-label="返回"]').click();
+  await page.waitForSelector('.my-page');
+  check('settings back returns to my', await page.locator('.my-settings').isVisible());
   check('my add button exists', await page.locator('.my-add').isVisible());
   check('my tab hides the card', !(await page.locator('.focus-card').isVisible().catch(() => false)));
   await page.locator('.my-add').click();
@@ -354,6 +371,33 @@ try {
   await duePage.waitForSelector('.home');
   check('复习 queue ends on the home with M = 0', (await homeCounts(duePage)).review === '0');
   await dueContext.close();
+
+  // ── 背完新词自动接复习 ─────────────────────────────────────────────────────
+  const dailyContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const dailyPage = await boot(dailyContext, { enter: false, study: dueFixture(), muted: true });
+  await dailyPage.waitForFunction(() => !document.querySelector('.home-learn')?.disabled);
+  await enterLearn(dailyPage, '.home-learn');
+  for (let index = 0; index < 10; index += 1) {
+    const word = WORDS[4 + index];
+    await waitCard(dailyPage, word, `${pad2(index + 1)}/10`);
+    await expand(dailyPage);
+    await dailyPage.locator('.actions .solid').click();
+  }
+  await waitCard(dailyPage, WORDS[0], '01/02');
+  check('new words flow into due reviews', (await counter(dailyPage)) === '01/02', await counter(dailyPage));
+  for (const [index, value] of [WORDS[0], WORDS[1]].entries()) {
+    await waitCard(dailyPage, value, `${pad2(index + 1)}/02`);
+    await expand(dailyPage);
+    await dailyPage.locator('.actions .solid').click();
+  }
+  await dailyPage.waitForSelector('.home-done');
+  check('daily plan ends in completion', await dailyPage.locator('.home-done').isVisible());
+  check(
+    'completion stats count new + review',
+    (await dailyPage.locator('.home-done-stats').innerText()).replace(/\s+/g, ' ').trim() === '10 新词 · 2 复习',
+    (await dailyPage.locator('.home-done-stats').innerText()).trim(),
+  );
+  await dailyContext.close();
 
   // ── 无词书 → 选书 ─────────────────────────────────────────────────────────
   const bookContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -436,16 +480,31 @@ try {
     await completePage.locator('.actions .solid').click();
   }
   await completePage.waitForSelector('.home');
-  const done = await homeCounts(completePage);
   check('finished queue returns to the learn home', (await completePage.locator('.focus-card').count()) === 0);
-  check('quota used up: 学习 0', done.learn === '0', done.learn);
-  check('nothing due tonight: 复习 0', done.review === '0', done.review);
-  check('学习 is disabled at 0', await completePage.locator('.home-learn').isDisabled());
+  check('completion card is shown', await completePage.locator('.home-done').isVisible());
+  check(
+    'completion card says 今日完成',
+    (await completePage.locator('.home-done-title').innerText()) === '今日完成',
+  );
+  check('home actions are hidden at completion', (await completePage.locator('.home-actions').count()) === 0);
   const completeStudy = await completePage.evaluate(() =>
     JSON.parse(localStorage.getItem('orangecy.study.v1') ?? 'null'),
   );
   check('10 reviews recorded', (completeStudy?.logs?.length ?? 0) === 10, `${completeStudy?.logs?.length}`);
+  await completePage.locator('.home-done-more').click();
+  await completePage.waitForSelector('.focus-card');
+  check('再学 10 个 starts a fresh batch', (await counter(completePage)) === '01/10', await counter(completePage));
   await completeContext.close();
+
+  // ── 每日复习上限 ───────────────────────────────────────────────────────────
+  const limitContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const limitFixture = dueFixture();
+  limitFixture.settings.reviewPerDay = 20;
+  limitFixture.daily.reviewCount = 19;
+  const limitPage = await boot(limitContext, { enter: false, study: limitFixture, muted: true });
+  await limitPage.waitForFunction(() => !document.querySelector('.home-learn')?.disabled);
+  check('M is capped by 每日复习上限', (await homeCounts(limitPage)).review === '1', (await homeCounts(limitPage)).review);
+  await limitContext.close();
 
   check('browser console clean', browserErrors.length === 0, browserErrors.slice(0, 5).join(' / '));
 } catch (error) {

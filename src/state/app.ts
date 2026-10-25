@@ -4,10 +4,18 @@ import type { FocusCardData } from '@/cards';
 export type AppView = 'learn' | 'playlists' | 'me';
 export type SessionKind = 'learn' | 'review';
 
-export interface LearnSession {
+export interface SessionPlan {
   kind: SessionKind;
   cards: FocusCardData[];
 }
+
+export interface LearnSession extends SessionPlan {
+  id: number;
+  /** Due review queue that starts as soon as the new-word queue finishes. */
+  next?: SessionPlan;
+}
+
+let sessionSeq = 0;
 
 const MUTE_KEY = 'orangecy.muted';
 const BOOK_KEY = 'orangecy.book';
@@ -38,7 +46,8 @@ interface AppState {
   toggleMuted: () => void;
   setBook: (id: string) => void;
   setPicking: (picking: boolean) => void;
-  startSession: (kind: SessionKind, cards: FocusCardData[]) => void;
+  startSession: (kind: SessionKind, cards: FocusCardData[], next?: SessionPlan) => void;
+  advanceSession: () => void;
   endSession: () => void;
 }
 
@@ -72,6 +81,17 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ bookId });
   },
   setPicking: (picking) => set({ picking }),
-  startSession: (kind, cards) => set({ session: cards.length ? { kind, cards } : null }),
+  startSession: (kind, cards, next) =>
+    set({
+      session: cards.length ? { id: (sessionSeq += 1), kind, cards, next } : null,
+    }),
+  advanceSession: () => {
+    const current = get().session;
+    if (!current?.next) {
+      set({ session: null });
+      return;
+    }
+    set({ session: { id: (sessionSeq += 1), ...current.next } });
+  },
   endSession: () => set({ session: null }),
 }));

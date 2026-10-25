@@ -23,6 +23,46 @@ const CHROME_PATH =
   process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const BLUE = [0, 47, 167];
 const WHITE = [255, 255, 255];
+const SEED = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/seed-50.json'), 'utf8')).cards;
+
+function dayKey(date = new Date()) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+/** A completed today: 10 new words learned, nothing due, so the home shows 今日完成. */
+function doneFixture() {
+  const now = new Date();
+  const due = new Date(now.getTime() + 86_400_000).toISOString();
+  const cards = {};
+  for (const card of SEED.slice(0, 10)) {
+    cards[card.w] = {
+      word: card.w,
+      bookId: 'cet4',
+      entry: { w: card.w, p: card.p, m: card.m },
+      card: {
+        due,
+        stability: 3,
+        difficulty: 5,
+        elapsed_days: 1,
+        scheduled_days: 1,
+        learning_steps: 0,
+        reps: 1,
+        lapses: 0,
+        state: 2,
+        last_review: now.toISOString(),
+      },
+      addedAt: now.toISOString(),
+      lastReviewedAt: now.toISOString(),
+    };
+  }
+  return {
+    version: 1,
+    cards,
+    daily: { date: dayKey(now), bookId: 'cet4', newWords: [], reviewed: [], extraNew: 0, reviewCount: 0 },
+    settings: { newPerDay: 10, reviewPerDay: 200 },
+    logs: [],
+  };
+}
 
 function walk(dir, predicate) {
   const out = [];
@@ -342,6 +382,11 @@ try {
     await placeholder.waitForSelector('.my-page');
     await placeholder.waitForTimeout(500);
     results.push(await scanState(placeholder, `${viewport.name} / my`));
+    await placeholder.locator('.my-settings').click();
+    await placeholder.waitForSelector('.settings-page');
+    results.push(await scanState(placeholder, `${viewport.name} / settings`));
+    await placeholder.locator('.settings-page .page-head .icon-action[aria-label="返回"]').click();
+    await placeholder.waitForSelector('.my-page');
     await placeholder.locator('.my-add').click();
     await placeholder.waitForSelector('.platform-sheet');
     results.push(await scanState(placeholder, `${viewport.name} / connect-sheet`));
@@ -350,6 +395,15 @@ try {
     results.push(await scanState(placeholder, `${viewport.name} / connect-qr`));
     await placeholder.locator('.platform-sheet .icon-action[aria-label="关闭"]').click();
     await placeholderContext.close();
+
+    const doneContext = await browser.newContext(base);
+    await doneContext.addInitScript((seed) => {
+      localStorage.setItem('orangecy.study.v1', JSON.stringify(seed));
+    }, doneFixture());
+    const done = await openPage(doneContext, { enter: false });
+    await done.waitForSelector('.home-done');
+    results.push(await scanState(done, `${viewport.name} / done`));
+    await doneContext.close();
   }
 
   if (process.env.ORANGECY_SID) {

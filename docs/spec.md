@@ -53,6 +53,22 @@
   `supportsGainRamp = false`；后期换真人音频 provider 只换实现。
 - 验收：`npm run trace:audio`（13 项断言，写 `docs/audio-trace.json`）。
 
+## 学习计划 / 设置（2026-10-25 晚）
+
+- 入口：我的 → 设置 → 学习设置；首页不放设置入口。
+- 每日新词 `newPerDay`：5–100，默认 10，步长 5；快捷 10 / 20 / 30 / 50 / 100。
+- 每日复习上限 `reviewPerDay`：0（不限）/ 100 / 200 / 300 / 500，默认 200。
+- N = min(`newPerDay + daily.extraNew − 今天首次学过的词数`, 当前词书未学可放卡数)；
+  `daily.extraNew` 只由「再学 10 个」增加，次日清零，不改进设置。
+- M = min(今天 23:59:59.999 前到期的可放卡数, `reviewPerDay − daily.reviewCount`)；
+  `daily.reviewCount` 只统计 kind='review' 的判断，新词卡不计；0 = 不限。
+- 学习 N 走完 → 自动接当天到期复习；两钮「学习 N / 复习 M」保留（今日完成态收起，只留完成卡）。
+- N=0 且 M=0 → 首页「今日完成」卡片（今日新学/复习数字）+「再学 10 个」；
+  被复习上限拦下的到期卡显示「X 个到期，明天继续」，次日重新进队。
+- 数据：`StudyState.settings = { newPerDay, reviewPerDay }`；
+  `DailyStudy` 增加 `extraNew`、`reviewCount`；旧 localStorage 由 normalize 补默认。
+- 调度：FSRS 内核与 `review()` 入口不变；只扩展设置与每日计数。
+
 ## 数据
 
 `public/cards/seed-50.json`（`src/data/seed-50.json` 为同内容打包副本）：
@@ -109,7 +125,8 @@
     src/today.ts               N/M 口径、预设书 + 导入书合并
     src/platforms.ts           四平台连接配置（复用 api.ts）
     src/screens/LearnScreen.tsx 卡索引、序列、判断
-    src/screens/LearnHome.tsx  词书条 + 学习 / 复习两钮
+    src/screens/LearnHome.tsx  词书条 + 学习 / 复习两钮 + 今日完成
+    src/screens/SettingsScreen.tsx 设置 → 学习设置（每日新词 / 复习上限）
     src/screens/BookPicker.tsx 词书列表 + 导入入口
     src/screens/MyScreen.tsx   我的：连接态 + 添加入口
     src/components/            FocusCard / LyricFragment / FragmentProgress /

@@ -2,6 +2,34 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
+## 最新（2026-10-25 晚）学习计划 · 我的设置 · 背完自动复习
+
+- **开工存档**：tag `checkpoint-pre-study-plan-20261025` → `1dbc71e`。
+- **先看主流**：Anki 的 `New cards/day` + `Maximum reviews/day`、墨墨的
+  「每日学习量 = 当日复习 + 当日新学，先复习再新学」、百词斩的「调整计划」、
+  Duolingo 的「每日目标与 streak 分开」。结论：限额本身不是问题，**限额要可见、可调，
+  用完要有完成态和继续入口**；新词越多，后面到期的复习越多。
+- **设置入口**：我的 → 设置 → 学习设置。每日新词 5–100（默认 10，步长 5，
+  快捷 10/20/30/50/100）；每日复习上限 0/100/200/300/500（默认 200，0=不限）；
+  两条提示说明「新词越多复习越多」「超过上限的到期复习明天继续，不会丢」。
+- **每日计划**：学习 N 走完 → 自动接当天的到期复习；两钮「学习 N」「复习 M」保留；今日完成态两钮收起，只留完成卡。
+  M 现在按 `reviewPerDay − 今天已复习数` 扣减，只统计复习会话，不把新词卡算进去。
+- **完成 / 继续**：N=0 且 M=0 → 首页「今日完成」卡片（今日新学 / 复习数字）+
+  「再学 10 个」；再学只加**今天**的额外新词，不改设置，次日清零，点后直接开新一组；
+  整本学完显示「全部学完」。被复习上限拦下的到期卡显示「X 个到期，明天继续」。
+- **数据**：`srs.ts` 的 `settings.newPerDay / reviewPerDay`、`daily.extraNew / reviewCount`；
+  `studyStore.ts` 的 `setNewPerDay / setReviewPerDay / increaseTodayNew`；FSRS 调度与
+  `review()` 入口未改。
+- **验收**：`smoke` **89/89**（设置、自动复习、完成态、再学一组、复习上限都覆盖）；
+  `check:palette` **42 状态 0 违规 / 0 渐变 / 0 阴影**；`accept:import` 仍是 **66/66**；
+  build / check:cards 484/484；trace:audio 13/13。
+- **截图**：`docs/screenshots/my-settings.png`、`study-settings.png`、
+  `study-settings-desktop.png`、`study-done.png`。
+- **已知限制**：没有 streak / 提醒；复习上限只按复习会话计数；「再学 10 个」可连续点，
+  没有总量硬上限；设置是全局的，不分词书。
+- **收工存档**：tag `checkpoint-post-study-plan-20261025`（hash 见 git log）。
+- **下一刀**：streak / 每日提醒；按词书设置；复习上限用尽时给一个「调整上限」快捷入口。
+
 ## 最新（2026-10-25 下午）词汇导入入口 + 高考 3500 配歌
 
 - **开工存档**：tag `checkpoint-pre-word-import-20261025` → `ee20a33`。
