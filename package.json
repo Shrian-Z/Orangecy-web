@@ -16,7 +16,8 @@
     "check:palette": "node scripts/check-palette.mjs",
     "smoke": "node scripts/smoke.mjs",
     "trace:audio": "node scripts/trace-audio.mjs",
-    "shoot:focus": "node scripts/shoot-focus.mjs"
+    "shoot:focus": "node scripts/shoot-focus.mjs",
+    "shoot:nav": "node scripts/shoot-nav.mjs"
   },
   "dependencies": {
     "@neteasecloudmusicapienhanced/api": "^4.41.1",

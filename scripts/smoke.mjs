@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
- * Focus-card smoke: startup, expansion, judgments, lyric replay, pronunciation,
- * mute persistence, four tabs, 50/50 completion, and 320/390/1440 layout.
+ * Smoke: learn home (学习 N / 复习 M, book bar, picker), focus card expansion,
+ * judgments, lyric replay, pronunciation, mute persistence, three tabs, the
+ * playlist empty state, M due-today fixture, queue completion, and
+ * 320/390/1440 layout.
  *
  * Run the built app first:
  *   npm run smoke
@@ -55,10 +57,73 @@ function watch(page) {
   });
 }
 
-async function boot(context, { muted = false, freeze = false, reduce = false } = {}) {
+function localDay(date) {
+  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+}
+
+/** M 口径 fixture：昨天到期 / 今晚到期 / 明天到期 / 今天已判过，只有前两个算复习。 */
+function dueFixture() {
+  const now = new Date();
+  const DAY = 86_400_000;
+  const record = (index, due) => {
+    const card = DECK[index];
+    return {
+      word: card.w,
+      bookId: 'cet4',
+      entry: { w: card.w, p: card.p, m: card.m },
+      card: {
+        due: due.toISOString(),
+        stability: 3,
+        difficulty: 5,
+        elapsed_days: 3,
+        scheduled_days: 3,
+        learning_steps: 0,
+        reps: 2,
+        lapses: 0,
+        state: 2,
+        last_review: new Date(now.getTime() - 3 * DAY).toISOString(),
+      },
+      addedAt: new Date(now.getTime() - 5 * DAY).toISOString(),
+    };
+  };
+  return {
+    version: 1,
+    cards: {
+      [WORDS[0]]: record(0, new Date(now.getTime() - DAY)),
+      [WORDS[1]]: record(1, new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)),
+      [WORDS[2]]: record(2, new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 12)),
+      [WORDS[3]]: record(3, new Date(now.getTime() - 2 * DAY)),
+    },
+    daily: { date: localDay(now), bookId: '', newWords: [], reviewed: [WORDS[3]] },
+    settings: { newPerDay: 10 },
+    logs: [],
+  };
+}
+
+async function homeCounts(page) {
+  return page.evaluate(() => ({
+    book: document.querySelector('.book-name')?.textContent ?? '',
+    learn: document.querySelector('.home-learn b')?.textContent ?? '',
+    review: document.querySelector('.home-review b')?.textContent ?? '',
+  }));
+}
+
+async function enterLearn(page, selector = '.home-learn') {
+  await page.waitForSelector('.home');
+  await page.locator(selector).click();
+  await page.waitForSelector('.focus-card');
+}
+
+async function boot(
+  context,
+  { muted = false, freeze = false, reduce = false, book = 'cet4', study = null, enter = true } = {},
+) {
   await context.addInitScript(
-    ({ mute, hold }) => {
+    ({ mute, hold, bookId, seed }) => {
       localStorage.removeItem('orangecy.study.v1');
+      if (seed) localStorage.setItem('orangecy.study.v1', JSON.stringify(seed));
+      if (bookId) localStorage.setItem('orangecy.book', bookId);
+      else localStorage.removeItem('orangecy.book');
       if (!sessionStorage.getItem('orangecy.smoke.muteInit')) {
         localStorage.setItem('orangecy.muted', mute ? '1' : '0');
         sessionStorage.setItem('orangecy.smoke.muteInit', '1');
@@ -71,14 +136,15 @@ async function boot(context, { muted = false, freeze = false, reduce = false } =
         };
       }
     },
-    { mute: muted, hold: freeze },
+    { mute: muted, hold: freeze, bookId: book, seed: study },
   );
   const page = await context.newPage();
   page.setDefaultTimeout(20_000);
   watch(page);
   if (reduce) await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('.focus-card');
+  if (enter) await enterLearn(page);
+  else await page.waitForSelector('.home');
   return page;
 }
 
@@ -124,15 +190,23 @@ const browser = await chromium.launch({
 try {
   // ── Functional page ────────────────────────────────────────────────────────
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  const page = await boot(context);
+  const page = await boot(context, { enter: false });
 
-  check('startup is already a card', await page.locator('.focus-card').isVisible());
+  check('startup is the learn home', await page.locator('.home').isVisible());
   check('no splash', (await page.locator('.splash').count()) === 0);
   check('title is Orangecy', (await page.title()) === 'Orangecy', await page.title());
-  check('four icon tabs', (await page.locator('.tab').count()) === 4);
+  check('three icon tabs', (await page.locator('.tab').count()) === 3);
   const texts = await tabTexts(page);
   check('tabs have no visible text', texts.every((text) => !text.trim()), JSON.stringify(texts));
-  check('counter starts at 01/50', (await counter(page)) === '01/50', await counter(page));
+  await page.waitForFunction(() => !document.querySelector('.home-learn')?.disabled);
+  const fresh = await homeCounts(page);
+  check('home shows book identity', fresh.book === '大学英语四级', fresh.book);
+  check('home 学习 N = daily quota 10', fresh.learn === '10', fresh.learn);
+  check('home 复习 M = 0 on a fresh profile', fresh.review === '0', fresh.review);
+  const labels = await page.locator('.home-action span').allInnerTexts();
+  check('home buttons are 学习/复习', labels.join('/') === '学习/复习', labels.join('/'));
+  await enterLearn(page);
+  check('counter starts at 01/10', (await counter(page)) === '01/10', await counter(page));
   check('word is lose', (await word(page)) === 'lose', await word(page));
   check('target word is highlighted', (await page.locator('.word-token.is-target').count()) > 0);
 
@@ -151,13 +225,13 @@ try {
   check('judgments are 模糊/认识', actionTexts.join('/') === '模糊/认识', actionTexts.join('/'));
 
   await page.locator('.actions .ghost').click();
-  await waitCard(page, 'dream', '02/50');
-  check('hard judgment advances to 02/50', (await counter(page)) === '02/50');
+  await waitCard(page, 'dream', '02/10');
+  check('hard judgment advances to 02/10', (await counter(page)) === '02/10');
 
   await expand(page);
   await page.locator('.actions .solid').click();
-  await waitCard(page, 'baby', '03/50');
-  check('good judgment advances to 03/50', (await counter(page)) === '03/50');
+  await waitCard(page, 'baby', '03/10');
+  check('good judgment advances to 03/10', (await counter(page)) === '03/10');
 
   const study = await page.evaluate(() => JSON.parse(localStorage.getItem('orangecy.study.v1') ?? 'null'));
   const logs = study?.logs ?? [];
@@ -167,7 +241,7 @@ try {
       logs.some((item) => item.word === 'dream' && item.rating === 'good'),
     logs.map((item) => `${item.word}:${item.rating}`).join(','),
   );
-  check('review() used focus-50 book', study?.cards?.lose?.bookId === 'focus-50');
+  check('review() used the chosen book', study?.cards?.lose?.bookId === 'cet4', study?.cards?.lose?.bookId);
 
   await page.waitForFunction(() => window.__orangecyFocusPhase === 'fragment');
   await page.waitForFunction(
@@ -210,17 +284,18 @@ try {
     (await page.locator('.focus-card').getAttribute('data-expanded')) === 'false',
   );
 
-  for (const label of ['复习', '词书']) {
-    await page.locator(`.tab[aria-label="${label}"]`).click();
-    await page.waitForTimeout(200);
-    check(`${label} is an icon-only empty state`, (await page.locator('.placeholder svg').count()) === 1);
-    check(`${label} hides the card`, !(await page.locator('.focus-card').isVisible().catch(() => false)));
-  }
+  await page.locator('.tab[aria-label="歌单"]').click();
+  await page.waitForSelector('.world-connect');
+  check('歌单 without a session shows the connect empty state', await page.locator('.world-connect').isVisible());
+  check('歌单 has no search box', (await page.locator('.world input').count()) === 0);
+  check('歌单 hides the card', !(await page.locator('.focus-card').isVisible().catch(() => false)));
 
   await page.locator('.tab[aria-label="我的"]').click();
   await page.waitForSelector('.my-page');
   await page.waitForTimeout(600);
-  check('my page is icon-only', (await page.locator('.my-page').innerText()).trim() === '');
+  check('my page shows only the daily quota number', (await page.locator('.my-page').innerText()).trim() === '10');
+  await page.locator('.my-quota [aria-label="每日新词增加"]').click();
+  check('quota steps to 15', (await page.locator('.my-quota-value').innerText()) === '15');
   check('my add button exists', await page.locator('.my-add').isVisible());
   check('my tab hides the card', !(await page.locator('.focus-card').isVisible().catch(() => false)));
   await page.locator('.my-add').click();
@@ -237,6 +312,7 @@ try {
   await page.locator('.tab[aria-label="学习"]').click();
   await page.waitForTimeout(300);
   check('learning tab returns to the card', await page.locator('.focus-card').isVisible());
+  check('card keeps its place across tabs', (await counter(page)) === '03/10', await counter(page));
 
   const old = await page.evaluate(
     (selectors) => selectors.filter((selector) => document.querySelector(selector)),
@@ -251,7 +327,48 @@ try {
     () => document.documentElement.scrollWidth === window.innerWidth,
   );
   check('desktop has no horizontal overflow', overflow);
+
+  await page.locator('.status-back').click();
+  await page.waitForSelector('.home');
+  const afterTwo = await homeCounts(page);
+  check('back returns to the learn home', await page.locator('.home').isVisible());
+  check('N = quota 15 − 2 learned today', afterTwo.learn === '13', afterTwo.learn);
+  check('just-learned words are not due today', afterTwo.review === '0', afterTwo.review);
   await context.close();
+
+  // ── 复习 M 口径 ────────────────────────────────────────────────────────────
+  const dueContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const duePage = await boot(dueContext, { enter: false, study: dueFixture(), muted: true });
+  await duePage.waitForFunction(() => !document.querySelector('.home-learn')?.disabled);
+  const due = await homeCounts(duePage);
+  check('M counts overdue + due tonight only', due.review === '2', `M=${due.review}`);
+  check('N ignores the 4 known words', due.learn === '10', `N=${due.learn}`);
+  await enterLearn(duePage, '.home-review');
+  check('复习 queue is 01/02', (await counter(duePage)) === '01/02', await counter(duePage));
+  check('复习 starts with the oldest due word', (await word(duePage)) === WORDS[0], await word(duePage));
+  for (const [index, value] of [WORDS[0], WORDS[1]].entries()) {
+    await waitCard(duePage, value, `${pad2(index + 1)}/02`);
+    await expand(duePage);
+    await duePage.locator('.actions .solid').click();
+  }
+  await duePage.waitForSelector('.home');
+  check('复习 queue ends on the home with M = 0', (await homeCounts(duePage)).review === '0');
+  await dueContext.close();
+
+  // ── 无词书 → 选书 ─────────────────────────────────────────────────────────
+  const bookContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const bookPage = await boot(bookContext, { enter: false, book: null });
+  check('no book shows 选择词书', (await homeCounts(bookPage)).book === '选择词书');
+  await bookPage.locator('.home-learn').click();
+  await bookPage.waitForSelector('.picker');
+  check('学习 without a book opens the picker, not a card', (await bookPage.locator('.focus-card').count()) === 0);
+  await bookPage.locator('.picker-row', { hasText: '大学英语六级' }).click();
+  await bookPage.waitForSelector('.home');
+  await bookPage.waitForFunction(() => !document.querySelector('.home-learn')?.disabled);
+  const cet6 = await homeCounts(bookPage);
+  check('picked book updates the identity bar', cet6.book === '大学英语六级', cet6.book);
+  check('N is capped by playable cards in the book (9)', cet6.learn === '9', cet6.learn);
+  await bookContext.close();
 
   // ── Mute persistence ───────────────────────────────────────────────────────
   const mutedContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -264,11 +381,11 @@ try {
   check('muted timeline still runs', mutedProgress > 0, `${mutedProgress}%`);
   check('muted skips audio commands', mutedTrace.every((item) => item.event !== 'seek'));
   await mutedPage.reload({ waitUntil: 'domcontentloaded' });
-  await mutedPage.waitForSelector('.focus-card');
+  await enterLearn(mutedPage);
   check('mute survives a reload', (await mutedPage.locator('.mute').getAttribute('data-muted')) === 'true');
   await mutedPage.locator('.mute').click();
   await mutedPage.reload({ waitUntil: 'domcontentloaded' });
-  await mutedPage.waitForSelector('.focus-card');
+  await enterLearn(mutedPage);
   check('unmuted state survives a reload', (await mutedPage.locator('.mute').getAttribute('data-muted')) === 'false');
   await mutedContext.close();
 
@@ -310,27 +427,24 @@ try {
     await responsive.close();
   }
 
-  // ── 50/50 completion ───────────────────────────────────────────────────────
+  // ── 今日新学走完 ───────────────────────────────────────────────────────────
   const completeContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const completePage = await boot(completeContext, { muted: true, reduce: true });
-  for (let index = 0; index < 50; index += 1) {
-    await waitCard(completePage, WORDS[index], `${pad2(index + 1)}/50`);
+  for (let index = 0; index < 10; index += 1) {
+    await waitCard(completePage, WORDS[index], `${pad2(index + 1)}/10`);
     await expand(completePage);
     await completePage.locator('.actions .solid').click();
-    if (index === 49) {
-      await completePage.waitForSelector('.study-complete .replay-all');
-    }
   }
-  check('completion stops at 50/50', (await counter(completePage)) === '50/50');
-  check('completion has only the replay icon', (await completePage.locator('.study-complete').innerText()).trim() === '');
-  check('completion shows replay', await completePage.locator('.replay-all').isVisible());
+  await completePage.waitForSelector('.home');
+  const done = await homeCounts(completePage);
+  check('finished queue returns to the learn home', (await completePage.locator('.focus-card').count()) === 0);
+  check('quota used up: 学习 0', done.learn === '0', done.learn);
+  check('nothing due tonight: 复习 0', done.review === '0', done.review);
+  check('学习 is disabled at 0', await completePage.locator('.home-learn').isDisabled());
   const completeStudy = await completePage.evaluate(() =>
     JSON.parse(localStorage.getItem('orangecy.study.v1') ?? 'null'),
   );
-  check('50 reviews recorded', (completeStudy?.logs?.length ?? 0) === 50, `${completeStudy?.logs?.length}`);
-  await completePage.locator('.replay-all').click();
-  await waitCard(completePage, WORDS[0], '01/50');
-  check('replay icon restarts at 01/50', await completePage.locator('.focus-card').isVisible());
+  check('10 reviews recorded', (completeStudy?.logs?.length ?? 0) === 10, `${completeStudy?.logs?.length}`);
   await completeContext.close();
 
   check('browser console clean', browserErrors.length === 0, browserErrors.slice(0, 5).join(' / '));

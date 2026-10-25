@@ -478,6 +478,30 @@ app.post('/api/auth/logout', (req, res) => {
   res.json({ ok: true });
 });
 
+app.get(
+  '/api/playlists',
+  asyncRoute(async (req, res) => {
+    if (!req.session.cookie) return res.json({ platform: 'netease', loggedIn: false, playlists: [] });
+    const status = await netease.loginStatus(req.session.cookie);
+    if (!status.loggedIn || !status.profile?.id) {
+      return res.json({ platform: 'netease', loggedIn: false, playlists: [] });
+    }
+    const playlists = await netease.userPlaylists(status.profile.id, req.session.cookie);
+    res.json({ platform: 'netease', loggedIn: true, playlists });
+  }),
+);
+
+app.get(
+  '/api/playlist/:id/tracks',
+  asyncRoute(async (req, res) => {
+    if (!req.session.cookie) return res.status(401).json({ error: '未连接网易云音乐' });
+    const offset = Math.max(0, Number(req.query.offset) || 0);
+    const limit = Math.min(200, Math.max(1, Number(req.query.limit) || 100));
+    const songs = await netease.playlistTracks(req.params.id, req.session.cookie, { offset, limit });
+    res.json({ songs, offset, limit });
+  }),
+);
+
 app.get('/api/recommend/status', (req, res) => {
   res.json({ catalog: getCatalogStatus() });
 });

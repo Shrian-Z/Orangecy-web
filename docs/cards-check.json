@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-24T15:03:21.569Z",
-  "api": "http://127.0.0.1:8787",
-  "authCookie": true,
-  "sessionPrefix": "03de4e",
+  "generatedAt": "2026-10-25T02:34:50.584Z",
+  "api": "http://127.0.0.1:8791",
+  "authCookie": false,
+  "sessionPrefix": null,
   "cards": 50,
   "tracks": 17,
   "words": [

@@ -239,9 +239,10 @@ function freezeIntro() {
   };
 }
 
-async function openPage(context, { muted = false } = {}) {
+async function openPage(context, { muted = false, enter = true } = {}) {
   await context.addInitScript((mutedValue) => {
     localStorage.setItem('orangecy.muted', mutedValue ? '1' : '0');
+    localStorage.setItem('orangecy.book', 'cet4');
   }, muted);
   const page = await context.newPage();
   page.on('console', (message) => {
@@ -249,7 +250,11 @@ async function openPage(context, { muted = false } = {}) {
   });
   page.on('pageerror', (error) => browserErrors.push(error.message));
   await page.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 60_000 });
-  await page.waitForSelector('.focus-card');
+  await page.waitForSelector('.home');
+  if (enter) {
+    await page.locator('.home-learn').click();
+    await page.waitForSelector('.focus-card');
+  }
   await page.evaluate(() => document.fonts?.ready);
   return page;
 }
@@ -317,10 +322,17 @@ try {
     await mutedContext.close();
 
     const placeholderContext = await browser.newContext(base);
-    const placeholder = await openPage(placeholderContext);
-    await placeholder.locator('.tab[aria-label="复习"]').click();
-    await placeholder.waitForTimeout(300);
-    results.push(await scanState(placeholder, `${viewport.name} / placeholder`));
+    const placeholder = await openPage(placeholderContext, { enter: false });
+    await placeholder.waitForFunction(() => !document.querySelector('.home-learn')?.disabled);
+    results.push(await scanState(placeholder, `${viewport.name} / learn-home`));
+    await placeholder.locator('.book-bar').click();
+    await placeholder.waitForSelector('.picker');
+    results.push(await scanState(placeholder, `${viewport.name} / book-picker`));
+    await placeholder.locator('.picker-row').first().click();
+
+    await placeholder.locator('.tab[aria-label="歌单"]').click();
+    await placeholder.waitForSelector('.world-connect');
+    results.push(await scanState(placeholder, `${viewport.name} / playlists-empty`));
 
     await placeholder.locator('.tab[aria-label="我的"]').click();
     await placeholder.waitForSelector('.my-page');
@@ -334,6 +346,26 @@ try {
     results.push(await scanState(placeholder, `${viewport.name} / connect-qr`));
     await placeholder.locator('.platform-sheet .icon-action[aria-label="关闭"]').click();
     await placeholderContext.close();
+  }
+
+  if (process.env.ORANGECY_SID) {
+    const worldContext = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+    await worldContext.addCookies([{ name: 'oc_sid', value: process.env.ORANGECY_SID, url: APP_URL }]);
+    const world = await openPage(worldContext, { enter: false });
+    await world.locator('.tab[aria-label="歌单"]').click();
+    await world.waitForSelector('.shelf-card');
+    results.push(await scanState(world, 'mobile-390 / playlists-shelf'));
+    await world.locator('.shelf-card').first().click({ force: true });
+    await world.waitForSelector('.track-row');
+    await world.locator('.track-row').first().click();
+    await world.waitForSelector('.now');
+    await world.waitForTimeout(1200);
+    results.push(await scanState(world, 'mobile-390 / playlists-list-playing'));
+    await world.locator('.now-main').click();
+    await world.waitForSelector('.lyric-view');
+    await world.waitForTimeout(800);
+    results.push(await scanState(world, 'mobile-390 / playlists-lyrics'));
+    await worldContext.close();
   }
 } finally {
   await browser.close();
@@ -391,7 +423,7 @@ const report = {
   shadows,
   musicTraces,
   notes: [
-    'Platform login QR images are functional third-party assets; <img> is skipped by the runtime paint scan. No other images are allowed.',
+    'Platform login QR images and the user\'s own playlist / track covers (playlist world only) are functional third-party assets; <img> is skipped by the runtime paint scan. No other images are allowed.',
   ],
   paletteTokensSeen,
   ladder,

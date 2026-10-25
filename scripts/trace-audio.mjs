@@ -41,6 +41,7 @@ try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   await context.addInitScript(() => {
     localStorage.setItem('orangecy.muted', '0');
+    localStorage.setItem('orangecy.book', 'cet4');
   });
   const page = await context.newPage();
   const errors = [];
@@ -50,6 +51,7 @@ try {
   });
 
   await page.goto(URL, { waitUntil: 'domcontentloaded' });
+  await page.locator('.home-learn').click();
   await page.waitForSelector('.focus-card');
   const word = await page.locator('.word').innerText();
   await page.waitForFunction(() => window.__orangecyFocusPhase === 'rest', null, {

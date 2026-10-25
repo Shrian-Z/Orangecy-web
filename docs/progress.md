@@ -2,7 +2,30 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
-## 最新（2026-10-24 深夜）音源接回 · 我的·添加
+## 最新（2026-10-25）三槽导航 + 歌单世界
+
+- **开工存档**：tag `checkpoint-pre-nav-playlist-20261025` → `4b95042`。裁定写进 `AGENTS.md`
+  「2026-10-25 裁定」小节；决策见 `docs/decisions.md` 2026-10-25 各行。
+- **第 1 步 · 学习首页**：`LearnHome`（词书条 + 学习 N / 复习 M）、`BookPicker`（四级 / 六级 / 高中）、
+  `src/today.ts`（N/M 口径）。LearnScreen 改为接收冻结队列 + 返回钮；走完回首页。
+  - N = min(配额 − 今天首次学过的词数, 本书未学可放卡数)；M = 今天 23:59:59 前到期、今天未判、有卡可放。
+  - smoke 用 fixture 证明：昨天到期 + 今晚到期算 M，明天到期 / 今天已判不算（M=2）。
+- **第 2 步 · 会话**：已落盘网易会话 `03de4e` 仍登录；Counting Stars play 可用、歌词 99 行。
+- **第 3 步 · 歌单 API**：`/api/playlists` 20 个真实歌单；「Shrian_喜欢的音乐」1178 首按 100 分页，
+  末页 78、越界 0；未登录 `loggedIn:false` / 401。见 `docs/evidence/playlist-api.json`。
+- **第 4 步 · 歌单世界**：`PlaylistWorld`（漂浮横滑书架 → 列表分页 → 迷你播控 → 歌词视图）；
+  空态 / 加载 / 错误齐全。`npm run shoot:nav` 15/15，见 `docs/evidence/nav-e2e.json`。
+  截图：`docs/screenshots/nav-learn-home.png`、`nav-shelf.png`、`nav-list-playing.png`、
+  `nav-lyrics.png`、`nav-shelf-empty.png`。
+- **第 5 步 · 回归**：`build`（check:cards 484/484 + tsc + vite）绿；`smoke` 80/80；`trace:audio` 13/13；
+  `check:palette` 33 状态 0 违规（含登录后书架 / 列表播放 / 歌词）；`shoot:focus` 重跑。
+  离开歌单 → 整曲暂停、播控收起；回卡 → 重新装载卡内曲目，200ms 淡入 + seek 通过。
+- **已知限制**：只接网易歌单；QQ / 酷狗 / 波点已连接也不拉歌单。曲目队列只含已加载页。
+  歌单世界离开即停播（不做后台续播）。歌词视图无逐字高亮。整曲播放不受卡内静音键影响。
+  可学卡仍只有 seed-50，六级只有 9 张可放。
+- **下一刀**：其它平台歌单；真机音频解锁实测；扩卡（更多带片段的词）。
+
+## 上一轮（2026-10-24 深夜）音源接回 · 我的·添加
 
 - **开工存档**：`checkpoint-pre-auth-reconnect-20261024` → tag `2a3ff2d` / commit `add0be2`。
 - **第 1 步 · 无 UI 证明旧链路**：复用本机已落盘网易会话 `03de4e`（`Shrian_`），

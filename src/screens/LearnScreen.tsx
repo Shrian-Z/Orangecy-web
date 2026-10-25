@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { RotateCcw } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { FocusCard } from '@/components/FocusCard';
 import { MuteButton } from '@/components/MuteButton';
 import { FocusSequence } from '@/audio/sequence';
@@ -8,12 +8,8 @@ import type { FocusSnapshot } from '@/audio/sequence';
 import { usePlayerStore } from '@/audio/store';
 import { useAppStore } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
-import {
-  cardToStudyWord,
-  FOCUS_BOOK_ID,
-  getFocusDeck,
-  sourceFromCard,
-} from '@/cards';
+import { cardToStudyWord, sourceFromCard } from '@/cards';
+import type { FocusCardData } from '@/cards';
 
 const INITIAL: FocusSnapshot = {
   phase: 'idle',
@@ -26,11 +22,19 @@ function pad2(value: number) {
   return String(value).padStart(2, '0');
 }
 
-export function LearnScreen({ active }: { active: boolean }) {
-  const deck = useMemo(() => getFocusDeck(), []);
+export function LearnScreen({
+  active,
+  cards: deck,
+  bookId,
+  onExit,
+}: {
+  active: boolean;
+  cards: FocusCardData[];
+  bookId: string;
+  onExit: () => void;
+}) {
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
-  const [completed, setCompleted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [snapshot, setSnapshot] = useState<FocusSnapshot>(INITIAL);
   const busyRef = useRef(false);
@@ -56,12 +60,12 @@ export function LearnScreen({ active }: { active: boolean }) {
   useEffect(() => {
     const sequence = sequenceRef.current;
     if (!sequence) return;
-    if (!active || completed || !card) {
+    if (!active || !card) {
       void sequence.stop({ fadeOut: true });
       return;
     }
     void sequence.start(card);
-  }, [active, completed, card, index]);
+  }, [active, card, index]);
 
   useEffect(() => {
     setExpanded(false);
@@ -106,51 +110,41 @@ export function LearnScreen({ active }: { active: boolean }) {
 
   const rate = useCallback(
     async (rating: 'hard' | 'good') => {
-      if (!card || completed || busyRef.current) return;
+      if (!card || busyRef.current) return;
       busyRef.current = true;
       setBusy(true);
       useStudyStore.getState().review({
         word: cardToStudyWord(card),
-        bookId: FOCUS_BOOK_ID,
+        bookId,
         rating,
         source: sourceFromCard(card),
       });
       await sequenceRef.current?.stop({ fadeOut: true });
-      if (index + 1 >= deck.length) {
-        setCompleted(true);
-      } else {
-        setIndex(index + 1);
-      }
       busyRef.current = false;
       setBusy(false);
+      if (index + 1 >= deck.length) onExit();
+      else setIndex(index + 1);
     },
-    [card, completed, deck.length, index],
+    [bookId, card, deck.length, index, onExit],
   );
-
-  const restart = useCallback(() => {
-    setCompleted(false);
-    setIndex(0);
-    setExpanded(false);
-  }, []);
 
   return (
     <div className="study">
       <header className="status">
-        <span className="counter">
-          <b>{pad2(completed ? deck.length : index + 1)}</b>
-          <i>/</i>
-          {pad2(deck.length)}
+        <span className="status-lead">
+          <button type="button" className="icon-action status-back" onClick={onExit} aria-label="返回">
+            <ChevronLeft size={22} strokeWidth={1.8} aria-hidden="true" />
+          </button>
+          <span className="counter">
+            <b>{pad2(index + 1)}</b>
+            <i>/</i>
+            {pad2(deck.length)}
+          </span>
         </span>
         <MuteButton muted={muted} onToggle={toggleMuted} />
       </header>
 
-      {completed ? (
-        <div className="study-complete">
-          <button type="button" className="replay-all" onClick={restart} aria-label="重新开始">
-            <RotateCcw size={26} strokeWidth={1.6} aria-hidden="true" />
-          </button>
-        </div>
-      ) : card ? (
+      {card ? (
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={index}
@@ -179,13 +173,7 @@ export function LearnScreen({ active }: { active: boolean }) {
             />
           </motion.div>
         </AnimatePresence>
-      ) : (
-        <div className="study-complete">
-          <span className="empty-glyph" aria-hidden="true">
-            <RotateCcw size={24} strokeWidth={1.6} />
-          </span>
-        </div>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -236,6 +236,25 @@ export const netease = {
   invalidatePlay(id, cookie) {
     playCache.delete(`${cookie || 'anon'}::${id}`);
   },
+
+  /** 只拉当前登录用户自己创建 / 收藏的歌单，不做任何推荐 / 发现。 */
+  async userPlaylists(uid, cookie) {
+    const body = bodyOf(await ncm.user_playlist({ uid, limit: 1000, offset: 0, cookie: cookie || '' }));
+    return (body?.playlist ?? []).map((item) => ({
+      id: String(item.id),
+      platform: PLATFORM,
+      name: item.name ?? '',
+      cover: item.coverImgUrl ?? null,
+      trackCount: Number(item.trackCount ?? 0),
+      liked: Number(item.specialType ?? 0) === 5,
+      own: String(item.userId ?? '') === String(uid),
+    }));
+  },
+
+  async playlistTracks(id, cookie, { offset = 0, limit = 100 } = {}) {
+    const body = bodyOf(await ncm.playlist_track_all({ id, offset, limit, cookie: cookie || '' }));
+    return (body?.songs ?? []).map(normalizeDetail).filter(Boolean);
+  },
 };
 
 export { mergeCookie };

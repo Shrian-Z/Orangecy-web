@@ -38,12 +38,14 @@ async function openPage(context, { muted = false } = {}) {
   } else {
     await context.addInitScript(() => localStorage.setItem('orangecy.muted', '0'));
   }
+  await context.addInitScript(() => localStorage.setItem('orangecy.book', 'cet4'));
   const page = await context.newPage();
   page.on('pageerror', (error) => errors.push(`PAGE ${error.message}`));
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(`CONSOLE ${message.text()}`);
   });
   await page.goto(URL, { waitUntil: 'domcontentloaded' });
+  await page.locator('.home-learn').click();
   await page.waitForSelector('.focus-card');
   await page.evaluate(() => document.fonts?.ready);
   return page;

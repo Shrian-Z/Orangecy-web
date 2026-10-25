@@ -1,0 +1,93 @@
+{
+  "generatedAt": "2026-10-25T02:19:14.168Z",
+  "api": "http://127.0.0.1:8791",
+  "session": "data/sessions.json 已落盘网易会话 03de4e（Shrian_）",
+  "step2": {
+    "authLoggedIn": true,
+    "track": "1850175684 Counting Stars",
+    "play": {
+      "available": true,
+      "br": 128000,
+      "trial": null
+    },
+    "lyricLines": 99
+  },
+  "playlists": {
+    "loggedIn": true,
+    "count": 20,
+    "liked": [
+      {
+        "id": "4882260915",
+        "trackCount": 1178
+      }
+    ],
+    "sample": [
+      {
+        "id": "4882260915",
+        "trackCount": 1178,
+        "own": true,
+        "hasCover": true
+      },
+      {
+        "id": "17849471914",
+        "trackCount": 32,
+        "own": true,
+        "hasCover": true
+      },
+      {
+        "id": "17709603371",
+        "trackCount": 98,
+        "own": true,
+        "hasCover": true
+      },
+      {
+        "id": "13906160323",
+        "trackCount": 34,
+        "own": true,
+        "hasCover": true
+      },
+      {
+        "id": "13906109600",
+        "trackCount": 27,
+        "own": true,
+        "hasCover": true
+      }
+    ]
+  },
+  "likedTracks": {
+    "p0": {
+      "offset": 0,
+      "limit": 100,
+      "count": 100,
+      "first": {
+        "id": "3880210",
+        "title": "Dancing Queen",
+        "artist": "ABBA"
+      }
+    },
+    "p11": {
+      "offset": 1100,
+      "limit": 100,
+      "count": 78,
+      "first": {
+        "id": "1449463159",
+        "title": "一天一天（钢琴版）（翻自 Various Artists）",
+        "artist": "柳轻颂"
+      }
+    },
+    "pastEnd": {
+      "offset": 5000,
+      "limit": 100,
+      "count": 0,
+      "first": null
+    }
+  },
+  "anonymous": {
+    "playlists": {
+      "loggedIn": false,
+      "playlists": []
+    },
+    "tracksHttp": 401
+  },
+  "badPlaylistHttp": 404
+}

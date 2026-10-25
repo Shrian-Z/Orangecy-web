@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-10-25T02:30:24.799Z",
+  "url": "http://127.0.0.1:8791",
+  "session": "03de4e…",
+  "home": {
+    "book": "大学英语四级",
+    "progress": "0 / 4542",
+    "learn": "学习10",
+    "review": "复习0"
+  },
+  "shelf": {
+    "playlists": 20,
+    "first": "Shrian_喜欢的音乐"
+  },
+  "list": {
+    "rows": 100,
+    "title": "Shrian_喜欢的音乐",
+    "afterScroll": 200
+  },
+  "playing": {
+    "index": 0,
+    "title": "Dancing Queen"
+  },
+  "lyrics": {
+    "lines": 34
+  },
+  "cardAfterWorld": {
+    "pausedAfterLeave": true,
+    "loadTrack": {
+      "at": 0.1,
+      "event": "load-track",
+      "trackId": "1850175684",
+      "title": "Counting Stars"
+    },
+    "fadeIn": true,
+    "seekCheck": {
+      "at": 1723.5,
+      "event": "seek-check",
+      "present": true,
+      "requested": 0.59,
+      "actual": 0.665727,
+      "passed": true,
+      "playing": true
+    }
+  },
+  "results": [
+    {
+      "name": "有已登录会话可用",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "学习页有词书条 + 学习/复习两钮",
+      "ok": true,
+      "detail": "{\"book\":\"大学英语四级\",\"progress\":\"0 / 4542\",\"learn\":\"学习10\",\"review\":\"复习0\"}"
+    },
+    {
+      "name": "歌单漂浮层有真实歌单",
+      "ok": true,
+      "detail": "{\"playlists\":20,\"first\":\"Shrian_喜欢的音乐\"}"
+    },
+    {
+      "name": "歌单层除歌单名/曲数外无其它文字、无搜索框",
+      "ok": true,
+      "detail": "{\"text\":\"\",\"inputs\":0}"
+    },
+    {
+      "name": "点进歌单列表非空",
+      "ok": true,
+      "detail": "{\"rows\":100,\"title\":\"Shrian_喜欢的音乐\"}"
+    },
+    {
+      "name": "滚到底自动分页",
+      "ok": true,
+      "detail": "100 -> 200"
+    },
+    {
+      "name": "点播一曲可听",
+      "ok": true,
+      "detail": "{\"index\":0,\"title\":\"Dancing Queen\"}"
+    },
+    {
+      "name": "歌词视图有文本或诚实空态",
+      "ok": true,
+      "detail": "{\"lines\":34}"
+    },
+    {
+      "name": "离开歌单世界即暂停整曲",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "离开歌单世界后播控收起",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "回卡后重新装载卡内曲目",
+      "ok": true,
+      "detail": "{\"at\":0.1,\"event\":\"load-track\",\"trackId\":\"1850175684\",\"title\":\"Counting Stars\"}"
+    },
+    {
+      "name": "回卡后片段 200ms 淡入 + seek 通过",
+      "ok": true,
+      "detail": "{\"at\":1723.5,\"event\":\"seek-check\",\"present\":true,\"requested\":0.59,\"actual\":0.665727,\"passed\":true,\"playing\":true}"
+    },
+    {
+      "name": "未登录：歌单空态 + 去连接音源",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "去连接音源跳到「我的」",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "浏览器 console 干净",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

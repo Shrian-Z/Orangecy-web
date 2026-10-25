@@ -1,4 +1,4 @@
-import type { AuthStatus, LyricPayload, PlayInfo, Profile, Song } from '@/types';
+import type { AuthStatus, LyricPayload, PlayInfo, Playlist, Profile, Song } from '@/types';
 
 export interface Recommendation {
   song: Song;
@@ -80,6 +80,14 @@ export const api = {
 
   play: (id: string) =>
     request<PlayInfo>(`/api/song/${encodeURIComponent(id)}/play`),
+
+  playlists: () =>
+    request<{ platform: string; loggedIn: boolean; playlists: Playlist[] }>('/api/playlists'),
+
+  playlistTracks: (id: string, offset = 0, limit = 100) =>
+    request<{ songs: Song[]; offset: number; limit: number }>(
+      `/api/playlist/${encodeURIComponent(id)}/tracks?offset=${offset}&limit=${limit}`,
+    ),
 
   recommend: (words: string[], limit = 10) =>
     request<RecommendResponse>('/api/recommend', {

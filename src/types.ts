@@ -28,6 +28,16 @@ export interface Song {
   };
 }
 
+export interface Playlist {
+  id: string;
+  platform: string;
+  name: string;
+  cover: string | null;
+  trackCount: number;
+  liked: boolean;
+  own: boolean;
+}
+
 export interface LyricPayload {
   lrc: string;
   tlyric: string;

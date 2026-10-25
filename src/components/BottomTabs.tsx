@@ -1,10 +1,9 @@
-import { BookOpen, Library, RotateCcw, User } from 'lucide-react';
+import { BookOpen, Disc3, User } from 'lucide-react';
 import type { AppView } from '@/state/app';
 
 const TABS: { view: AppView; label: string; Icon: typeof BookOpen }[] = [
   { view: 'learn', label: '学习', Icon: BookOpen },
-  { view: 'review', label: '复习', Icon: RotateCcw },
-  { view: 'books', label: '词书', Icon: Library },
+  { view: 'playlists', label: '歌单', Icon: Disc3 },
   { view: 'me', label: '我的', Icon: User },
 ];
 

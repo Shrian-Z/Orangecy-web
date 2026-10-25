@@ -1,8 +1,16 @@
 import { create } from 'zustand';
+import type { FocusCardData } from '@/cards';
 
-export type AppView = 'learn' | 'review' | 'books' | 'me';
+export type AppView = 'learn' | 'playlists' | 'me';
+export type SessionKind = 'learn' | 'review';
+
+export interface LearnSession {
+  kind: SessionKind;
+  cards: FocusCardData[];
+}
 
 const MUTE_KEY = 'orangecy.muted';
+const BOOK_KEY = 'orangecy.book';
 
 function readMuted() {
   try {
@@ -12,21 +20,39 @@ function readMuted() {
   }
 }
 
+function readBook() {
+  try {
+    return localStorage.getItem(BOOK_KEY);
+  } catch {
+    return null;
+  }
+}
+
 interface AppState {
   view: AppView;
   muted: boolean;
+  bookId: string | null;
+  picking: boolean;
+  session: LearnSession | null;
   setView: (view: AppView) => void;
   toggleMuted: () => void;
+  setBook: (id: string) => void;
+  setPicking: (picking: boolean) => void;
+  startSession: (kind: SessionKind, cards: FocusCardData[]) => void;
+  endSession: () => void;
 }
 
 /**
- * The new shell owns only what the focus card needs: which of the four tabs is
- * active, and whether sound is muted. Everything audio-specific lives in
- * src/audio/store.ts.
+ * Shell state: which of the three tabs is active, mute, the chosen wordbook and
+ * the running learn/review queue. The queue is frozen when a button is pressed
+ * so judging cards never reshuffles it. Audio state lives in src/audio/store.ts.
  */
 export const useAppStore = create<AppState>((set, get) => ({
   view: 'learn',
   muted: readMuted(),
+  bookId: readBook(),
+  picking: false,
+  session: null,
   setView: (view) => set({ view }),
   toggleMuted: () => {
     const muted = !get().muted;
@@ -37,4 +63,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
     set({ muted });
   },
+  setBook: (bookId) => {
+    try {
+      localStorage.setItem(BOOK_KEY, bookId);
+    } catch {
+      // 隐私模式下词书只在本次会话生效
+    }
+    set({ bookId });
+  },
+  setPicking: (picking) => set({ picking }),
+  startSession: (kind, cards) => set({ session: cards.length ? { kind, cards } : null }),
+  endSession: () => set({ session: null }),
 }));
