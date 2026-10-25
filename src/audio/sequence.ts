@@ -87,12 +87,28 @@ export class FocusSequence {
     this.phase = 'flip';
     this.progress = 0;
     this.activeLine = -1;
-    this.songTime = card.fragment.start;
+    this.songTime = card.fragment?.start ?? 0;
     this.beginTrace('card');
-    this.trace('flip', { flipMs: FLIP_MS, introMs: INTRO_MS });
+    this.trace('flip', { flipMs: FLIP_MS, introMs: INTRO_MS, plain: !card.fragment });
     this.emit();
 
     const run = this.requestId;
+    if (!card.fragment || !card.track) {
+      // Imported word without a singable lyric: keep the same flip + intro
+      // clock, then speak the word. No fragment, no progress, no seek.
+      this.later(() => {
+        if (run !== this.requestId || this.phase !== 'flip' || !this.card) return;
+        if (this.muted) {
+          this.pronounceSkipped = true;
+          this.trace('pronounce-skip-muted', { word: this.card.w, plain: true });
+          this.later(() => this.rest(), 300);
+          return;
+        }
+        this.speakNow(this.card.w);
+      }, FLIP_MS + INTRO_MS);
+      return;
+    }
+
     const ready = this.ensureTrack(card.track);
     this.later(() => {
       void ready.then(() => {
@@ -104,7 +120,7 @@ export class FocusSequence {
 
   async replayFragment() {
     const card = this.card;
-    if (!card) return;
+    if (!card?.fragment) return;
     await this.stop({ fadeOut: true });
     this.beginTrace('replay-fragment');
     this.runFragment(false);
@@ -253,17 +269,18 @@ export class FocusSequence {
 
   private runFragment(autoPronounce: boolean) {
     const card = this.card;
-    if (!card || this.stopped) return;
+    const fragment = card?.fragment;
+    if (!card || !fragment || this.stopped) return;
     this.autoPronounce = autoPronounce;
     this.phase = 'fragment';
     this.fragmentStartedAt = performance.now();
-    this.duration = Math.max(0.5, card.fragment.end - card.fragment.start);
+    this.duration = Math.max(0.5, fragment.end - fragment.start);
     this.progress = 0;
-    this.songTime = card.fragment.start;
-    this.activeLine = currentLineIndex(card.fragment.lines, card.fragment.start);
+    this.songTime = fragment.start;
+    this.activeLine = currentLineIndex(fragment.lines, fragment.start);
     this.trace('fragment-start', {
-      start: card.fragment.start,
-      end: card.fragment.end,
+      start: fragment.start,
+      end: fragment.end,
       duration: Number(this.duration.toFixed(2)),
       autoPronounce,
     });
@@ -274,8 +291,8 @@ export class FocusSequence {
     } else {
       player.setVolume(0);
       this.trace('volume', { value: 0, stage: 'fragment' });
-      this.trace('seek', { time: card.fragment.start, play: true });
-      void player.seekTo(card.fragment.start, { play: true });
+      this.trace('seek', { time: fragment.start, play: true });
+      void player.seekTo(fragment.start, { play: true });
       this.trace('play');
       void this.rampVolume(0, 1, FRAGMENT_FADE_MS);
       this.later(() => {
@@ -297,16 +314,17 @@ export class FocusSequence {
 
   private startProgressLoop() {
     const card = this.card;
-    if (!card) return;
+    const fragment = card?.fragment;
+    if (!card || !fragment) return;
     const tick = () => {
       if (this.phase !== 'fragment' || this.stopped) return;
       const elapsed = Math.min(
         this.duration,
         Math.max(0, (performance.now() - this.fragmentStartedAt) / 1000),
       );
-      this.songTime = card.fragment.start + elapsed;
+      this.songTime = fragment.start + elapsed;
       this.progress = this.duration > 0 ? elapsed / this.duration : 0;
-      const active = currentLineIndex(card.fragment.lines, this.songTime);
+      const active = currentLineIndex(fragment.lines, this.songTime);
       const changed = active !== this.activeLine;
       this.activeLine = active;
       const now = performance.now();
@@ -320,10 +338,11 @@ export class FocusSequence {
   }
 
   private currentSongTime() {
-    if (this.phase !== 'fragment' || !this.card) return this.card?.fragment.start ?? 0;
+    const fragment = this.card?.fragment;
+    if (this.phase !== 'fragment' || !fragment) return fragment?.start ?? 0;
     return Math.min(
-      this.card.fragment.end,
-      this.card.fragment.start + (performance.now() - this.fragmentStartedAt) / 1000,
+      fragment.end,
+      fragment.start + (performance.now() - this.fragmentStartedAt) / 1000,
     );
   }
 
@@ -339,10 +358,11 @@ export class FocusSequence {
 
   private endFragment() {
     if (this.phase !== 'fragment') return;
+    const fragment = this.card?.fragment;
     this.phase = 'quiet';
     this.progress = 1;
-    this.songTime = this.card?.fragment.end ?? this.songTime;
-    this.activeLine = (this.card?.fragment.lines.length ?? 1) - 1;
+    this.songTime = fragment?.end ?? this.songTime;
+    this.activeLine = (fragment?.lines.length ?? 1) - 1;
     if (!this.muted) {
       player.setVolume(0);
       this.trace('volume', { value: 0, stage: 'fragment-end' });

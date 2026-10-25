@@ -328,6 +328,10 @@ try {
     await placeholder.locator('.book-bar').click();
     await placeholder.waitForSelector('.picker');
     results.push(await scanState(placeholder, `${viewport.name} / book-picker`));
+    await placeholder.locator('.picker-import').click();
+    await placeholder.waitForSelector('.import-sheet');
+    results.push(await scanState(placeholder, `${viewport.name} / import-sheet`));
+    await placeholder.locator('.import-sheet .icon-action[aria-label="关闭"]').click();
     await placeholder.locator('.picker-row').first().click();
 
     await placeholder.locator('.tab[aria-label="歌单"]').click();

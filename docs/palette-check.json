@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-25T05:58:51.028Z",
-  "url": "http://127.0.0.1:5174",
+  "generatedAt": "2026-10-25T06:51:05.508Z",
+  "url": "http://127.0.0.1:8787",
   "sourceFiles": [
     "src/App.tsx",
     "src/api.ts",
@@ -12,10 +12,14 @@
     "src/components/BottomTabs.tsx",
     "src/components/FocusCard.tsx",
     "src/components/FragmentProgress.tsx",
+    "src/components/ImportSheet.tsx",
     "src/components/LyricFragment.tsx",
     "src/components/MuteButton.tsx",
     "src/components/PlatformConnectSheet.tsx",
+    "src/lib/importDeck.ts",
+    "src/lib/importStore.ts",
     "src/lib/srs.ts",
+    "src/lib/wordImport.ts",
     "src/lib/wordbook.ts",
     "src/lyrics/WordHighlight.tsx",
     "src/lyrics/parse.ts",
@@ -238,8 +242,16 @@
     },
     {
       "state": "desktop / book-picker",
-      "paintedElements": 37,
-      "uniquePaintValues": 5,
+      "paintedElements": 46,
+      "uniquePaintValues": 6,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / import-sheet",
+      "paintedElements": 77,
+      "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -263,7 +275,7 @@
     {
       "state": "desktop / connect-sheet",
       "paintedElements": 65,
-      "uniquePaintValues": 5,
+      "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -318,8 +330,16 @@
     },
     {
       "state": "mobile-390 / book-picker",
-      "paintedElements": 37,
-      "uniquePaintValues": 5,
+      "paintedElements": 46,
+      "uniquePaintValues": 6,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / import-sheet",
+      "paintedElements": 77,
+      "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -343,7 +363,7 @@
     {
       "state": "mobile-390 / connect-sheet",
       "paintedElements": 65,
-      "uniquePaintValues": 5,
+      "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -398,8 +418,16 @@
     },
     {
       "state": "mobile-320 / book-picker",
-      "paintedElements": 37,
-      "uniquePaintValues": 5,
+      "paintedElements": 46,
+      "uniquePaintValues": 6,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / import-sheet",
+      "paintedElements": 77,
+      "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -423,7 +451,7 @@
     {
       "state": "mobile-320 / connect-sheet",
       "paintedElements": 65,
-      "uniquePaintValues": 5,
+      "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
       "shadows": 0

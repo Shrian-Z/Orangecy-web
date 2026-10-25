@@ -16,6 +16,7 @@
     "check:palette": "node scripts/check-palette.mjs",
     "smoke": "node scripts/smoke.mjs",
     "trace:audio": "node scripts/trace-audio.mjs",
+    "accept:import": "node scripts/import-gaokao.mjs",
     "shoot:focus": "node scripts/shoot-focus.mjs",
     "shoot:nav": "node scripts/shoot-nav.mjs"
   },

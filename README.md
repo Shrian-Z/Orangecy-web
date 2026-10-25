@@ -5,15 +5,14 @@
 
 ## 产品
 
-Orangecy 是一台纯粹的背单词机器。一轮 50 词，一屏一词：
+Orangecy 是一台纯粹的背单词机器。一屏一词，词书决定队列：
 
 - 上半屏是这个词在真实歌曲里的 1–2 句歌词，目标词高亮；片段只播一遍。
 - 下半屏是单词 + 音标；点卡片空白展开释义 / 知识 / 例句。
 - 展开后只有两个判断：**模糊**（hard）/ **认识**（good），直接交给已有 `review()`。
 - 点歌词只重播片段；点单词只重听发音；两者不展开词义、不切卡。
-- 50 词走完停在 50/50，居中一个重播图标，无文字。
-- 底部 4 个纯图标 tab：学习 / 复习 / 词书 / 我的；复习 / 词书为空态，
-  「我的」是音源连接页。
+- 学习首页 = 词书身份条 +「学习 N」「复习 M」；队列走完回首页。
+- 底部 3 个纯图标槽：学习 / 歌单 / 我的；「我的」是音源连接页。
 
 学习卡上没有歌单、歌曲、播放器、浏览、搜索、抽屉、推荐、弹窗。音乐只以
 歌词、目标词、片段进度、静音钮四种痕迹出现。全站只有 `#002FA7` 与
@@ -40,6 +39,29 @@ Orangecy 是一台纯粹的背单词机器。一轮 50 词，一屏一词：
 | 添加 · 选平台 | 添加 · 扫码（示例码已过期） |
 | --- | --- |
 | ![选平台](docs/screenshots/my-chooser.png) | ![扫码](docs/screenshots/my-qr-live.png) |
+
+## 词汇导入 · 高考 3500
+
+- 入口：词书选择页右上 `FileUp`（aria「导入词汇」）→ 导入 sheet。
+- 预设「高考 3500」= `public/wordbooks/gaozhong.json` 全量 **3738** 词
+  （3500 核心 + 238 个补齐 w–z 的扩展词；不硬切会丢 write / world / you）。
+- 也支持粘贴 / 文件：每行 `word` 或 `word,音标,释义`，或词书 JSON；最多 6000 词。
+- 导入时真实走已连接网易的 20 个歌单（自建 / 喜欢全量，收藏每本前 300 首）：
+  2613 首 → 2521 首带歌词 → 1006 首试听 → **3059 词配歌**，**1005 首曲目全部可播**；
+  剩下 **679 词保留纯词卡**（flip 后 TTS），3738 词一个不丢。
+- 歌卡 = 真实 1–2 句歌词 + 真实时间戳 + 目标 surface；纯词卡无歌词 / 进度 / seek。
+- 数据存 IndexedDB `orangecy.imports`，刷新后词书 / 进度 / N 都在。
+
+| 导入入口 | 导入完成 |
+| --- | --- |
+| ![导入入口](docs/screenshots/import-sheet.png) | ![导入完成](docs/screenshots/import-done.png) |
+
+| 配歌卡 | 纯词卡 |
+| --- | --- |
+| ![配歌卡](docs/screenshots/import-card.png) | ![纯词卡](docs/screenshots/import-plain.png) |
+
+验收：`npm run accept:import`（需要 server + 已登录网易，约 2.5 分钟）；
+证据 `docs/evidence/gaokao-import.json`，本轮 66/66。
 
 ## 预览
 
@@ -75,8 +97,8 @@ Orangecy 是一台纯粹的背单词机器。一轮 50 词，一屏一词：
 type FocusCardData = {
   w: string; p: string; m: string;
   s?: string; syn?: string[]; exam?: [string, string]; k?: string;
-  track: Song;
-  fragment: {
+  track?: Song;                 // 导入纯词卡没有音源
+  fragment?: {                  // 导入纯词卡没有片段
     trackId: string;
     target: string;
     start: number; end: number;
@@ -85,11 +107,12 @@ type FocusCardData = {
 };
 ```
 
-- `npm run cards` 从 `data/catalog.json` + 本地歌词接口生成。
+- `npm run cards` 从 `data/catalog.json` + 本地歌词接口生成 seed-50。
+- 导入词书由 `src/lib/wordImport.ts` 从用户自己的歌单实时成卡，存 IndexedDB。
 - `npm run build` 先跑 `check:cards`：逐首校验 `/api/song/:id/play` 可播、
   歌词存在、每句时间戳逐行命中、目标词在句内。校验失败构建失败，
   不拿假时间轴补。
-- 词义 / 音标 / 例句 / 近义 / 真题来自 CET4 词书（KyleBing，BSD-3-Clause）。
+- 词义 / 音标 / 例句 / 近义 / 真题来自词书（KyleBing，BSD-3-Clause）。
 - 学习状态只存在浏览器 `localStorage`（`orangecy.study.v1`）。
 
 ## 验收
@@ -98,10 +121,11 @@ type FocusCardData = {
 npm run typecheck
 npm run check:cards     # 需要本地 API 在 8787
 npm run build           # 已包含 check:cards
-npm run check:palette   # 24 状态 / 0 违规 / 0 渐变 / 0 阴影
-npm run smoke           # 63 项
+npm run check:palette   # 36 状态 / 0 违规 / 0 渐变 / 0 阴影
+npm run smoke           # 80 项
 npm run trace:audio     # 0.2s 淡入淡出 / 0.5s 安静 / 发音直出
 npm run shoot:focus     # 双端四态截图
+npm run accept:import   # 3738 词真实配歌 66 项（需登录网易，约 2.5 分钟）
 ```
 
 生产预览：`npm start` 后打开 <http://127.0.0.1:8787>（API + dist 同源）。
@@ -117,16 +141,22 @@ src/audio/sequence.ts      每卡序列器（只调既有 volume / seek / play�
 src/lyrics/parse.ts        LRC 解析（旧 lib/lrc 迁入）
 src/lyrics/timing.ts       逐词三态（旧 lib/wordTiming 迁入）
 src/lyrics/WordHighlight.tsx 词高亮 token 化 / 目标词 / phase
-src/cards.ts               卡数据 + SRS 输入适配
-src/state/app.ts           view / muted
+src/cards.ts               卡数据 + SRS 输入适配（track / fragment 可空）
+src/lib/importDeck.ts      词表解析 / 歌词配卡 / 纯词卡 / 卡排序
+src/lib/importStore.ts     IndexedDB 导入书 + 列表 / 读取 hooks
+src/lib/wordImport.ts      歌单→歌词→可播→成卡流水线
+src/state/app.ts           view / muted / bookId
+src/today.ts               N/M 口径、预设书 + 导入书合并
 src/platforms.ts           四平台连接配置（复用 api.ts）
-src/screens/LearnScreen.tsx 卡索引、序列、判断、完成态
+src/screens/LearnHome.tsx  词书条 + 学习 / 复习两钮
+src/screens/BookPicker.tsx 词书列表 + 导入入口
+src/screens/LearnScreen.tsx 卡索引、序列、判断
 src/screens/MyScreen.tsx   我的：连接态 + 添加入口
 src/components/            FocusCard / LyricFragment / FragmentProgress /
-                           MuteButton / BottomTabs / PlaceholderView /
+                           MuteButton / BottomTabs / ImportSheet /
                            PlatformConnectSheet
 src/styles/tokens.css      两色 + 明度阶梯
-src/styles/app.css         卡面 / tabs / 动效
+src/styles/app.css         卡面 / tabs / 导入 sheet / 动效
 public/cards/seed-50.json  真实验收数据
 server/                    音源代理 / 四平台能力 / 歌词（本轮零改动）
 public/wordbooks/          CET4 / CET6 / 高中词书（本轮零改动）
@@ -146,6 +176,10 @@ docs/archive/              旧双模式壳 / 旧导航稿 / 旧 CSS / 旧验收
   不返回给前端。平台能力只作为音源，不进入界面。
 - **动效**：卡片翻入 / 词义展开 / 进度呼吸走 CSS + Motion；
   `prefers-reduced-motion` 时切卡、展开、呼吸归零，音频淡入淡出保留。
+- **词汇导入**：`src/lib/importDeck.ts` 是纯函数（浏览器与验收脚本同一套配卡规则）；
+  `src/lib/wordImport.ts` 只调 `api.playlists / playlistTracks / lyric / play`；
+  导入书存 IndexedDB，`localStorage` 只放当前书 id 与 SRS。无歌词词保留纯词卡，
+  保证 3738 词全部可学。
 
 ## 协议与版权
 
@@ -165,6 +199,6 @@ docs/archive/              旧双模式壳 / 旧导航稿 / 旧 CSS / 旧验收
 
 ## 下一步
 
-1. 复习 / 词书两个 tab 的真内容（本轮只做空态；「我的」已完成连接）。
-2. 补一次真实扫码 E2E；真人发音音频包 provider（可做真 0.2s 增益斜坡）。
-3. 真机首次音频解锁、锁屏 / 通勤场景实测。
+1. 歌词 IndexedDB 缓存 + 增量重导（换歌单只补新歌）。
+2. 其它平台歌单同入口接入；纯词卡配真人发音音频包 provider。
+3. 补一次真实扫码 E2E；真机首次音频解锁、锁屏 / 通勤场景实测。

@@ -60,8 +60,8 @@
     type FocusCardData = {
       w: string; p: string; m: string;
       s?: string; syn?: string[]; exam?: [string, string]; k?: string;
-      track: Song;                 // 真实可播曲目元数据
-      fragment: {
+      track?: Song;                // 导入纯词卡没有音源
+      fragment?: {                 // 导入纯词卡没有片段
         trackId: string;
         target: string;            // 歌词里的 surface
         start: number; end: number;
@@ -74,6 +74,24 @@
 - `scripts/check-cards.mjs` 在 `npm run build` 前逐首校验可播、歌词存在、
   时间戳逐行命中、目标词在句内；失败即构建失败。
 
+## 词汇导入（2026-10-25）
+
+- 入口：学习首页词书条「换」→ 词书选择页右上 `FileUp`（aria「导入词汇」）。
+- 预设：`public/wordbooks/gaozhong.json` 全量 3738 词（3500 核心 + 238 个扩展），
+  书名片「高考 3500」，计数 3738。
+- 粘贴 / 文件：每行 `word` 或 `word,音标,释义`，也接受词书 JSON；最多 6000 词，
+  大小写去重。书 id：预设固定 `import-gaokao-3500`，粘贴为 `import-<base36 时间>`。
+- 配歌流水线：`/api/playlists` 20 个歌单 → 自建 / 喜欢全量 + 收藏各前 300 首
+  （总上限 4000）→ `/api/playlist/:id/tracks` 200 一页 → `/api/song/:id/lyric`
+  并发 6 → `/api/song/:id/play` 并发 5 校验可播 → 每曲最多 10 卡、每 3 张一轮
+  跨曲分散；同一曲内相邻卡不重叠同一段音频。
+- 有词：真实 1–2 句歌词 + 真实时间戳 + 目标 surface；无词：纯词卡（无歌词 /
+  进度 / seek，flip 后 TTS）。
+- 存储：IndexedDB `orangecy.imports`（`meta` / `data` 两 store）；书数据 3738 词
+  + 最多 3059 歌卡，刷新恢复。
+- 验收：`npm run accept:import`，需要 `npm run build` + 本地 server +
+  已登录网易会话；写 `docs/evidence/gaokao-import.json`。
+
 ## 代码地图
 
     src/audio/source.ts        音源单例（旧 player.ts 迁入，内核行为不变）
@@ -84,15 +102,21 @@
     src/lyrics/timing.ts       逐词三态（旧 lib/wordTiming 迁入）
     src/lyrics/WordHighlight.tsx 词高亮 token 化 / 目标词 / phase
     src/cards.ts               卡数据、SRS 输入适配
-    src/state/app.ts           view / muted
+    src/lib/importDeck.ts      词表解析 / 歌词配卡 / 纯词卡 / 导入卡排序
+    src/lib/importStore.ts     IndexedDB 导入书 + 列表 / 读取 hooks
+    src/lib/wordImport.ts      歌单→歌词→可播→成卡流水线
+    src/state/app.ts           view / muted / bookId
+    src/today.ts               N/M 口径、预设书 + 导入书合并
     src/platforms.ts           四平台连接配置（复用 api.ts）
     src/screens/LearnScreen.tsx 卡索引、序列、判断
+    src/screens/LearnHome.tsx  词书条 + 学习 / 复习两钮
+    src/screens/BookPicker.tsx 词书列表 + 导入入口
     src/screens/MyScreen.tsx   我的：连接态 + 添加入口
     src/components/            FocusCard / LyricFragment / FragmentProgress /
-                               MuteButton / BottomTabs / PlaceholderView /
-                               PlatformConnectSheet
+                               MuteButton / BottomTabs / PlatformConnectSheet /
+                               ImportSheet
     src/styles/tokens.css      两色 + 明度阶梯
-    src/styles/app.css         卡面 / tabs / 动效
+    src/styles/app.css         卡面 / tabs / 导入 sheet / 动效
 
 ## 验收
 
@@ -104,7 +128,11 @@ npm run check:palette
 npm run smoke
 npm run trace:audio
 npm run shoot:focus
+npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
 ```
+
+导入配歌证据：`docs/evidence/gaokao-import.json`（3738 词 / 3059 歌卡 /
+679 纯词卡 / 1005 曲全可播 / 5 卡 seek-check）。
 
 登录 / 音源接回证据：`docs/evidence/auth-step1.json`（3 首 play/lyric +
 未登录对照）、`docs/evidence/platform-entry.json`（四平台二维码入口）、

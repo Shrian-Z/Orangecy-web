@@ -39,6 +39,7 @@ export function FocusCard({
   onRate: (rating: 'hard' | 'good') => void;
 }) {
   const playing = phase === 'fragment';
+  const fragment = card.fragment;
 
   return (
     <article
@@ -46,6 +47,7 @@ export function FocusCard({
       data-expanded={expanded}
       data-playing={playing}
       data-muted={muted}
+      data-plain={fragment ? undefined : 'true'}
       tabIndex={0}
       role="group"
       aria-label="学习卡片"
@@ -59,13 +61,17 @@ export function FocusCard({
       }}
     >
       <div className="card-body">
-        <LyricFragment
-          fragment={card.fragment}
-          activeLine={activeLine}
-          playing={playing}
-          onReplay={onReplay}
-        />
-        <FragmentProgress progress={progress} playing={playing} />
+        {fragment ? (
+          <>
+            <LyricFragment
+              fragment={fragment}
+              activeLine={activeLine}
+              playing={playing}
+              onReplay={onReplay}
+            />
+            <FragmentProgress progress={progress} playing={playing} />
+          </>
+        ) : null}
 
         <section
           className="word-block"

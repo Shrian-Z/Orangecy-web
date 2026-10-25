@@ -1,0 +1,605 @@
+{
+  "generatedAt": "2026-10-25T06:49:40.018Z",
+  "api": "http://127.0.0.1:8787",
+  "app": "http://127.0.0.1:8787",
+  "session": {
+    "loggedIn": true,
+    "nickname": "Shrian_"
+  },
+  "elapsedMs": 148238,
+  "preset": {
+    "name": "高考 3500",
+    "expectedWords": 3738
+  },
+  "import": {
+    "summary": "3738 词 · 3059 配歌 · 1005 曲",
+    "sub": "2613 曲扫描 · 2521 首带歌词",
+    "stats": {
+      "words": 3738,
+      "matchedWords": 3059,
+      "plainWords": 679,
+      "tracksScanned": 2613,
+      "tracksWithLyrics": 2521,
+      "tracksChecked": 1006,
+      "tracksPlayable": 1005,
+      "trackCount": 1005,
+      "playlists": 20,
+      "durationMs": 147393
+    },
+    "stored": {
+      "words": 3738,
+      "uniqueWords": 3738,
+      "cards": 3059,
+      "uniqueCards": 3059,
+      "plain": 679,
+      "tracks": 1005,
+      "badTargets": 0
+    },
+    "progressSamples": [
+      "词表",
+      "歌单 1 / 1",
+      "曲目 7 / 20",
+      "曲目 11 / 20",
+      "曲目 13 / 20",
+      "曲目 14 / 20",
+      "曲目 17 / 20",
+      "歌词 80 / 2613",
+      "歌词 205 / 2613",
+      "歌词 325 / 2613",
+      "歌词 445 / 2613",
+      "歌词 555 / 2613",
+      "歌词 670 / 2613",
+      "歌词 790 / 2613",
+      "歌词 920 / 2613",
+      "歌词 1045 / 2613",
+      "歌词 1170 / 2613",
+      "歌词 1295 / 2613",
+      "歌词 1415 / 2613",
+      "歌词 1540 / 2613",
+      "歌词 1670 / 2613",
+      "歌词 1795 / 2613",
+      "歌词 1925 / 2613",
+      "歌词 2055 / 2613",
+      "歌词 2185 / 2613",
+      "歌词 2320 / 2613",
+      "歌词 2450 / 2613",
+      "歌词 2580 / 2613",
+      "试听 87 / 1006",
+      "试听 207 / 1006",
+      "试听 330 / 1006",
+      "试听 453 / 1006",
+      "试听 570 / 1006",
+      "试听 690 / 1006",
+      "试听 804 / 1006",
+      "试听 921 / 1006"
+    ]
+  },
+  "samples": [
+    {
+      "w": "wait",
+      "track": {
+        "id": "2117985149",
+        "title": "Are You Looking Up"
+      },
+      "fragment": {
+        "trackId": "2117985149",
+        "target": "waits",
+        "start": 1.21,
+        "end": 7.21,
+        "lines": [
+          {
+            "text": "Rylee just waits on",
+            "time": 1.21
+          },
+          {
+            "text": "Somebody to give her new light",
+            "time": 4.51
+          }
+        ]
+      }
+    },
+    {
+      "w": "weight",
+      "track": {
+        "id": "2117985149",
+        "title": "Are You Looking Up"
+      },
+      "fragment": {
+        "trackId": "2117985149",
+        "target": "weight",
+        "start": 7.21,
+        "end": 13.42,
+        "lines": [
+          {
+            "text": "With the heaviest weight on",
+            "time": 7.21
+          },
+          {
+            "text": "A miracle to cut me slack",
+            "time": 11.18
+          }
+        ]
+      }
+    },
+    {
+      "w": "look",
+      "track": {
+        "id": "2117985149",
+        "title": "Are You Looking Up"
+      },
+      "fragment": {
+        "trackId": "2117985149",
+        "target": "looking",
+        "start": 13.42,
+        "end": 19.57,
+        "lines": [
+          {
+            "text": "So are you looking up?",
+            "time": 13.42
+          },
+          {
+            "text": "Are you asking why?",
+            "time": 14.81
+          }
+        ]
+      }
+    },
+    {
+      "w": "make",
+      "track": {
+        "id": "3795680",
+        "title": "A Thousand Miles"
+      },
+      "fragment": {
+        "trackId": "3795680",
+        "target": "Making",
+        "start": 10.88,
+        "end": 13.69,
+        "lines": [
+          {
+            "text": "Making my way down town",
+            "time": 10.88
+          },
+          {
+            "text": "Walking fast",
+            "time": 12.48
+          }
+        ]
+      }
+    },
+    {
+      "w": "face",
+      "track": {
+        "id": "3795680",
+        "title": "A Thousand Miles"
+      },
+      "fragment": {
+        "trackId": "3795680",
+        "target": "Faces",
+        "start": 13.69,
+        "end": 20.66,
+        "lines": [
+          {
+            "text": "Faces pass",
+            "time": 13.69
+          },
+          {
+            "text": "And I'm home bound",
+            "time": 14.94
+          }
+        ]
+      }
+    },
+    {
+      "w": "stare",
+      "track": {
+        "id": "3795680",
+        "title": "A Thousand Miles"
+      },
+      "fragment": {
+        "trackId": "3795680",
+        "target": "Staring",
+        "start": 20.66,
+        "end": 23.67,
+        "lines": [
+          {
+            "text": "Staring blankly ahead",
+            "time": 20.66
+          },
+          {
+            "text": "Just making my way",
+            "time": 22.34
+          }
+        ]
+      }
+    },
+    {
+      "w": "dance",
+      "track": {
+        "id": "3880210",
+        "title": "Dancing Queen"
+      },
+      "fragment": {
+        "trackId": "3880210",
+        "target": "dance",
+        "start": 20.04,
+        "end": 29.88,
+        "lines": [
+          {
+            "text": "You can dance, you can jive",
+            "time": 20.04
+          },
+          {
+            "text": "Having the time of your life",
+            "time": 25.14
+          }
+        ]
+      }
+    },
+    {
+      "w": "girl",
+      "track": {
+        "id": "3880210",
+        "title": "Dancing Queen"
+      },
+      "fragment": {
+        "trackId": "3880210",
+        "target": "girl",
+        "start": 29.88,
+        "end": 41.88,
+        "lines": [
+          {
+            "text": "See that girl, watch that scene",
+            "time": 29.88
+          },
+          {
+            "text": "Digging the Dancing Queen...",
+            "time": 34.04
+          }
+        ]
+      }
+    }
+  ],
+  "plainSample": [
+    {
+      "w": "abnormal",
+      "p": "æb'nɔːml",
+      "m": "adj. 反常的，不规则的；变态的"
+    },
+    {
+      "w": "about",
+      "p": "ə'baʊt",
+      "m": "prep. 关于；大约；adj. 在附近的；四处走动的；在起作用的；adv. 大约；周围；到处"
+    },
+    {
+      "w": "above",
+      "p": "ə'bʌv",
+      "m": "prep. 超过；在……上面；在……之上；adv. 在上面；在上文；adj. 上文的"
+    }
+  ],
+  "seekChecks": [
+    {
+      "index": 1,
+      "word": "wait",
+      "counter": "01/10",
+      "target": true,
+      "activeLines": 1,
+      "flip": {
+        "at": 0,
+        "event": "flip",
+        "flipMs": 320,
+        "introMs": 200,
+        "plain": false
+      },
+      "fragment": {
+        "at": 522.5,
+        "event": "fragment-start",
+        "start": 1.21,
+        "end": 7.21,
+        "duration": 6,
+        "autoPronounce": true
+      },
+      "seek": {
+        "at": 1724.3,
+        "event": "seek-check",
+        "present": true,
+        "requested": 1.21,
+        "actual": 1.218356,
+        "passed": true,
+        "playing": true
+      },
+      "cardInfo": {
+        "w": "wait",
+        "track": {
+          "id": "2117985149",
+          "title": "Are You Looking Up"
+        },
+        "fragment": {
+          "trackId": "2117985149",
+          "target": "waits",
+          "start": 1.21,
+          "end": 7.21,
+          "lines": [
+            {
+              "text": "Rylee just waits on",
+              "time": 1.21
+            },
+            {
+              "text": "Somebody to give her new light",
+              "time": 4.51
+            }
+          ]
+        }
+      }
+    },
+    {
+      "index": 2,
+      "word": "weight",
+      "counter": "02/10",
+      "target": true,
+      "activeLines": 1,
+      "flip": {
+        "at": 0,
+        "event": "flip",
+        "flipMs": 320,
+        "introMs": 200,
+        "plain": false
+      },
+      "fragment": {
+        "at": 521.4,
+        "event": "fragment-start",
+        "start": 7.21,
+        "end": 13.42,
+        "duration": 6.21,
+        "autoPronounce": true
+      },
+      "seek": {
+        "at": 1723.1,
+        "event": "seek-check",
+        "present": true,
+        "requested": 7.21,
+        "actual": 7.229984,
+        "passed": true,
+        "playing": true
+      },
+      "cardInfo": {
+        "w": "weight",
+        "track": {
+          "id": "2117985149",
+          "title": "Are You Looking Up"
+        },
+        "fragment": {
+          "trackId": "2117985149",
+          "target": "weight",
+          "start": 7.21,
+          "end": 13.42,
+          "lines": [
+            {
+              "text": "With the heaviest weight on",
+              "time": 7.21
+            },
+            {
+              "text": "A miracle to cut me slack",
+              "time": 11.18
+            }
+          ]
+        }
+      }
+    },
+    {
+      "index": 3,
+      "word": "look",
+      "counter": "03/10",
+      "target": true,
+      "activeLines": 1,
+      "flip": {
+        "at": 0,
+        "event": "flip",
+        "flipMs": 320,
+        "introMs": 200,
+        "plain": false
+      },
+      "fragment": {
+        "at": 520.6,
+        "event": "fragment-start",
+        "start": 13.42,
+        "end": 19.57,
+        "duration": 6.15,
+        "autoPronounce": true
+      },
+      "seek": {
+        "at": 1723.7,
+        "event": "seek-check",
+        "present": true,
+        "requested": 13.42,
+        "actual": 13.442218,
+        "passed": true,
+        "playing": true
+      },
+      "cardInfo": {
+        "w": "look",
+        "track": {
+          "id": "2117985149",
+          "title": "Are You Looking Up"
+        },
+        "fragment": {
+          "trackId": "2117985149",
+          "target": "looking",
+          "start": 13.42,
+          "end": 19.57,
+          "lines": [
+            {
+              "text": "So are you looking up?",
+              "time": 13.42
+            },
+            {
+              "text": "Are you asking why?",
+              "time": 14.81
+            }
+          ]
+        }
+      }
+    },
+    {
+      "index": 4,
+      "word": "make",
+      "counter": "04/10",
+      "target": true,
+      "activeLines": 1,
+      "flip": {
+        "at": 0,
+        "event": "flip",
+        "flipMs": 320,
+        "introMs": 200,
+        "plain": false
+      },
+      "fragment": {
+        "at": 523,
+        "event": "fragment-start",
+        "start": 10.88,
+        "end": 13.69,
+        "duration": 2.81,
+        "autoPronounce": true
+      },
+      "seek": {
+        "at": 1724.4,
+        "event": "seek-check",
+        "present": true,
+        "requested": 10.88,
+        "actual": 10.922929,
+        "passed": true,
+        "playing": true
+      },
+      "cardInfo": {
+        "w": "make",
+        "track": {
+          "id": "3795680",
+          "title": "A Thousand Miles"
+        },
+        "fragment": {
+          "trackId": "3795680",
+          "target": "Making",
+          "start": 10.88,
+          "end": 13.69,
+          "lines": [
+            {
+              "text": "Making my way down town",
+              "time": 10.88
+            },
+            {
+              "text": "Walking fast",
+              "time": 12.48
+            }
+          ]
+        }
+      }
+    },
+    {
+      "index": 5,
+      "word": "face",
+      "counter": "05/10",
+      "target": true,
+      "activeLines": 1,
+      "flip": {
+        "at": 0,
+        "event": "flip",
+        "flipMs": 320,
+        "introMs": 200,
+        "plain": false
+      },
+      "fragment": {
+        "at": 520.2,
+        "event": "fragment-start",
+        "start": 13.69,
+        "end": 20.66,
+        "duration": 6.97,
+        "autoPronounce": true
+      },
+      "seek": {
+        "at": 1720.9,
+        "event": "seek-check",
+        "present": true,
+        "requested": 13.69,
+        "actual": 13.709857,
+        "passed": true,
+        "playing": true
+      },
+      "cardInfo": {
+        "w": "face",
+        "track": {
+          "id": "3795680",
+          "title": "A Thousand Miles"
+        },
+        "fragment": {
+          "trackId": "3795680",
+          "target": "Faces",
+          "start": 13.69,
+          "end": 20.66,
+          "lines": [
+            {
+              "text": "Faces pass",
+              "time": 13.69
+            },
+            {
+              "text": "And I'm home bound",
+              "time": 14.94
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "trackAvailability": {
+    "checked": 1005,
+    "available": 1005,
+    "failures": []
+  },
+  "lyricVerification": {
+    "checked": 8,
+    "failures": []
+  },
+  "plainCard": {
+    "summary": "1 词 · 0 配歌 · 0 曲",
+    "snapshot": {
+      "word": "quixotic",
+      "plain": "true",
+      "hasLyrics": false,
+      "hasProgress": false,
+      "phase": "pronounce",
+      "flip": {
+        "at": 0,
+        "event": "flip",
+        "flipMs": 320,
+        "introMs": 200,
+        "plain": true
+      },
+      "pronounce": {
+        "at": 521.2,
+        "event": "pronounce",
+        "word": "quixotic",
+        "fadeIn": 0,
+        "fadeOut": 0,
+        "provider": "browserTts",
+        "supportsGainRamp": false
+      },
+      "fragment": null,
+      "seek": null
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "checks": 66,
+  "failures": [],
+  "screenshots": [
+    "docs/screenshots/import-entry.png",
+    "docs/screenshots/import-sheet.png",
+    "docs/screenshots/import-progress.png",
+    "docs/screenshots/import-done.png",
+    "docs/screenshots/import-home.png",
+    "docs/screenshots/import-card.png",
+    "docs/screenshots/import-reload.png",
+    "docs/screenshots/import-picker.png",
+    "docs/screenshots/import-plain.png",
+    "docs/screenshots/import-sheet-desktop.png"
+  ]
+}

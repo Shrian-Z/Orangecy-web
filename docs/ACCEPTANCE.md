@@ -1,6 +1,6 @@
-# Orangecy 验收清单（弹药时代 · 2026-10-24）
+# Orangecy 验收清单（v3 三槽导航 + 词汇导入 · 2026-10-25）
 
-更新日期：2026-10-24  
+更新日期：2026-10-25
 验收入口：`http://127.0.0.1:8787`（API + dist 同源）；`http://localhost:5173`（Vite）  
 API：`http://127.0.0.1:8787`  
 设计对照：`docs/design/focus-card-v3.md` + 四态 PNG
@@ -15,21 +15,49 @@ npm run check:palette
 npm run smoke
 npm run trace:audio
 npm run shoot:focus
+npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
 ```
 
-最近结果：
+最近结果（2026-10-25 下午）：
 
 | 项 | 结果 | 证据 |
 | --- | --- | --- |
 | typecheck | PASS | 无输出 |
 | check:cards | 484/484 | `docs/cards-check.json` |
 | build | PASS | `dist/` |
-| check:palette | 24 状态 0 违规 / 0 渐变 / 0 阴影 | `docs/palette-check.json` |
-| smoke | 63/63 | 终端输出 |
+| check:palette | 36 状态 0 违规 / 0 渐变 / 0 阴影 | `docs/palette-check.json` |
+| smoke | 80/80 | 终端输出 |
 | trace:audio | 13/13 | `docs/audio-trace.json` |
 | shoot:focus | 3 视口 × 4 态 | `docs/screenshots/focus-*.png` |
+| accept:import | 66/66 | `docs/evidence/gaokao-import.json` |
 
-## 产品验收
+## 词汇导入验收（2026-10-25）
+
+一键命令：`npm run accept:import`。它用真实已登录网易会话跑完整 UI，不接受假数据。
+
+- **入口**：词书选择页右上 `FileUp`（aria「导入词汇」）→ 导入 sheet；
+  内置「高考 3500」预设 + 粘贴 / 文件入口。
+- **词表**：`public/wordbooks/gaozhong.json` 全量 **3738** 词（3500 核心 + 238 扩展），
+  全部导入且唯一；其中 **3059** 词从用户 20 个歌单的歌词里找到歌，
+  **679** 词保留为纯词卡（TTS 发音，无歌词片段）。`3059 + 679 = 3738`，一个不丢。
+- **歌单 / 歌词 / 可播**：扫描 **2613** 首（自建 / 喜欢全量 + 收藏每本前 300 首），
+  **2521** 首有歌词，**1006** 首进入可播检查，**1005** 首可播并成卡；
+  每张歌卡都有真实 1–2 句歌词、真实时间戳、目标 surface 在句内。
+- **实听**：前 5 张卡逐一 `fragment-start` + `seek-check.passed` + `playing: true`，
+  目标词高亮、歌词行点亮；5 次 review 写入 SRS，学习进度 `5 / 3738`，N 从 10 降到 5；
+  刷新后书 / 进度 / N 均保留。
+- **纯词卡**：无登录上下文粘贴 1 词 → 无歌词 / 无进度 / 无 seek，
+  `data-plain="true"`，flip 后 `pronounce` 直出。
+- **全量可播复核**：1005 首去重曲目逐一 `/api/song/:id/play`，**1005/1005 available**。
+- **耗时**：约 148 秒（2613 首歌词 + 1006 首试听）。
+- 截图：`docs/screenshots/import-entry.png`、`import-sheet.png`、`import-progress.png`、
+  `import-done.png`、`import-home.png`、`import-card.png`、`import-reload.png`、
+  `import-picker.png`、`import-plain.png`、`import-sheet-desktop.png`。
+
+## 产品验收（历史 · 2026-10-24 弹药时代）
+
+> 本节描述的是 v2 四 tab 时代；底栏与完成态已被 2026-10-25「三槽导航」取代
+> （学习 / 歌单 / 我的；队列走完回学习首页）。保留作历史对照，现行以 `AGENTS.md` v3 为准。
 
 1. **启动**：打开即一张卡，无 splash、无品牌语、无说明字。
 2. **唯一业务屏**：只有学习卡；底部 4 个无字图标 tab；复习 / 词书空态，

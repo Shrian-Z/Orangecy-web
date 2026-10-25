@@ -1,5 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { getFocusDeck } from '@/cards';
 import type { FocusCardData } from '@/cards';
+import { buildImportedDeck, isImportedBookId } from '@/lib/importDeck';
+import { useImportedBook, useImportedBooks } from '@/lib/importStore';
 import { dayKey, getDueQueue } from '@/lib/srs';
 import type { StudyState } from '@/lib/srs';
 import { loadWordbook } from '@/lib/wordbook';
@@ -19,21 +22,66 @@ export const BOOKS: BookMeta[] = [
 
 export const BOOK_BY_ID = new Map(BOOKS.map((book) => [book.id, book]));
 
-export function useBookWords(id: string | null) {
-  const [loaded, setLoaded] = useState<{ id: string; words: Set<string> } | null>(null);
+/** Preset shelves plus the user's imported books, newest import first. */
+export function useBookList() {
+  const imported = useImportedBooks();
+  return useMemo(
+    () => [
+      ...BOOKS,
+      ...imported.map((book) => ({ id: book.id, name: book.name, count: book.count })),
+    ],
+    [imported],
+  );
+}
+
+export interface BookData {
+  meta: BookMeta | null;
+  words: Set<string> | null;
+  deck: FocusCardData[] | null;
+  loading: boolean;
+}
+
+/**
+ * One selected book's words and deck. Preset books keep the bundled seed deck
+ * filtered by the book; imported books carry matched music cards plus a
+ * word-only card for every word no lyric could sing.
+ */
+export function useBookData(id: string | null): BookData {
+  const imported = useImportedBook(id);
+  const [preset, setPreset] = useState<{ id: string; words: Set<string> } | null>(null);
+
   useEffect(() => {
-    if (!id) return;
+    if (!id || isImportedBookId(id)) return;
     let alive = true;
     loadWordbook(id)
       .then((book) => {
-        if (alive) setLoaded({ id, words: new Set(book.words.map((entry) => entry.w)) });
+        if (alive) setPreset({ id, words: new Set(book.words.map((entry) => entry.w)) });
       })
       .catch((error) => console.warn('[book]', error));
     return () => {
       alive = false;
     };
   }, [id]);
-  return loaded && loaded.id === id ? loaded.words : null;
+
+  return useMemo(() => {
+    if (!id) return { meta: null, words: null, deck: null, loading: false };
+    if (isImportedBookId(id)) {
+      if (!imported) return { meta: null, words: null, deck: null, loading: true };
+      return {
+        meta: { id, name: imported.name, count: imported.count },
+        words: new Set(imported.words.map((entry) => entry.w)),
+        deck: buildImportedDeck(imported.words, imported.cards),
+        loading: false,
+      };
+    }
+    const meta = BOOK_BY_ID.get(id) ?? null;
+    return {
+      meta,
+      words: preset?.id === id ? preset.words : null,
+      deck: meta ? getFocusDeck() : null,
+      loading: Boolean(meta) && preset?.id !== id,
+    };
+  }, [id, imported, preset]);
 }
 
 function endOfToday(now = new Date()) {

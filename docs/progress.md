@@ -2,7 +2,33 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
-## 最新（2026-10-25）三槽导航 + 歌单世界
+## 最新（2026-10-25 下午）词汇导入入口 + 高考 3500 配歌
+
+- **开工存档**：tag `checkpoint-pre-word-import-20261025` → `ee20a33`。
+- **入口**：词书选择页右上 `FileUp`（aria「导入词汇」）→ `ImportSheet`：内置「高考 3500」+
+  粘贴/文件（每行一词，或 word,音标,释义；也接受词书 JSON）。
+- **功能**：`importWordbook()` 真实走 20 个网易歌单 → 2613 首（自建/喜欢全量；收藏歌单各前 300 首）
+  → 2521 首带歌词 → 1006 首待检、1005 首可播曲目下 **3059 个词成卡** → IndexedDB
+  `orangecy.imports`。其余 **679 词保留纯词卡**（无歌词片段，flip 后 TTS 发音），
+  3738 词一个不丢。
+- **词表口径**：用 `public/wordbooks/gaozhong.json` 全量 3738（3500 核心 + 238 个补齐
+  w–z 的扩展词；只切前 3500 会丢掉 write / world / you 等）。导入书仍叫「高考 3500」，
+  计数诚实显示 3738。
+- **学习链路**：`useBookList` / `useBookData` 把导入书接进学习首页；deck = 3059 歌卡 +
+  679 纯词卡。`FocusCard` / `sequence` 支持可选 `track` / `fragment`；无片段卡只 TTS，
+  不 seek、不画歌词进度。`srs / studyStore / wordbook / api / server` 零改动。
+- **验收**：`npm run accept:import` **66/66**：3738 唯一词；3059 歌卡；1005 曲全部
+  `available`；5 张卡 `seek-check.passed` + 目标词高亮 + 歌词行点亮；5 次 review 落 SRS；
+  刷新后书 / 进度 / N 均在；无登录上下文 1 词纯词卡发音通过。证据
+  `docs/evidence/gaokao-import.json`，截图 `docs/screenshots/import-*.png`。
+- **回归**：build（check:cards 484/484 + tsc + vite）、`check:palette` 36 状态 0 违规 /
+  0 渐变 / 0 阴影、`smoke` 80/80、`trace:audio` 13/13、`shoot:focus` 3×4。
+- **已知限制**：只配已连接网易的歌单；收藏歌单每本只取前 300 首；同一首最多 10 张卡、
+  按 3 张一轮分散；3059 / 3738 = 81.8% 有歌，679 词无歌上下文；导入约 2.5 分钟。
+- **收工存档**：tag `checkpoint-post-word-import-20261025`（hash 见 git log）。
+- **下一刀**：歌词 IndexedDB 缓存做增量重导；其它平台歌单同入口接入；纯词卡配真人音频包。
+
+## 上一轮（2026-10-25 上午）三槽导航 + 歌单世界
 
 - **开工存档**：tag `checkpoint-pre-nav-playlist-20261025` → `4b95042`。裁定写进 `AGENTS.md`
   「2026-10-25 裁定」小节；决策见 `docs/decisions.md` 2026-10-25 各行。

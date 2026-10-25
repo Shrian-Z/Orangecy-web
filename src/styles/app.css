@@ -246,6 +246,15 @@ button {
   outline: none;
 }
 
+/* Imported word with no singable lyric: no lyric block, no fragment progress. */
+.focus-card[data-plain='true'] .card-body {
+  padding-top: clamp(64px, 20vh, 190px);
+}
+
+.focus-card[data-plain='true'] .word-block {
+  margin-top: clamp(16px, 5vh, 48px);
+}
+
 .word {
   margin: 0;
   font-size: clamp(58px, 6.8vw, 100px);
@@ -803,15 +812,27 @@ button {
   padding-top: 8px;
 }
 
+.picker-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-top: 1px solid var(--ink-08);
+}
+
+.picker-group:first-child {
+  border-top: 0;
+}
+
 .picker-row {
   appearance: none;
+  flex: 1 1 auto;
+  min-width: 0;
   height: 60px;
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 0;
   border: 0;
-  border-top: 1px solid var(--ink-08);
   background: transparent;
   color: var(--ink-70);
   font-size: 15px;
@@ -819,23 +840,242 @@ button {
   cursor: pointer;
 }
 
-.picker-row:first-child {
-  border-top: 0;
-}
-
 .picker-row:hover,
 .picker-row.is-current {
   color: var(--ink);
 }
 
+.picker-import {
+  margin-left: auto;
+  color: var(--ink-55);
+}
+
+.picker-delete {
+  flex: 0 0 auto;
+  color: var(--ink-28);
+}
+
+.picker-delete:hover {
+  color: var(--ink-70);
+}
+
 .picker-name {
   flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .picker-count {
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   color: var(--ink-40);
+}
+
+/* ── 导入词汇 ───────────────────────────────────────────────────────── */
+
+.import-sheet {
+  width: min(440px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: 8px 16px 20px;
+  border: 1px solid var(--ink-18);
+  border-radius: 20px;
+  background: var(--white);
+}
+
+.import-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.import-preset {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 14px;
+  border: 1px solid var(--ink-18);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--ink-70);
+  text-align: left;
+  cursor: pointer;
+}
+
+.import-preset:hover {
+  border-color: var(--ink-28);
+  color: var(--ink);
+}
+
+.import-preset-icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink-18);
+  border-radius: 12px;
+  color: var(--ink);
+}
+
+.import-preset-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.import-preset-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.import-preset-tag {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-40);
+}
+
+.import-preset-count {
+  font-size: 12px;
+  color: var(--ink-40);
+  font-variant-numeric: tabular-nums;
+}
+
+.import-hint {
+  margin: 16px 0 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-40);
+}
+
+.import-input {
+  width: 100%;
+  min-height: 128px;
+  padding: 12px;
+  border: 1px solid var(--ink-18);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.import-input::placeholder {
+  color: var(--ink-34);
+}
+
+.import-input:focus {
+  outline: none;
+  border-color: var(--ink-40);
+}
+
+.import-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.import-go,
+.import-use {
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.import-go:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.import-progress {
+  padding: 28px 0 32px;
+}
+
+.import-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink-70);
+}
+
+.import-progress-head b {
+  margin-left: auto;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.import-bar {
+  height: 2px;
+  margin-top: 16px;
+  background: var(--ink-08);
+  overflow: hidden;
+}
+
+.import-bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transition: width 160ms linear;
+}
+
+.import-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 0 8px;
+  text-align: center;
+}
+
+.import-done-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink-18);
+  border-radius: 50%;
+  color: var(--ink);
+}
+
+.import-summary {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-70);
+}
+
+.import-summary b {
+  color: var(--ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.import-sub {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-40);
+}
+
+.import-use {
+  margin-top: 12px;
 }
 
 .my-quota {
@@ -1210,6 +1450,12 @@ button {
 .book-bar:focus-visible,
 .home-action:focus-visible,
 .picker-row:focus-visible,
+.picker-import:focus-visible,
+.picker-delete:focus-visible,
+.import-preset:focus-visible,
+.import-input:focus-visible,
+.import-go:focus-visible,
+.import-use:focus-visible,
 .world-connect:focus-visible,
 .shelf-card:focus-visible,
 .track-row:focus-visible,

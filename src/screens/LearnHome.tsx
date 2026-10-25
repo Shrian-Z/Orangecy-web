@@ -1,24 +1,28 @@
 import { useMemo } from 'react';
 import { BookOpen, ChevronRight } from 'lucide-react';
-import { getFocusDeck } from '@/cards';
+import type { FocusCardData } from '@/cards';
 import { useAppStore } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
 import {
-  BOOK_BY_ID,
   learnedInBook,
   todayLearnQueue,
   todayReviewQueue,
-  useBookWords,
+  useBookData,
+  useBookList,
 } from '@/today';
+
+const EMPTY_DECK: FocusCardData[] = [];
 
 export function LearnHome() {
   const state = useStudyStore((store) => store.state);
   const bookId = useAppStore((store) => store.bookId);
   const setPicking = useAppStore((store) => store.setPicking);
   const startSession = useAppStore((store) => store.startSession);
-  const book = bookId ? BOOK_BY_ID.get(bookId) ?? null : null;
-  const words = useBookWords(book?.id ?? null);
-  const deck = getFocusDeck();
+  const books = useBookList();
+  const book = bookId ? books.find((item) => item.id === bookId) ?? null : null;
+  const data = useBookData(book?.id ?? null);
+  const words = data.words;
+  const deck = data.deck ?? EMPTY_DECK;
   const learn = useMemo(() => todayLearnQueue(state, deck, words), [state, deck, words]);
   const review = useMemo(() => todayReviewQueue(state, deck), [state, deck]);
 

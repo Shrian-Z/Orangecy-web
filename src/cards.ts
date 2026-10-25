@@ -23,8 +23,9 @@ export interface FocusCardData {
   syn?: string[];
   exam?: [string, string];
   k?: string;
-  track: Song;
-  fragment: FocusFragment;
+  /** Absent on imported words that no lyric in the user's library can sing. */
+  track?: Song;
+  fragment?: FocusFragment;
 }
 
 const deck = seed.cards as FocusCardData[];
@@ -51,7 +52,8 @@ export function cardToStudyWord(card: FocusCardData): StudyWord {
   };
 }
 
-export function sourceFromCard(card: FocusCardData): StudySource {
+export function sourceFromCard(card: FocusCardData): StudySource | undefined {
+  if (!card.track || !card.fragment) return undefined;
   return {
     songId: card.track.id,
     songTitle: card.track.title,
