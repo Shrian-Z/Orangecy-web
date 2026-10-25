@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-25T02:35:42.010Z",
-  "url": "http://127.0.0.1:8791",
+  "generatedAt": "2026-10-25T05:58:51.028Z",
+  "url": "http://127.0.0.1:5174",
   "sourceFiles": [
     "src/App.tsx",
     "src/api.ts",
@@ -263,7 +263,7 @@
     {
       "state": "desktop / connect-sheet",
       "paintedElements": 65,
-      "uniquePaintValues": 6,
+      "uniquePaintValues": 5,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -343,7 +343,7 @@
     {
       "state": "mobile-390 / connect-sheet",
       "paintedElements": 65,
-      "uniquePaintValues": 6,
+      "uniquePaintValues": 5,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -423,7 +423,7 @@
     {
       "state": "mobile-320 / connect-sheet",
       "paintedElements": 65,
-      "uniquePaintValues": 6,
+      "uniquePaintValues": 5,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -454,7 +454,7 @@
     },
     {
       "state": "mobile-390 / playlists-lyrics",
-      "paintedElements": 725,
+      "paintedElements": 733,
       "uniquePaintValues": 8,
       "violations": 0,
       "gradients": 0,

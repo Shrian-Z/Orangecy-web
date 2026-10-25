@@ -1,6 +1,9 @@
 node_modules/
 dist/
 data/
+# 运行时 data/ 忽略；src/data 里的打包词卡必须进 git，干净 checkout 才能 build
+!src/data/
+!src/data/seed-50.json
 .npm-cache/
 .probe/
 .env

@@ -1,0 +1,2247 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-24T12:32:42.337Z",
+  "source": "data/catalog.json + http://127.0.0.1:8787/api/song/:id/lyric",
+  "cards": [
+    {
+      "w": "lose",
+      "p": "luːz",
+      "m": "v. 失去；迷失；输掉",
+      "s": "I’ve lost my appetite.||我已经没有了胃口。",
+      "syn": [
+        "spend",
+        "waste on",
+        "founder",
+        "come to naught"
+      ],
+      "exam": [
+        "...We will lose a vital part of what has made humanity as a whole so successful as a species...",
+        "CET4 2017.12 阅读理解"
+      ],
+      "k": "losing 是 lose 的现在分词；lose sleep over sth. 为某事失眠",
+      "track": {
+        "id": "1850175684",
+        "platform": "netease",
+        "title": "Counting Stars",
+        "artists": [
+          "OneRepublic"
+        ],
+        "artistText": "OneRepublic",
+        "album": "Horoscope Tunes: Cancer",
+        "cover": "https://p4.music.126.net/U-yDjD8W3jpifx_XYlKzuA==/109951168146309790.jpg",
+        "durationMs": 256760,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1850175684",
+        "target": "losing",
+        "start": 0.59,
+        "end": 9.19,
+        "lines": [
+          {
+            "text": "Lately I've been I've been losing sleep",
+            "time": 0.59
+          },
+          {
+            "text": "Dreaming about the things that we could be",
+            "time": 5.29
+          }
+        ]
+      }
+    },
+    {
+      "w": "dream",
+      "p": "driːm",
+      "m": "n. 梦；梦想；v. 做梦",
+      "s": "I had lots of dreams last night.||昨晚我做了很多梦。",
+      "syn": [
+        "come to mind",
+        "bethink of",
+        "voice",
+        "aspirations"
+      ],
+      "exam": [
+        "...This dream came true for me one afternoon in the ninth grade...",
+        "CET4 2015.12 阅读理解"
+      ],
+      "k": "dream 的现在分词是 dreaming；dream of / about sth. 梦见某事",
+      "track": {
+        "id": "1850175684",
+        "platform": "netease",
+        "title": "Counting Stars",
+        "artists": [
+          "OneRepublic"
+        ],
+        "artistText": "OneRepublic",
+        "album": "Horoscope Tunes: Cancer",
+        "cover": "https://p4.music.126.net/U-yDjD8W3jpifx_XYlKzuA==/109951168146309790.jpg",
+        "durationMs": 256760,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1850175684",
+        "target": "dreaming",
+        "start": 5.29,
+        "end": 14.16,
+        "lines": [
+          {
+            "text": "Dreaming about the things that we could be",
+            "time": 5.29
+          },
+          {
+            "text": "But baby I've been I've been praying hard",
+            "time": 9.19
+          }
+        ]
+      }
+    },
+    {
+      "w": "baby",
+      "p": "'beɪbɪ",
+      "m": "n. 婴儿；孩子气的人",
+      "s": "The baby is crying.||宝宝在哭。",
+      "syn": [
+        "infant",
+        "babe",
+        "pamper",
+        "indulge"
+      ],
+      "exam": [
+        "...order a whole chicken and a shoulder of lamb or a baby pig...",
+        "CET4 2011.6 阅读理解"
+      ],
+      "k": "近义：infant · babe · pamper",
+      "track": {
+        "id": "1850175684",
+        "platform": "netease",
+        "title": "Counting Stars",
+        "artists": [
+          "OneRepublic"
+        ],
+        "artistText": "OneRepublic",
+        "album": "Horoscope Tunes: Cancer",
+        "cover": "https://p4.music.126.net/U-yDjD8W3jpifx_XYlKzuA==/109951168146309790.jpg",
+        "durationMs": 256760,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1850175684",
+        "target": "baby",
+        "start": 9.19,
+        "end": 16.16,
+        "lines": [
+          {
+            "text": "But baby I've been I've been praying hard",
+            "time": 9.19
+          },
+          {
+            "text": "Said no more counting dollars",
+            "time": 14.16
+          }
+        ]
+      }
+    },
+    {
+      "w": "count",
+      "p": "kaʊnt",
+      "m": "v. 计算；v. 数，计数",
+      "s": "I was amazed at the number of plants - I counted 147.||我对植物的数量之多感到惊讶，我数了有147棵。",
+      "syn": [
+        "figure",
+        "expect",
+        "guess",
+        "find"
+      ],
+      "exam": [
+        "...But don’t count on it...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：figure · expect · guess",
+      "track": {
+        "id": "1850175684",
+        "platform": "netease",
+        "title": "Counting Stars",
+        "artists": [
+          "OneRepublic"
+        ],
+        "artistText": "OneRepublic",
+        "album": "Horoscope Tunes: Cancer",
+        "cover": "https://p4.music.126.net/U-yDjD8W3jpifx_XYlKzuA==/109951168146309790.jpg",
+        "durationMs": 256760,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1850175684",
+        "target": "counting",
+        "start": 14.16,
+        "end": 19.08,
+        "lines": [
+          {
+            "text": "Said no more counting dollars",
+            "time": 14.16
+          },
+          {
+            "text": "We'll be counting stars",
+            "time": 16.16
+          }
+        ]
+      }
+    },
+    {
+      "w": "give",
+      "p": "gɪv",
+      "m": "v. 做，作；送给",
+      "s": "Researchers were given a £10,000 grant to continue their work.||研究人员得到一万英镑的经费以继续他们的研究。",
+      "syn": [
+        "award",
+        "effect",
+        "form",
+        "grant"
+      ],
+      "exam": [
+        "...and began to test her: he would give her a date and ask her to tell him about the world events on that day...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "gave 是 give 的过去式；give sth. to sb. 把某物给某人",
+      "track": {
+        "id": "33187386",
+        "platform": "netease",
+        "title": "Viva La Vida (Live)",
+        "artists": [
+          "Coldplay"
+        ],
+        "artistText": "Coldplay",
+        "album": "Live At The iTunes Festival At SXSW 2014",
+        "cover": "https://p3.music.126.net/MXXcK4zkpA082hnESNMVWQ==/7746059418716335.jpg",
+        "durationMs": 237000,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "33187386",
+        "target": "gave",
+        "start": 22.27,
+        "end": 29.3,
+        "lines": [
+          {
+            "text": "Seas would rise when I gave the word",
+            "time": 22.27
+          },
+          {
+            "text": "Now in the morning I sleep alone",
+            "time": 24.85
+          }
+        ]
+      }
+    },
+    {
+      "w": "morning",
+      "p": "'mɔːnɪŋ",
+      "m": "n. 早晨，上午",
+      "s": "I hated those cold winter mornings.||我讨厌冬天里寒冷的早晨。",
+      "syn": [
+        "prime",
+        "sunrise"
+      ],
+      "exam": [
+        "...I was still rewriting my midterm the morning it was due...",
+        "CET4 2017.12 阅读理解"
+      ],
+      "k": "in the morning 在早上；Good morning 早上好",
+      "track": {
+        "id": "33187386",
+        "platform": "netease",
+        "title": "Viva La Vida (Live)",
+        "artists": [
+          "Coldplay"
+        ],
+        "artistText": "Coldplay",
+        "album": "Live At The iTunes Festival At SXSW 2014",
+        "cover": "https://p3.music.126.net/MXXcK4zkpA082hnESNMVWQ==/7746059418716335.jpg",
+        "durationMs": 237000,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "33187386",
+        "target": "morning",
+        "start": 24.85,
+        "end": 36.85,
+        "lines": [
+          {
+            "text": "Now in the morning I sleep alone",
+            "time": 24.85
+          },
+          {
+            "text": "Sweep the streets I used to own",
+            "time": 29.3
+          }
+        ]
+      }
+    },
+    {
+      "w": "sweep",
+      "p": "swiːp",
+      "m": "v. 扫；刮起；扫过",
+      "s": "Bert swept the path in front of the house.||伯特清扫了屋前的小路。",
+      "syn": [
+        "clean off",
+        "broom",
+        "clean",
+        "do out"
+      ],
+      "exam": [
+        "...There is also an old Chinese saying to go with this that a person can’t sweep the world before he can sweep his own room...",
+        "CET4 2013.6 写作题"
+      ],
+      "k": "近义：clean off · broom · clean",
+      "track": {
+        "id": "33187386",
+        "platform": "netease",
+        "title": "Viva La Vida (Live)",
+        "artists": [
+          "Coldplay"
+        ],
+        "artistText": "Coldplay",
+        "album": "Live At The iTunes Festival At SXSW 2014",
+        "cover": "https://p3.music.126.net/MXXcK4zkpA082hnESNMVWQ==/7746059418716335.jpg",
+        "durationMs": 237000,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "33187386",
+        "target": "sweep",
+        "start": 29.3,
+        "end": 38.3,
+        "lines": [
+          {
+            "text": "Sweep the streets I used to own",
+            "time": 29.3
+          }
+        ]
+      }
+    },
+    {
+      "w": "roll",
+      "p": "rəʊl",
+      "m": "vivt. 滚动；转动",
+      "s": "There was silence as the cameras started to roll.||摄影机开始转动，大家安静了下来。",
+      "syn": [
+        "turn",
+        "wheel",
+        "wave",
+        "screw"
+      ],
+      "exam": [
+        "...with the average household reducing their toilet roll spending from £43 in 2014 to £41 in 2015...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：turn · wheel · wave",
+      "track": {
+        "id": "33187386",
+        "platform": "netease",
+        "title": "Viva La Vida (Live)",
+        "artists": [
+          "Coldplay"
+        ],
+        "artistText": "Coldplay",
+        "album": "Live At The iTunes Festival At SXSW 2014",
+        "cover": "https://p3.music.126.net/MXXcK4zkpA082hnESNMVWQ==/7746059418716335.jpg",
+        "durationMs": 237000,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "33187386",
+        "target": "roll",
+        "start": 46.14,
+        "end": 53.22,
+        "lines": [
+          {
+            "text": "I used to roll the dice",
+            "time": 46.14
+          },
+          {
+            "text": "Feel the fear in my enemy's eyes",
+            "time": 50.08
+          }
+        ]
+      }
+    },
+    {
+      "w": "listen",
+      "p": "'lɪs(ə)n",
+      "m": "v. 听，留神听；听从",
+      "s": "Listen! There’s a strange noise in the engine.||听！引擎发出奇怪的声音。",
+      "syn": [
+        "hear",
+        "hark",
+        "ear"
+      ],
+      "exam": [
+        "...watch videos or listen to music and so on with it as morally as you do with a brand-new one...",
+        "CET4 2017.6 写作题"
+      ],
+      "k": "listen to sth. 听某事；listen 强调听的动作，hear 强调听见",
+      "track": {
+        "id": "2619953693",
+        "platform": "netease",
+        "title": "Yesterday Once More",
+        "artists": [
+          "Carpenters"
+        ],
+        "artistText": "Carpenters",
+        "album": "Now And Then",
+        "cover": "https://p3.music.126.net/lu3PgUMSMyLcDwqbFJH-Wg==/109951169897000068.jpg",
+        "durationMs": 233493,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2619953693",
+        "target": "listen",
+        "start": 3.43,
+        "end": 13.28,
+        "lines": [
+          {
+            "text": "I'd listen to the radio",
+            "time": 3.43
+          },
+          {
+            "text": "Waiting for my favorite songs",
+            "time": 7.26
+          }
+        ]
+      }
+    },
+    {
+      "w": "play",
+      "p": "pleɪ",
+      "m": "v. 玩，游戏；演奏",
+      "s": "Kids were playing and chasing each other.||孩子们在互相追逐嬉闹。",
+      "syn": [
+        "sport",
+        "broadcast",
+        "put on",
+        "perform on"
+      ],
+      "exam": [
+        "...It's key objective is to play so the center of recovery efforts...",
+        "CET4 2016.6 听力题"
+      ],
+      "k": "近义：sport · broadcast · put on",
+      "track": {
+        "id": "2619953693",
+        "platform": "netease",
+        "title": "Yesterday Once More",
+        "artists": [
+          "Carpenters"
+        ],
+        "artistText": "Carpenters",
+        "album": "Now And Then",
+        "cover": "https://p3.music.126.net/lu3PgUMSMyLcDwqbFJH-Wg==/109951169897000068.jpg",
+        "durationMs": 233493,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2619953693",
+        "target": "played",
+        "start": 13.28,
+        "end": 24.86,
+        "lines": [
+          {
+            "text": "When they played I'd sing along",
+            "time": 13.28
+          },
+          {
+            "text": "It made me smile",
+            "time": 18.16
+          }
+        ]
+      }
+    },
+    {
+      "w": "imagine",
+      "p": "ɪ'mædʒɪn",
+      "m": "v. 想象，设想；料想",
+      "s": "Perhaps she’d never really been there at all – perhaps she’d just imagined it.||可能她从未到过那儿——也许这都是她的幻想。",
+      "syn": [
+        "picture",
+        "think of",
+        "suppose"
+      ],
+      "exam": [
+        "...Fantasy proneness could be considered a tendency to imagine and daydream...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "imagine doing sth. 想象做某事",
+      "track": {
+        "id": "2003968950",
+        "platform": "netease",
+        "title": "Imagine",
+        "artists": [
+          "John Lennon"
+        ],
+        "artistText": "John Lennon",
+        "album": "Oh My Love",
+        "cover": "https://p3.music.126.net/rs194Yx8SFXxSWeMsA3qfA==/109951168115201413.jpg",
+        "durationMs": 186453,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2003968950",
+        "target": "imagine",
+        "start": 13.77,
+        "end": 25.77,
+        "lines": [
+          {
+            "text": "Imagine there's no heaven",
+            "time": 13.77
+          },
+          {
+            "text": "It's easy if you try",
+            "time": 20.17
+          }
+        ]
+      }
+    },
+    {
+      "w": "easy",
+      "p": "'iːzɪ",
+      "m": "adj. 容易的；安逸的",
+      "s": "The test was easy.||考试很容易。",
+      "syn": [
+        "pleasant",
+        "comfortable",
+        "light",
+        "easiest"
+      ],
+      "exam": [
+        "...making them relatively cheap and easy to install...",
+        "CET4 2017.12 听力题"
+      ],
+      "k": "easy 的比较级是 easier，最高级是 easiest",
+      "track": {
+        "id": "2003968950",
+        "platform": "netease",
+        "title": "Imagine",
+        "artists": [
+          "John Lennon"
+        ],
+        "artistText": "John Lennon",
+        "album": "Oh My Love",
+        "cover": "https://p3.music.126.net/rs194Yx8SFXxSWeMsA3qfA==/109951168115201413.jpg",
+        "durationMs": 186453,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2003968950",
+        "target": "easy",
+        "start": 20.17,
+        "end": 32.17,
+        "lines": [
+          {
+            "text": "It's easy if you try",
+            "time": 20.17
+          },
+          {
+            "text": "No hell below us",
+            "time": 26.33
+          }
+        ]
+      }
+    },
+    {
+      "w": "hell",
+      "p": "hel",
+      "m": "n. 地狱；极大的痛苦",
+      "s": "War is hell.||战争是人间地狱。",
+      "syn": [
+        "Sam Hill",
+        "sheol",
+        "rocket",
+        "ball it up"
+      ],
+      "exam": [
+        "...but it’s hell on the body...",
+        "CET4 2012.12 阅读理解"
+      ],
+      "k": "近义：Sam Hill · sheol · rocket",
+      "track": {
+        "id": "2003968950",
+        "platform": "netease",
+        "title": "Imagine",
+        "artists": [
+          "John Lennon"
+        ],
+        "artistText": "John Lennon",
+        "album": "Oh My Love",
+        "cover": "https://p3.music.126.net/rs194Yx8SFXxSWeMsA3qfA==/109951168115201413.jpg",
+        "durationMs": 186453,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2003968950",
+        "target": "hell",
+        "start": 26.33,
+        "end": 38.33,
+        "lines": [
+          {
+            "text": "No hell below us",
+            "time": 26.33
+          },
+          {
+            "text": "Above us, only sky",
+            "time": 32.47
+          }
+        ]
+      }
+    },
+    {
+      "w": "heaven",
+      "p": "'hev(ə)n",
+      "m": "n. 天堂；天，天空",
+      "s": "He looked up towards the heavens.||他仰望苍穹。",
+      "syn": [
+        "sky",
+        "paradise",
+        "air",
+        "high"
+      ],
+      "k": "heaven 天堂；Good heavens! 表示惊讶",
+      "track": {
+        "id": "18651170",
+        "platform": "netease",
+        "title": "Take Me Home Country Roads",
+        "artists": [
+          "John Denver"
+        ],
+        "artistText": "John Denver",
+        "album": "The Country Roads Collection",
+        "cover": "https://p4.music.126.net/U64rAQnwN37Ehus7cLtfrA==/624522604586100.jpg",
+        "durationMs": 192026,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "18651170",
+        "target": "heaven",
+        "start": 8,
+        "end": 20,
+        "lines": [
+          {
+            "text": "Almost heaven West Virginia",
+            "time": 8
+          },
+          {
+            "text": "Blue Ridge Mountains Shenandoah river",
+            "time": 13
+          }
+        ]
+      }
+    },
+    {
+      "w": "blue",
+      "p": "bluː",
+      "m": "adj. 蓝色的；n. 蓝色",
+      "s": "the blue waters of the lake||蓝蓝的湖水",
+      "syn": [
+        "dark",
+        "disappointed",
+        "dirty",
+        "depressed"
+      ],
+      "exam": [
+        "...This used bike is a blue medium-sized Giant race bicycle I bought just six months before...",
+        "CET4 2017.6 写作题"
+      ],
+      "k": "近义：dark · disappointed · dirty",
+      "track": {
+        "id": "18651170",
+        "platform": "netease",
+        "title": "Take Me Home Country Roads",
+        "artists": [
+          "John Denver"
+        ],
+        "artistText": "John Denver",
+        "album": "The Country Roads Collection",
+        "cover": "https://p4.music.126.net/U64rAQnwN37Ehus7cLtfrA==/624522604586100.jpg",
+        "durationMs": 192026,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "18651170",
+        "target": "blue",
+        "start": 13,
+        "end": 25,
+        "lines": [
+          {
+            "text": "Blue Ridge Mountains Shenandoah river",
+            "time": 13
+          },
+          {
+            "text": "Life is old there older than the trees",
+            "time": 21
+          }
+        ]
+      }
+    },
+    {
+      "w": "life",
+      "p": "laɪf",
+      "m": "n. 生命；一生；寿命",
+      "s": "Learning goes on throughout life.||学习是一生的事。",
+      "syn": [
+        "existence",
+        "living",
+        "age",
+        "livelihood"
+      ],
+      "exam": [
+        "...he would start recording his whole life in detail...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：existence · living · age",
+      "track": {
+        "id": "18651170",
+        "platform": "netease",
+        "title": "Take Me Home Country Roads",
+        "artists": [
+          "John Denver"
+        ],
+        "artistText": "John Denver",
+        "album": "The Country Roads Collection",
+        "cover": "https://p4.music.126.net/U64rAQnwN37Ehus7cLtfrA==/624522604586100.jpg",
+        "durationMs": 192026,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "18651170",
+        "target": "life",
+        "start": 21,
+        "end": 31,
+        "lines": [
+          {
+            "text": "Life is old there older than the trees",
+            "time": 21
+          },
+          {
+            "text": "Younger than the mountains blowin' like a breeze",
+            "time": 26
+          }
+        ]
+      }
+    },
+    {
+      "w": "hello",
+      "p": "hə'ləʊ; he-",
+      "m": "int. 喂",
+      "s": "Hello, John! How are you?||喂，约翰！你好吗？",
+      "syn": [
+        "hallo",
+        "holloo"
+      ],
+      "k": "近义：hallo · holloo",
+      "track": {
+        "id": "25938294",
+        "platform": "netease",
+        "title": "The Sound Of Silence",
+        "artists": [
+          "Simon & Garfunkel"
+        ],
+        "artistText": "Simon & Garfunkel",
+        "album": "Tales From New York:The Best Of",
+        "cover": "https://p3.music.126.net/HQhlMmbGT-yw0wxdJnYpRQ==/3233663700042072.jpg",
+        "durationMs": 185573,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "25938294",
+        "target": "hello",
+        "start": 3.76,
+        "end": 12.61,
+        "lines": [
+          {
+            "text": "Hello darkness my old friend.",
+            "time": 3.76
+          },
+          {
+            "text": "I've come to talk with U again.",
+            "time": 8.16
+          }
+        ]
+      }
+    },
+    {
+      "w": "come",
+      "p": "kʌm",
+      "m": "v. 来，来到；出现",
+      "s": "Let me know when they come.||他们来了就告诉我。",
+      "syn": [
+        "occur",
+        "happen",
+        "proceed",
+        "become"
+      ],
+      "exam": [
+        "...Small signs may indicate great changes to come and therefore merit attention...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：occur · happen · proceed",
+      "track": {
+        "id": "25938294",
+        "platform": "netease",
+        "title": "The Sound Of Silence",
+        "artists": [
+          "Simon & Garfunkel"
+        ],
+        "artistText": "Simon & Garfunkel",
+        "album": "Tales From New York:The Best Of",
+        "cover": "https://p3.music.126.net/HQhlMmbGT-yw0wxdJnYpRQ==/3233663700042072.jpg",
+        "durationMs": 185573,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "25938294",
+        "target": "come",
+        "start": 8.16,
+        "end": 17.32,
+        "lines": [
+          {
+            "text": "I've come to talk with U again.",
+            "time": 8.16
+          },
+          {
+            "text": "Because a vision softly creeping.",
+            "time": 12.61
+          }
+        ]
+      }
+    },
+    {
+      "w": "vision",
+      "p": "'vɪʒ(ə)n",
+      "m": "n. 视；想象力；梦幻",
+      "s": "She suffered temporary loss of vision after being struck on the head.||她头部受撞击以后出现暂时性失明。",
+      "syn": [
+        "sight",
+        "imagination",
+        "eye",
+        "seeing"
+      ],
+      "exam": [
+        "...’ She then realized that her life no longer matched her vision for it...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：sight · imagination · eye",
+      "track": {
+        "id": "25938294",
+        "platform": "netease",
+        "title": "The Sound Of Silence",
+        "artists": [
+          "Simon & Garfunkel"
+        ],
+        "artistText": "Simon & Garfunkel",
+        "album": "Tales From New York:The Best Of",
+        "cover": "https://p3.music.126.net/HQhlMmbGT-yw0wxdJnYpRQ==/3233663700042072.jpg",
+        "durationMs": 185573,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "25938294",
+        "target": "vision",
+        "start": 12.61,
+        "end": 21.91,
+        "lines": [
+          {
+            "text": "Because a vision softly creeping.",
+            "time": 12.61
+          },
+          {
+            "text": "Left its seeds while I was sleeping.",
+            "time": 17.32
+          }
+        ]
+      }
+    },
+    {
+      "w": "dark",
+      "p": "dɑːk",
+      "m": "adj. 暗的；黑色的",
+      "s": "The church was dark and quiet.||教堂里黑魆魆的，寂静无声。",
+      "syn": [
+        "fuzzy",
+        "blue",
+        "empty",
+        "gloomy"
+      ],
+      "exam": [
+        "...dark question hanging over my head when seeking employment: should I tell my employers I have a condition...",
+        "CET4 2012.12 阅读理解"
+      ],
+      "k": "近义：fuzzy · blue · empty",
+      "track": {
+        "id": "2698479305",
+        "platform": "netease",
+        "title": "Hotel California (Live, 1994)",
+        "artists": [
+          "Eagles"
+        ],
+        "artistText": "Eagles",
+        "album": "5ive of a Kind - Hotel California (Live)",
+        "cover": "https://p3.music.126.net/WJHFLigcPCK3xmjulosCNg==/109951170861573710.jpg",
+        "durationMs": 339847,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2698479305",
+        "target": "dark",
+        "start": 51.63,
+        "end": 57.62,
+        "lines": [
+          {
+            "text": "On a dark desert highway,",
+            "time": 51.63
+          },
+          {
+            "text": "cool wind in my hair,",
+            "time": 54.61
+          }
+        ]
+      }
+    },
+    {
+      "w": "cool",
+      "p": "kuːl",
+      "m": "adj. 凉的，冷静的",
+      "s": "She swam out into the cool water.||她往外游向清凉的水里。",
+      "syn": [
+        "philosophical",
+        "cracking",
+        "still",
+        "subside"
+      ],
+      "exam": [
+        "...I thought it was so cool to text message all my friends who have one...",
+        "CET4 2016.6 听力题"
+      ],
+      "k": "近义：philosophical · cracking · still",
+      "track": {
+        "id": "2698479305",
+        "platform": "netease",
+        "title": "Hotel California (Live, 1994)",
+        "artists": [
+          "Eagles"
+        ],
+        "artistText": "Eagles",
+        "album": "5ive of a Kind - Hotel California (Live)",
+        "cover": "https://p3.music.126.net/WJHFLigcPCK3xmjulosCNg==/109951170861573710.jpg",
+        "durationMs": 339847,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2698479305",
+        "target": "cool",
+        "start": 54.61,
+        "end": 60.67,
+        "lines": [
+          {
+            "text": "cool wind in my hair,",
+            "time": 54.61
+          },
+          {
+            "text": "warm smell of colitas,",
+            "time": 57.62
+          }
+        ]
+      }
+    },
+    {
+      "w": "ahead",
+      "p": "ə'hed",
+      "m": "adv. 在前；向前；提前",
+      "s": "He kept his gaze fixed on the car ahead.||他的目光一直盯着前面的那辆汽车。",
+      "syn": [
+        "forth",
+        "in advance",
+        "previously",
+        "to"
+      ],
+      "exam": [
+        "...What advice would Leah give you to move you ahead on your journey...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：forth · in advance · previously",
+      "track": {
+        "id": "2698479305",
+        "platform": "netease",
+        "title": "Hotel California (Live, 1994)",
+        "artists": [
+          "Eagles"
+        ],
+        "artistText": "Eagles",
+        "album": "5ive of a Kind - Hotel California (Live)",
+        "cover": "https://p3.music.126.net/WJHFLigcPCK3xmjulosCNg==/109951170861573710.jpg",
+        "durationMs": 339847,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2698479305",
+        "target": "ahead",
+        "start": 63.93,
+        "end": 70.2,
+        "lines": [
+          {
+            "text": "Up ahead in the distance,",
+            "time": 63.93
+          },
+          {
+            "text": "I saw a shimmering light,",
+            "time": 67.19
+          }
+        ]
+      }
+    },
+    {
+      "w": "ocean",
+      "p": "",
+      "m": "n. 海洋；洋",
+      "s": "The cape extends far into the ocean.||那海岬伸向海洋远处。",
+      "exam": [
+        "...The high cost of steam and the lesser need for speed kept the majority of the world's ocean freight moving by sail until the early years of the 20th century...",
+        "CET4 2014.6 阅读理解"
+      ],
+      "k": "歌词里唱的是 oceans，对应词条 ocean。",
+      "track": {
+        "id": "1855160975",
+        "platform": "netease",
+        "title": "Right Here Waiting (Remastered 2021)",
+        "artists": [
+          "Richard Marx"
+        ],
+        "artistText": "Richard Marx",
+        "album": "Stories To Tell (Greatest Hits and More)",
+        "cover": "https://p3.music.126.net/0xsmJEkokFjMVQ8tBl55OQ==/109951173505312699.jpg",
+        "durationMs": 266493,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1855160975",
+        "target": "oceans",
+        "start": 45.56,
+        "end": 56.13,
+        "lines": [
+          {
+            "text": "Oceans apart, day after day",
+            "time": 45.56
+          },
+          {
+            "text": "And I slowly go insane",
+            "time": 51.5
+          }
+        ]
+      }
+    },
+    {
+      "w": "hear",
+      "p": "hɪə",
+      "m": "v. 听见；审讯；听说",
+      "s": "Blanche heard a crash as the back door was flung open.||布兰奇听见后门哗啦一声被推开。",
+      "syn": [
+        "sound",
+        "learn of",
+        "ear",
+        "hark"
+      ],
+      "exam": [
+        "...the Native American Indians have a saying: “Pay attention to the whispers so you won’t have to hear the screams...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：sound · learn of · ear",
+      "track": {
+        "id": "1855160975",
+        "platform": "netease",
+        "title": "Right Here Waiting (Remastered 2021)",
+        "artists": [
+          "Richard Marx"
+        ],
+        "artistText": "Richard Marx",
+        "album": "Stories To Tell (Greatest Hits and More)",
+        "cover": "https://p3.music.126.net/0xsmJEkokFjMVQ8tBl55OQ==/109951173505312699.jpg",
+        "durationMs": 266493,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1855160975",
+        "target": "hear",
+        "start": 56.13,
+        "end": 66.79,
+        "lines": [
+          {
+            "text": "I hear your voice on the line",
+            "time": 56.13
+          },
+          {
+            "text": "But it doesn't stop the pain",
+            "time": 62.31
+          }
+        ]
+      }
+    },
+    {
+      "w": "pain",
+      "p": "peɪn",
+      "m": "n. 痛，疼痛；辛苦",
+      "s": "The pain is getting worse.||疼得越来越厉害了。",
+      "syn": [
+        "effort",
+        "trial",
+        "struggle",
+        "try"
+      ],
+      "exam": [
+        "...Viewing the past in high definition can make it very difficult to get over pain and regret...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：effort · trial · struggle",
+      "track": {
+        "id": "1855160975",
+        "platform": "netease",
+        "title": "Right Here Waiting (Remastered 2021)",
+        "artists": [
+          "Richard Marx"
+        ],
+        "artistText": "Richard Marx",
+        "album": "Stories To Tell (Greatest Hits and More)",
+        "cover": "https://p3.music.126.net/0xsmJEkokFjMVQ8tBl55OQ==/109951173505312699.jpg",
+        "durationMs": 266493,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1855160975",
+        "target": "pain",
+        "start": 62.31,
+        "end": 72.35,
+        "lines": [
+          {
+            "text": "But it doesn't stop the pain",
+            "time": 62.31
+          },
+          {
+            "text": "If I see you next to never",
+            "time": 66.79
+          }
+        ]
+      }
+    },
+    {
+      "w": "radio",
+      "p": "'reɪdɪəʊ",
+      "m": "n. 无线电；收音机",
+      "s": "The last 12 months have been difficult ones for local radio.||最近的12个月对地方广播电台来说是艰难的。",
+      "syn": [
+        "receiving set"
+      ],
+      "exam": [
+        "...The radio business has changed greatly and now attracts more listeners...",
+        "CET4 2014.6 阅读理解"
+      ],
+      "k": "近义：receiving set",
+      "track": {
+        "id": "439122231",
+        "platform": "netease",
+        "title": "Because Of You (Jason Nevins Radio)",
+        "artists": [
+          "Kelly Clarkson"
+        ],
+        "artistText": "Kelly Clarkson",
+        "album": "Because Of You Remixes",
+        "cover": "https://p4.music.126.net/7wjtWHWBGor5tnbqHYdfcw==/18506979719698450.jpg",
+        "durationMs": 238399,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "439122231",
+        "target": "radio",
+        "start": 0.29,
+        "end": 9.29,
+        "lines": [
+          {
+            "text": "Because of You （Radio Edit）-Kelly Clarkson",
+            "time": 0.29
+          }
+        ]
+      }
+    },
+    {
+      "w": "mistake",
+      "p": "mɪ'steɪk",
+      "m": "n. 错误；v. 误解，弄错",
+      "s": "The most common mistake is to plant them too deep.||最常见的错误就是把它们种得太深了。",
+      "syn": [
+        "error",
+        "fault",
+        "sin",
+        "blame"
+      ],
+      "exam": [
+        "...The biggest budget mistake is no budget at all...",
+        "CET4 2015.6 听力题"
+      ],
+      "k": "近义：error · fault · sin",
+      "track": {
+        "id": "439122231",
+        "platform": "netease",
+        "title": "Because Of You (Jason Nevins Radio)",
+        "artists": [
+          "Kelly Clarkson"
+        ],
+        "artistText": "Kelly Clarkson",
+        "album": "Because Of You Remixes",
+        "cover": "https://p4.music.126.net/7wjtWHWBGor5tnbqHYdfcw==/18506979719698450.jpg",
+        "durationMs": 238399,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "439122231",
+        "target": "mistakes",
+        "start": 15.24,
+        "end": 27.24,
+        "lines": [
+          {
+            "text": "I will not make the same mistakes that you did",
+            "time": 15.24
+          },
+          {
+            "text": "I will not let myself cause my heart so much misery",
+            "time": 21.3
+          }
+        ]
+      }
+    },
+    {
+      "w": "hold",
+      "p": "həʊld",
+      "m": "v. 拿住；掌握；拥有",
+      "s": "He holds shares in ICI.||他持有帝国化学工业集团的股份。",
+      "syn": [
+        "own",
+        "save",
+        "support of",
+        "stand up for sb"
+      ],
+      "exam": [
+        "...Chinese parents also hold that if the child can obtain the big success in the society...",
+        "CET4 2015.12 文本题"
+      ],
+      "k": "近义：own · save · support of",
+      "track": {
+        "id": "1945802821",
+        "platform": "netease",
+        "title": "Apologize",
+        "artists": [
+          "OneRepublic"
+        ],
+        "artistText": "OneRepublic",
+        "album": "Sad Love Songs 2022",
+        "cover": "https://p4.music.126.net/QoxhEBFF2IDCBXT_DU42sA==/109951167911904198.jpg",
+        "durationMs": 208106,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1945802821",
+        "target": "holding",
+        "start": 32.91,
+        "end": 40.87,
+        "lines": [
+          {
+            "text": "I'm holding on your rope",
+            "time": 32.91
+          },
+          {
+            "text": "Got me ten feet off the ground",
+            "time": 34.65
+          }
+        ]
+      }
+    },
+    {
+      "w": "ground",
+      "p": "graʊnd",
+      "m": "n. 地；场地；根据",
+      "s": "There are strong grounds for believing his statement.||有充分的理由可以相信他的话。",
+      "syn": [
+        "extent",
+        "boundary",
+        "region",
+        "spectrum"
+      ],
+      "exam": [
+        "...set some ground rules so everyone understands responsibilities and boundaries...",
+        "CET4 2015.12 阅读理解"
+      ],
+      "k": "近义：extent · boundary · region",
+      "track": {
+        "id": "1945802821",
+        "platform": "netease",
+        "title": "Apologize",
+        "artists": [
+          "OneRepublic"
+        ],
+        "artistText": "OneRepublic",
+        "album": "Sad Love Songs 2022",
+        "cover": "https://p4.music.126.net/QoxhEBFF2IDCBXT_DU42sA==/109951167911904198.jpg",
+        "durationMs": 208106,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1945802821",
+        "target": "ground",
+        "start": 34.65,
+        "end": 42.76,
+        "lines": [
+          {
+            "text": "Got me ten feet off the ground",
+            "time": 34.65
+          },
+          {
+            "text": "And I'm hearing what you say",
+            "time": 40.87
+          }
+        ]
+      }
+    },
+    {
+      "w": "hearing",
+      "p": "'hɪərɪŋ",
+      "m": "n. 听力， 听觉； 听力所及之距离； 意见听取会； 申辩的机会",
+      "s": "a child with a hearing disability||有听力障碍的儿童",
+      "syn": [
+        "trial",
+        "aural comprehension",
+        "earring"
+      ],
+      "exam": [
+        "...We look forward to hearing from you...",
+        "CET4 2015.6 听力题"
+      ],
+      "k": "近义：trial · aural comprehension · earring",
+      "track": {
+        "id": "1945802821",
+        "platform": "netease",
+        "title": "Apologize",
+        "artists": [
+          "OneRepublic"
+        ],
+        "artistText": "OneRepublic",
+        "album": "Sad Love Songs 2022",
+        "cover": "https://p4.music.126.net/QoxhEBFF2IDCBXT_DU42sA==/109951167911904198.jpg",
+        "durationMs": 208106,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1945802821",
+        "target": "hearing",
+        "start": 40.87,
+        "end": 49.03,
+        "lines": [
+          {
+            "text": "And I'm hearing what you say",
+            "time": 40.87
+          },
+          {
+            "text": "But I just can't make a sound",
+            "time": 42.76
+          }
+        ]
+      }
+    },
+    {
+      "w": "city",
+      "p": "'sɪtɪ",
+      "m": "n. 城市，都市",
+      "s": "The nearest big city was St. Louis.||最近的大城市是圣路易斯。",
+      "syn": [
+        "Cities",
+        "ciudad",
+        "urban"
+      ],
+      "exam": [
+        "...or will choose to remain in the city center...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：Cities · ciudad · urban",
+      "track": {
+        "id": "27949657",
+        "platform": "netease",
+        "title": "Fireflies (Dj Strobe Remix)",
+        "artists": [
+          "Owl City"
+        ],
+        "artistText": "Owl City",
+        "album": "最新热歌慢摇31",
+        "cover": "https://p4.music.126.net/FZX7XAjsmEPGyVOqm4H7aQ==/109951166361039007.jpg",
+        "durationMs": 175000,
+        "fee": 0
+      },
+      "fragment": {
+        "trackId": "27949657",
+        "target": "city",
+        "start": 0.88,
+        "end": 9.88,
+        "lines": [
+          {
+            "text": "Fireflies Strobe Remix）-Owl City",
+            "time": 0.88
+          }
+        ]
+      }
+    },
+    {
+      "w": "believe",
+      "p": "bɪ'liːv",
+      "m": "v. 相信；认为",
+      "s": "You shouldn’t believe everything you read.||你不应尽信书上看来的东西。",
+      "syn": [
+        "trust on",
+        "suppose",
+        "expect",
+        "count"
+      ],
+      "exam": [
+        "...Don’t you remember all those things we used to believe when we were little...",
+        "CET4 2017.6 听力题"
+      ],
+      "k": "近义：trust on · suppose · expect",
+      "track": {
+        "id": "27949657",
+        "platform": "netease",
+        "title": "Fireflies (Dj Strobe Remix)",
+        "artists": [
+          "Owl City"
+        ],
+        "artistText": "Owl City",
+        "album": "最新热歌慢摇31",
+        "cover": "https://p4.music.126.net/FZX7XAjsmEPGyVOqm4H7aQ==/109951166361039007.jpg",
+        "durationMs": 175000,
+        "fee": 0
+      },
+      "fragment": {
+        "trackId": "27949657",
+        "target": "believe",
+        "start": 19.18,
+        "end": 23.6,
+        "lines": [
+          {
+            "text": "You would not believe your eyes",
+            "time": 19.18
+          },
+          {
+            "text": "If ten million fireflies",
+            "time": 21.7
+          }
+        ]
+      }
+    },
+    {
+      "w": "million",
+      "p": "'mɪljən",
+      "m": "num. 百万；n. 许多",
+      "s": "The book sold more than a million copies.||这本书售出了一百多万册。",
+      "syn": [
+        "mega",
+        "innumerability",
+        "thousand",
+        "countless"
+      ],
+      "exam": [
+        "...The company's self-driving cars have done well over a million miles across various states in the US...",
+        "CET4 2017.6 听力题"
+      ],
+      "k": "近义：mega · innumerability · thousand",
+      "track": {
+        "id": "27949657",
+        "platform": "netease",
+        "title": "Fireflies (Dj Strobe Remix)",
+        "artists": [
+          "Owl City"
+        ],
+        "artistText": "Owl City",
+        "album": "最新热歌慢摇31",
+        "cover": "https://p4.music.126.net/FZX7XAjsmEPGyVOqm4H7aQ==/109951166361039007.jpg",
+        "durationMs": 175000,
+        "fee": 0
+      },
+      "fragment": {
+        "trackId": "27949657",
+        "target": "million",
+        "start": 21.7,
+        "end": 27.21,
+        "lines": [
+          {
+            "text": "If ten million fireflies",
+            "time": 21.7
+          },
+          {
+            "text": "Lit up the world as I fell asleep",
+            "time": 23.6
+          }
+        ]
+      }
+    },
+    {
+      "w": "boring",
+      "p": "'bɔːrɪŋ",
+      "m": "adj. 令人厌烦的， 乏味的， 无聊的",
+      "s": "Her husband is about the most boring person I’ve ever met.||她丈夫可以说是我见过的最无聊的人。",
+      "syn": [
+        "trying",
+        "frivolous",
+        "drilling hole",
+        "bouche"
+      ],
+      "exam": [
+        "...whereas women may approach the same dispute from the perspective of what's the easiest and quickest way to resolve the problem-even if that means doing the boring work",
+        "CET4 2017.12 阅读理解"
+      ],
+      "k": "近义：trying · frivolous · drilling hole",
+      "track": {
+        "id": "406704345",
+        "platform": "netease",
+        "title": "Lemon Tree (Live at Villa Berg, Stuttgart 22.02.96)",
+        "artists": [
+          "Fool's Garden"
+        ],
+        "artistText": "Fool's Garden",
+        "album": "Pieces",
+        "cover": "https://p3.music.126.net/qObrv5viPBS7tUW-WhoAPw==/16589431440484300.jpg",
+        "durationMs": 202080,
+        "fee": 0
+      },
+      "fragment": {
+        "trackId": "406704345",
+        "target": "boring",
+        "start": 15.38,
+        "end": 22.01,
+        "lines": [
+          {
+            "text": "I'm sitting here in the boring room",
+            "time": 15.38
+          },
+          {
+            "text": "It's just another rainy Sunday afternoon",
+            "time": 18.57
+          }
+        ]
+      }
+    },
+    {
+      "w": "rainy",
+      "p": "'reɪnɪ",
+      "m": "adj. 下雨的，多雨的",
+      "s": "a cold rainy day in October||十月里一个寒冷的雨天",
+      "syn": [
+        "pluvian",
+        "drippy"
+      ],
+      "k": "近义：pluvian · drippy",
+      "track": {
+        "id": "406704345",
+        "platform": "netease",
+        "title": "Lemon Tree (Live at Villa Berg, Stuttgart 22.02.96)",
+        "artists": [
+          "Fool's Garden"
+        ],
+        "artistText": "Fool's Garden",
+        "album": "Pieces",
+        "cover": "https://p3.music.126.net/qObrv5viPBS7tUW-WhoAPw==/16589431440484300.jpg",
+        "durationMs": 202080,
+        "fee": 0
+      },
+      "fragment": {
+        "trackId": "406704345",
+        "target": "rainy",
+        "start": 18.57,
+        "end": 23.07,
+        "lines": [
+          {
+            "text": "It's just another rainy Sunday afternoon",
+            "time": 18.57
+          },
+          {
+            "text": "I'm wasting my time",
+            "time": 22.01
+          }
+        ]
+      }
+    },
+    {
+      "w": "nothing",
+      "p": "'nʌθɪŋ",
+      "m": "n. 没有东西；adv. 毫不",
+      "s": "Nothing ever happens in this town.||这镇上从来都不会发生什么特别的事。",
+      "syn": [
+        "nil",
+        "nonbeing",
+        "none",
+        "nowise"
+      ],
+      "exam": [
+        "...The candidate was productive, or intelligent, or a solid scientist or something that's clearly solid praise, but nothing that singles out the candidate as exceptional ",
+        "CET4 2017.12 阅读理解"
+      ],
+      "k": "近义：nil · nonbeing · none",
+      "track": {
+        "id": "406704345",
+        "platform": "netease",
+        "title": "Lemon Tree (Live at Villa Berg, Stuttgart 22.02.96)",
+        "artists": [
+          "Fool's Garden"
+        ],
+        "artistText": "Fool's Garden",
+        "album": "Pieces",
+        "cover": "https://p3.music.126.net/qObrv5viPBS7tUW-WhoAPw==/16589431440484300.jpg",
+        "durationMs": 202080,
+        "fee": 0
+      },
+      "fragment": {
+        "trackId": "406704345",
+        "target": "nothing",
+        "start": 23.07,
+        "end": 26.67,
+        "lines": [
+          {
+            "text": "I got nothing to do",
+            "time": 23.07
+          },
+          {
+            "text": "I'm hanging around",
+            "time": 25.25
+          }
+        ]
+      }
+    },
+    {
+      "w": "original",
+      "p": "ə'ridʒənl",
+      "m": "adj. 原始的，最初的",
+      "s": "The land was returned to its original owner.||这块土地归还给了原主。",
+      "syn": [
+        "archetype",
+        "antitype",
+        "initial",
+        "premier"
+      ],
+      "k": "近义：archetype · antitype · initial",
+      "track": {
+        "id": "502434884",
+        "platform": "netease",
+        "title": "Big Big World",
+        "artists": [
+          "Emilia",
+          "Alta Marea"
+        ],
+        "artistText": "Emilia / Alta Marea",
+        "album": "Basi Musicali Hits Vol.13 (Backing Tracks Altamarea)",
+        "cover": "https://p4.music.126.net/8jossiUmJSWXcHesofQERA==/18351948579979476.jpg",
+        "durationMs": 204904,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "502434884",
+        "target": "originally",
+        "start": 0.1,
+        "end": 9.1,
+        "lines": [
+          {
+            "text": "Big Big World （Originally Performed By Emilia）-Alta Marea",
+            "time": 0.1
+          }
+        ]
+      }
+    },
+    {
+      "w": "girl",
+      "p": "gɜːl",
+      "m": "n. 女孩子，姑娘；女儿",
+      "s": "Both boys and girls can apply to join the choir.||男孩和女孩均可申请加入合唱团。",
+      "syn": [
+        "daughter",
+        "bride"
+      ],
+      "exam": [
+        "...A 9-year-old girl in New Mexico has raised more than $500 for her little brother who needs heart surgery in Houston...",
+        "CET4 2017.12 听力题"
+      ],
+      "k": "近义：daughter · bride",
+      "track": {
+        "id": "502434884",
+        "platform": "netease",
+        "title": "Big Big World",
+        "artists": [
+          "Emilia",
+          "Alta Marea"
+        ],
+        "artistText": "Emilia / Alta Marea",
+        "album": "Basi Musicali Hits Vol.13 (Backing Tracks Altamarea)",
+        "cover": "https://p4.music.126.net/8jossiUmJSWXcHesofQERA==/18351948579979476.jpg",
+        "durationMs": 204904,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "502434884",
+        "target": "girl",
+        "start": 51.75,
+        "end": 56.77,
+        "lines": [
+          {
+            "text": "I'm a big big girl",
+            "time": 51.75
+          },
+          {
+            "text": "In a big big world",
+            "time": 54.15
+          }
+        ]
+      }
+    },
+    {
+      "w": "leave",
+      "p": "liːv",
+      "m": "v. 离去；v. 离开",
+      "s": "My baby gets upset when I leave the room.||我一离开房间宝宝就会不安。",
+      "syn": [
+        "split",
+        "quit",
+        "refer",
+        "get out"
+      ],
+      "exam": [
+        "...Would you like to leave a comment on our web page when you have time...",
+        "CET4 2017.6 听力题"
+      ],
+      "k": "近义：split · quit · refer",
+      "track": {
+        "id": "502434884",
+        "platform": "netease",
+        "title": "Big Big World",
+        "artists": [
+          "Emilia",
+          "Alta Marea"
+        ],
+        "artistText": "Emilia / Alta Marea",
+        "album": "Basi Musicali Hits Vol.13 (Backing Tracks Altamarea)",
+        "cover": "https://p4.music.126.net/8jossiUmJSWXcHesofQERA==/18351948579979476.jpg",
+        "durationMs": 204904,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "502434884",
+        "target": "leave",
+        "start": 56.77,
+        "end": 65.46,
+        "lines": [
+          {
+            "text": "It's not a big big thing if you leave me",
+            "time": 56.77
+          },
+          {
+            "text": "But I do do feel that",
+            "time": 62.45
+          }
+        ]
+      }
+    },
+    {
+      "w": "empty",
+      "p": "'em(p)tɪ",
+      "m": "adj. 空的；空洞的",
+      "s": "an empty box||空盒子",
+      "syn": [
+        "dark",
+        "hollow",
+        "bare",
+        "vacant"
+      ],
+      "exam": [
+        "...particularly ones that sell food rich in empty calories...",
+        "CET4 2015.6 阅读理解"
+      ],
+      "k": "近义：dark · hollow · bare",
+      "track": {
+        "id": "2080749",
+        "platform": "netease",
+        "title": "My Love (Radio Edit)",
+        "artists": [
+          "Westlife"
+        ],
+        "artistText": "Westlife",
+        "album": "World Of Our Own - No. 1 Hits Plus (EP)",
+        "cover": "https://p3.music.126.net/K92H6JBy4W79yOuNHCq_jA==/1738327883515486.jpg",
+        "durationMs": 232920,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2080749",
+        "target": "empty",
+        "start": 6.54,
+        "end": 12.09,
+        "lines": [
+          {
+            "text": "An empty street",
+            "time": 6.54
+          },
+          {
+            "text": "An empty house",
+            "time": 10.53
+          }
+        ]
+      }
+    },
+    {
+      "w": "house",
+      "p": "haʊs",
+      "m": "n. 房屋，住宅；商号",
+      "s": "America’s oldest publishing house||美国历史最悠久的出版社",
+      "syn": [
+        "residence",
+        "organization",
+        "machinery",
+        "family"
+      ],
+      "exam": [
+        "...whose shelves house our most precious memories as well as our lifetime’s knowledge...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：residence · organization · machinery",
+      "track": {
+        "id": "2080749",
+        "platform": "netease",
+        "title": "My Love (Radio Edit)",
+        "artists": [
+          "Westlife"
+        ],
+        "artistText": "Westlife",
+        "album": "World Of Our Own - No. 1 Hits Plus (EP)",
+        "cover": "https://p3.music.126.net/K92H6JBy4W79yOuNHCq_jA==/1738327883515486.jpg",
+        "durationMs": 232920,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2080749",
+        "target": "house",
+        "start": 10.53,
+        "end": 14.61,
+        "lines": [
+          {
+            "text": "An empty house",
+            "time": 10.53
+          },
+          {
+            "text": "A hole inside my heart",
+            "time": 12.09
+          }
+        ]
+      }
+    },
+    {
+      "w": "hole",
+      "p": "həʊl",
+      "m": "n. 洞；孔眼，裂开处",
+      "s": "I began digging a hole for the plant.||我开始挖洞种那棵植物。",
+      "syn": [
+        "cavity",
+        "hollow",
+        "aperture",
+        "thirl"
+      ],
+      "k": "近义：cavity · hollow · aperture",
+      "track": {
+        "id": "2080749",
+        "platform": "netease",
+        "title": "My Love (Radio Edit)",
+        "artists": [
+          "Westlife"
+        ],
+        "artistText": "Westlife",
+        "album": "World Of Our Own - No. 1 Hits Plus (EP)",
+        "cover": "https://p3.music.126.net/K92H6JBy4W79yOuNHCq_jA==/1738327883515486.jpg",
+        "durationMs": 232920,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2080749",
+        "target": "hole",
+        "start": 12.09,
+        "end": 17.05,
+        "lines": [
+          {
+            "text": "A hole inside my heart",
+            "time": 12.09
+          },
+          {
+            "text": "I'm all alone",
+            "time": 14.61
+          }
+        ]
+      }
+    },
+    {
+      "w": "trust",
+      "p": "trʌst",
+      "m": "n. 信任；v. 相信；委托",
+      "s": "At first there was a lack of trust between them.||起初，他们之间缺乏信任。",
+      "syn": [
+        "duty",
+        "liability",
+        "belief",
+        "faith"
+      ],
+      "exam": [
+        "...it not only serves as crucial bridge to build trust and connection between two generations but also exerts a profound and subtle influence toward to children’s persona",
+        "CET4 2017.12 写作题"
+      ],
+      "k": "近义：duty · liability · belief",
+      "track": {
+        "id": "2081236",
+        "platform": "netease",
+        "title": "Seasons in the Sun",
+        "artists": [
+          "Westlife"
+        ],
+        "artistText": "Westlife",
+        "album": "I Have A Dream",
+        "cover": "https://p3.music.126.net/26eAGHMyuVwZpwHIbb0YqQ==/18435511463184496.jpg",
+        "durationMs": 248450,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2081236",
+        "target": "trusted",
+        "start": 13.87,
+        "end": 24.61,
+        "lines": [
+          {
+            "text": "Goodbye to you my trusted friend",
+            "time": 13.87
+          },
+          {
+            "text": "We've known each other since we were nine or ten",
+            "time": 19.32
+          }
+        ]
+      }
+    },
+    {
+      "w": "know",
+      "p": "nəʊ",
+      "m": "v. 知道；认识；通晓",
+      "s": "Who knows the answer?||谁知道答案？",
+      "syn": [
+        "weet",
+        "be aware of",
+        "wise",
+        "understand"
+      ],
+      "exam": [
+        "...don't follow stream unless you know it...",
+        "CET4 2107.12 听力题"
+      ],
+      "k": "近义：weet · be aware of · wise",
+      "track": {
+        "id": "2081236",
+        "platform": "netease",
+        "title": "Seasons in the Sun",
+        "artists": [
+          "Westlife"
+        ],
+        "artistText": "Westlife",
+        "album": "I Have A Dream",
+        "cover": "https://p3.music.126.net/26eAGHMyuVwZpwHIbb0YqQ==/18435511463184496.jpg",
+        "durationMs": 248450,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2081236",
+        "target": "known",
+        "start": 19.32,
+        "end": 30.26,
+        "lines": [
+          {
+            "text": "We've known each other since we were nine or ten",
+            "time": 19.32
+          },
+          {
+            "text": "Together we've climbed hills and trees",
+            "time": 24.61
+          }
+        ]
+      }
+    },
+    {
+      "w": "climb",
+      "p": "klaɪm",
+      "m": "v. 攀登，爬；v. 爬",
+      "s": "Harry climbed the stairs.||哈里爬上楼梯。",
+      "syn": [
+        "arise",
+        "raise",
+        "scale",
+        "come up"
+      ],
+      "k": "近义：arise · raise · scale",
+      "track": {
+        "id": "2081236",
+        "platform": "netease",
+        "title": "Seasons in the Sun",
+        "artists": [
+          "Westlife"
+        ],
+        "artistText": "Westlife",
+        "album": "I Have A Dream",
+        "cover": "https://p3.music.126.net/26eAGHMyuVwZpwHIbb0YqQ==/18435511463184496.jpg",
+        "durationMs": 248450,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "2081236",
+        "target": "climbed",
+        "start": 24.61,
+        "end": 32.98,
+        "lines": [
+          {
+            "text": "Together we've climbed hills and trees",
+            "time": 24.61
+          },
+          {
+            "text": "Learned of love and ABC's",
+            "time": 30.26
+          }
+        ]
+      }
+    },
+    {
+      "w": "club",
+      "p": "klʌb",
+      "m": "n. 俱乐部，夜总会",
+      "s": "Manchester United Football Club||曼联（队）足球俱乐部",
+      "syn": [
+        "society",
+        "association",
+        "corporation",
+        "league"
+      ],
+      "exam": [
+        "...is a more pleasant community since a local girls 4-H club improved Main Street...",
+        "CET4 2015.6 听力题"
+      ],
+      "k": "近义：society · association · corporation",
+      "track": {
+        "id": "459720198",
+        "platform": "netease",
+        "title": "Shape Of You (Galantis Extended Remix)",
+        "artists": [
+          "Ed Sheeran",
+          "Galantis"
+        ],
+        "artistText": "Ed Sheeran / Galantis",
+        "album": "Shape of You (Galantis Remix)",
+        "cover": "https://p4.music.126.net/owwVe6RbjJWjqceKdgD0tw==/109951166602447464.jpg",
+        "durationMs": 235415,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "459720198",
+        "target": "club",
+        "start": 28.74,
+        "end": 33.58,
+        "lines": [
+          {
+            "text": "The club isn't the best place to find a lover",
+            "time": 28.74
+          },
+          {
+            "text": "So the bar is where I go",
+            "time": 30.81
+          }
+        ]
+      }
+    },
+    {
+      "w": "friend",
+      "p": "frend",
+      "m": "n. 朋友，友人",
+      "s": "Jerry, this is my friend Sue.||杰里，这是我的朋友休。",
+      "syn": [
+        "assistant",
+        "fellow",
+        "aid"
+      ],
+      "exam": [
+        "...It is really an honor for me to be your friend and I will cherish the goodwill you have showed to me wherever I go...",
+        "CET4 2016.6 写作题"
+      ],
+      "k": "近义：assistant · fellow · aid",
+      "track": {
+        "id": "459720198",
+        "platform": "netease",
+        "title": "Shape Of You (Galantis Extended Remix)",
+        "artists": [
+          "Ed Sheeran",
+          "Galantis"
+        ],
+        "artistText": "Ed Sheeran / Galantis",
+        "album": "Shape of You (Galantis Remix)",
+        "cover": "https://p4.music.126.net/owwVe6RbjJWjqceKdgD0tw==/109951166602447464.jpg",
+        "durationMs": 235415,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "459720198",
+        "target": "friends",
+        "start": 33.58,
+        "end": 38.32,
+        "lines": [
+          {
+            "text": "Me and my friends at the table doing shots",
+            "time": 33.58
+          },
+          {
+            "text": "Drinking fast and then we talk slow",
+            "time": 35.69
+          }
+        ]
+      }
+    },
+    {
+      "w": "drink",
+      "p": "drɪŋk",
+      "m": "v. 饮；v. 喝；n. 饮料",
+      "s": "You should drink plenty of water.||你应该大量喝水。",
+      "syn": [
+        "eat",
+        "absorb",
+        "wine",
+        "liquor"
+      ],
+      "exam": [
+        "...We purify the water we drink with the water filter designed for the astronauts to use in space...",
+        "CET4 2017.12 听力题"
+      ],
+      "k": "近义：eat · absorb · wine",
+      "track": {
+        "id": "459720198",
+        "platform": "netease",
+        "title": "Shape Of You (Galantis Extended Remix)",
+        "artists": [
+          "Ed Sheeran",
+          "Galantis"
+        ],
+        "artistText": "Ed Sheeran / Galantis",
+        "album": "Shape of You (Galantis Remix)",
+        "cover": "https://p4.music.126.net/owwVe6RbjJWjqceKdgD0tw==/109951166602447464.jpg",
+        "durationMs": 235415,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "459720198",
+        "target": "drinking",
+        "start": 35.69,
+        "end": 40.68,
+        "lines": [
+          {
+            "text": "Drinking fast and then we talk slow",
+            "time": 35.69
+          },
+          {
+            "text": "Come over and start up a conversation with just me",
+            "time": 38.32
+          }
+        ]
+      }
+    },
+    {
+      "w": "cheer",
+      "p": "tʃɪə",
+      "m": "v. 使振作；欢呼",
+      "s": "Everybody cheered when the firemen arrived.||消防员到达时，大家都欢呼起来。",
+      "syn": [
+        "please",
+        "glad",
+        "satisfy",
+        "sunshine"
+      ],
+      "k": "近义：please · glad · satisfy",
+      "track": {
+        "id": "1946426343",
+        "platform": "netease",
+        "title": "Memories",
+        "artists": [
+          "Maroon 5"
+        ],
+        "artistText": "Maroon 5",
+        "album": "2022 Mega Hits",
+        "cover": "https://p4.music.126.net/KQkpo1Ft3jFpzgqYe5ABaQ==/109951167913013459.jpg",
+        "durationMs": 189486,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1946426343",
+        "target": "cheers",
+        "start": 13.44,
+        "end": 18.24,
+        "lines": [
+          {
+            "text": "Cheers to the wish you were here but you're not",
+            "time": 13.44
+          },
+          {
+            "text": "Cause the drinks bring back all the memories",
+            "time": 15.74
+          }
+        ]
+      }
+    },
+    {
+      "w": "cause",
+      "p": "kɔːz",
+      "m": "n. 原因，理由；事业",
+      "s": "It’s our job to establish the cause of the fire.||查明起火原因是我们的责任。",
+      "syn": [
+        "career",
+        "consideration",
+        "enterprise",
+        "matter"
+      ],
+      "exam": [
+        "...which cause some investors to worry...",
+        "CET4 2017.6 阅读理解"
+      ],
+      "k": "近义：career · consideration · enterprise",
+      "track": {
+        "id": "1946426343",
+        "platform": "netease",
+        "title": "Memories",
+        "artists": [
+          "Maroon 5"
+        ],
+        "artistText": "Maroon 5",
+        "album": "2022 Mega Hits",
+        "cover": "https://p4.music.126.net/KQkpo1Ft3jFpzgqYe5ABaQ==/109951167913013459.jpg",
+        "durationMs": 189486,
+        "fee": 8
+      },
+      "fragment": {
+        "trackId": "1946426343",
+        "target": "cause",
+        "start": 15.74,
+        "end": 21.18,
+        "lines": [
+          {
+            "text": "Cause the drinks bring back all the memories",
+            "time": 15.74
+          },
+          {
+            "text": "Of everything we've been through",
+            "time": 18.24
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-25T02:30:24.799Z",
-  "url": "http://127.0.0.1:8791",
+  "generatedAt": "2026-10-25T05:59:38.677Z",
+  "url": "http://127.0.0.1:5174",
   "session": "03de4e…",
   "home": {
     "book": "大学英语四级",
@@ -19,10 +19,10 @@
   },
   "playing": {
     "index": 0,
-    "title": "Dancing Queen"
+    "title": "Are You Looking Up"
   },
   "lyrics": {
-    "lines": 34
+    "lines": 38
   },
   "cardAfterWorld": {
     "pausedAfterLeave": true,
@@ -34,11 +34,11 @@
     },
     "fadeIn": true,
     "seekCheck": {
-      "at": 1723.5,
+      "at": 1722,
       "event": "seek-check",
       "present": true,
       "requested": 0.59,
-      "actual": 0.665727,
+      "actual": 0.671182,
       "passed": true,
       "playing": true
     }
@@ -77,12 +77,12 @@
     {
       "name": "点播一曲可听",
       "ok": true,
-      "detail": "{\"index\":0,\"title\":\"Dancing Queen\"}"
+      "detail": "{\"index\":0,\"title\":\"Are You Looking Up\"}"
     },
     {
       "name": "歌词视图有文本或诚实空态",
       "ok": true,
-      "detail": "{\"lines\":34}"
+      "detail": "{\"lines\":38}"
     },
     {
       "name": "离开歌单世界即暂停整曲",
@@ -102,7 +102,7 @@
     {
       "name": "回卡后片段 200ms 淡入 + seek 通过",
       "ok": true,
-      "detail": "{\"at\":1723.5,\"event\":\"seek-check\",\"present\":true,\"requested\":0.59,\"actual\":0.665727,\"passed\":true,\"playing\":true}"
+      "detail": "{\"at\":1722,\"event\":\"seek-check\",\"present\":true,\"requested\":0.59,\"actual\":0.671182,\"passed\":true,\"playing\":true}"
     },
     {
       "name": "未登录：歌单空态 + 去连接音源",

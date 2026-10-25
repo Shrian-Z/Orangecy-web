@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { BookOpen, ChevronRight } from 'lucide-react';
 import { getFocusDeck } from '@/cards';
 import { useAppStore } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
@@ -35,6 +35,7 @@ export function LearnHome() {
           </>
         ) : (
           <>
+            <BookOpen size={18} strokeWidth={1.8} aria-hidden="true" />
             <span className="book-name">选择词书</span>
             <ChevronRight size={18} strokeWidth={1.8} aria-hidden="true" />
           </>

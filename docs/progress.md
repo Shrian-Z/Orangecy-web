@@ -20,6 +20,10 @@
 - **第 5 步 · 回归**：`build`（check:cards 484/484 + tsc + vite）绿；`smoke` 80/80；`trace:audio` 13/13；
   `check:palette` 33 状态 0 违规（含登录后书架 / 列表播放 / 歌词）；`shoot:focus` 重跑。
   离开歌单 → 整曲暂停、播控收起；回卡 → 重新装载卡内曲目，200ms 淡入 + seek 通过。
+- **收尾（2026-10-25）**：`LearnHome` 无词书态补 BookOpen 图标；`src/data/seed-50.json`
+  补进 git（否则干净 checkout 缺 seed）；干净 worktree 复跑 build/check:cards 484/484、
+  smoke 80/80、palette 33 状态 0 违规、trace 13/13、shoot:focus 3×4、shoot:nav 15/15。
+  收尾 tag `checkpoint-post-nav-playlist-polish-20261025`（hash 见 git log）。
 - **已知限制**：只接网易歌单；QQ / 酷狗 / 波点已连接也不拉歌单。曲目队列只含已加载页。
   歌单世界离开即停播（不做后台续播）。歌词视图无逐字高亮。整曲播放不受卡内静音键影响。
   可学卡仍只有 seed-50，六级只有 9 张可放。
