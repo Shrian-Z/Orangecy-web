@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Check, ChevronLeft, FileUp, Trash2 } from 'lucide-react';
 import { ImportSheet } from '@/components/ImportSheet';
+import { DEMO } from '@/demo';
 import { isImportedBookId } from '@/lib/importDeck';
 import type { ImportedBookMeta } from '@/lib/importDeck';
 import { deleteImportedBook } from '@/lib/importStore';
@@ -49,14 +50,16 @@ export function BookPicker() {
         >
           <ChevronLeft size={22} strokeWidth={1.8} aria-hidden="true" />
         </button>
-        <button
-          type="button"
-          className="icon-action picker-import"
-          onClick={() => setImportOpen(true)}
-          aria-label="导入词汇"
-        >
-          <FileUp size={20} strokeWidth={1.8} aria-hidden="true" />
-        </button>
+        {DEMO ? null : (
+          <button
+            type="button"
+            className="icon-action picker-import"
+            onClick={() => setImportOpen(true)}
+            aria-label="导入词书"
+          >
+            <FileUp size={20} strokeWidth={1.8} aria-hidden="true" />
+          </button>
+        )}
       </header>
       <div className="picker-list">
         {books.map((book) => {

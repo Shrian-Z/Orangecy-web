@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { FocusCardData } from '@/cards';
+import { DEMO, DEMO_BOOK_ID } from '@/demo';
 
 export type AppView = 'learn' | 'playlists' | 'me';
 export type SessionKind = 'learn' | 'review';
@@ -29,6 +30,7 @@ function readMuted() {
 }
 
 function readBook() {
+  if (DEMO) return DEMO_BOOK_ID;
   try {
     return localStorage.getItem(BOOK_KEY);
   } catch {

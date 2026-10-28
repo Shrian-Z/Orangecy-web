@@ -414,6 +414,163 @@ try {
   check('N is capped by playable cards in the book (9)', cet6.learn === '9', cet6.learn);
   await bookContext.close();
 
+  // ── 导入词书（纯词卡） ─────────────────────────────────────────────────────
+  const importContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await importContext.addInitScript(() => {
+    if (!sessionStorage.getItem('orangecy.smoke.importInit')) {
+      localStorage.setItem('orangecy.muted', '1');
+      sessionStorage.setItem('orangecy.smoke.importInit', '1');
+    }
+  });
+  const importPage = await importContext.newPage();
+  importPage.setDefaultTimeout(20_000);
+  watch(importPage);
+  await importPage.goto(BASE, { waitUntil: 'domcontentloaded' });
+  await importPage.waitForSelector('.home');
+  check('empty profile starts without a book', (await importPage.locator('.book-name').innerText()) === '选择词书');
+  await importPage.locator('.home-learn').click();
+  await importPage.waitForSelector('.picker');
+  await importPage.locator('.picker-import').click();
+  await importPage.waitForSelector('.import-sheet');
+  check(
+    'import sheet is titled 导入词书',
+    (await importPage.locator('.import-title').innerText()).includes('导入词书'),
+  );
+  const bookJson = JSON.stringify({
+    name: '精读测试词书',
+    tagline: 'smoke',
+    source: 'smoke',
+    words: [
+      ['alpha', 'ˈælfə', 'n. 阿尔法'],
+      { word: 'beta', phonetic: 'ˈbiːtə', meaning: 'n. 贝塔' },
+      ['gamma', 'ˈɡæmə', 'n. 伽马'],
+    ],
+  });
+  await importPage.locator('.import-input').fill(bookJson);
+  await importPage.waitForFunction(() => document.querySelector('.import-go')?.textContent?.includes('3'));
+  check(
+    'import preview keeps the JSON book name',
+    (await importPage.locator('.import-preview-name').innerText()) === '精读测试词书',
+  );
+  check(
+    'import preview counts three words',
+    (await importPage.locator('.import-preview-count').innerText()).replace(/\s+/g, ' ').trim() === '3 词',
+  );
+  check(
+    'plain wordbook is the default import mode',
+    (await importPage.locator('.import-mode-option[aria-pressed="true"]').innerText()) === '仅词书',
+  );
+  await importPage.locator('.import-go').click();
+  await importPage.waitForSelector('.import-done');
+  check(
+    'plain import finishes as pure word cards',
+    (await importPage.locator('.import-summary').innerText()).replace(/\s+/g, ' ').trim() === '3 词 · 纯词卡',
+  );
+  check(
+    'plain import confirms the book name',
+    (await importPage.locator('.import-done-name').innerText()) === '精读测试词书',
+  );
+  const imported = await importPage.evaluate(async () => {
+    const db = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('orangecy.imports', 1);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const all = (store) =>
+      new Promise((resolve, reject) => {
+        const request = db.transaction(store, 'readonly').objectStore(store).getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    const [metas, data] = await Promise.all([all('meta'), all('data')]);
+    const meta = metas.find((item) => item.name === '精读测试词书');
+    const dataset = data.find((item) => item.id === meta?.id);
+    return {
+      mode: meta?.mode ?? null,
+      words: dataset?.words?.length ?? 0,
+      cards: dataset?.cards?.length ?? 0,
+      name: meta?.name ?? '',
+    };
+  });
+  check(
+    'imported wordbook is stored as pure cards',
+    imported.mode === 'words' && imported.words === 3 && imported.cards === 0,
+    JSON.stringify(imported),
+  );
+  await importPage.locator('.import-use').click();
+  await importPage.waitForSelector('.home');
+  await importPage.waitForFunction(
+    () => document.querySelector('.book-name')?.textContent === '精读测试词书',
+    null,
+    { timeout: 20_000 },
+  );
+  check('book bar shows the imported wordbook', true);
+  await importPage.waitForFunction(
+    () => document.querySelector('.home-learn b')?.textContent === '3',
+    null,
+    { timeout: 20_000 },
+  );
+  check('N equals the imported word count (3)', true);
+  await enterLearn(importPage);
+  await waitCard(importPage, 'alpha', '01/03');
+  check(
+    'pure word card has no lyric fragment or progress',
+    (await importPage.locator('.lyrics').count()) === 0 &&
+      (await importPage.locator('.progress').count()) === 0,
+  );
+  check(
+    'pure word card marks itself data-plain',
+    (await importPage.locator('.focus-card').getAttribute('data-plain')) === 'true',
+  );
+  await importPage.reload({ waitUntil: 'domcontentloaded' });
+  await importPage.waitForSelector('.home');
+  await importPage.waitForFunction(
+    () => document.querySelector('.book-name')?.textContent === '精读测试词书',
+    null,
+    { timeout: 20_000 },
+  );
+  check('imported wordbook survives a reload', true);
+  await importPage.locator('.book-bar').click();
+  await importPage.waitForSelector('.picker');
+  await importPage.locator('.picker-import').click();
+  await importPage.waitForSelector('.import-sheet');
+  const csv = [
+    'word,phonetic,meaning',
+    'orbit,/ˈɔːbɪt/,n. 轨道',
+    'spiral,/ˈspaɪrəl/,n. 螺旋',
+    '',
+  ].join('\n');
+  await importPage.locator('input[type="file"]').setInputFiles({
+    name: '托福核心词.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from(csv),
+  });
+  await importPage.waitForFunction(() => document.querySelector('.import-go')?.textContent?.includes('2'));
+  check(
+    'file import uses the file name as the book name',
+    (await importPage.locator('.import-preview-name').innerText()) === '托福核心词',
+  );
+  check(
+    'CSV header is skipped',
+    (await importPage.locator('.import-preview-count').innerText()).replace(/\s+/g, ' ').trim() === '2 词',
+  );
+  await importPage.locator('.import-go').click();
+  await importPage.waitForSelector('.import-done');
+  check(
+    'CSV import becomes a pure wordbook',
+    (await importPage.locator('.import-done-name').innerText()) === '托福核心词' &&
+      (await importPage.locator('.import-summary').innerText()).includes('2 词 · 纯词卡'),
+  );
+  await importPage.locator('.import-use').click();
+  await importPage.waitForSelector('.home');
+  await importPage.waitForFunction(
+    () => document.querySelector('.book-name')?.textContent === '托福核心词',
+    null,
+    { timeout: 20_000 },
+  );
+  check('file wordbook becomes the active book', true);
+  await importContext.close();
+
   // ── Mute persistence ───────────────────────────────────────────────────────
   const mutedContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const mutedPage = await boot(mutedContext, { muted: true });
@@ -487,6 +644,16 @@ try {
     (await completePage.locator('.home-done-title').innerText()) === '今日完成',
   );
   check('home actions are hidden at completion', (await completePage.locator('.home-actions').count()) === 0);
+  check('completion has a top-left back button', await completePage.locator('.home-back').isVisible());
+  await completePage.locator('.home-back').click();
+  check('back hides the completion card', (await completePage.locator('.home-done').count()) === 0);
+  check('back shows the standard home actions', await completePage.locator('.home-actions').isVisible());
+  check('back leaves 学习 0 disabled', await completePage.locator('.home-learn').isDisabled());
+  await completePage.locator('.tab[aria-label="我的"]').click();
+  await completePage.waitForSelector('.my-page');
+  await completePage.locator('.tab[aria-label="学习"]').click();
+  await completePage.waitForSelector('.home-done');
+  check('returning to 学习 restores the completion card', await completePage.locator('.home-done').isVisible());
   const completeStudy = await completePage.evaluate(() =>
     JSON.parse(localStorage.getItem('orangecy.study.v1') ?? 'null'),
   );

@@ -6,6 +6,7 @@ import { MuteButton } from '@/components/MuteButton';
 import { FocusSequence } from '@/audio/sequence';
 import type { FocusSnapshot } from '@/audio/sequence';
 import { usePlayerStore } from '@/audio/store';
+import { DEMO } from '@/demo';
 import { useAppStore } from '@/state/app';
 import type { SessionKind } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
@@ -39,6 +40,7 @@ export function LearnScreen({
   onComplete: () => void;
 }) {
   const [index, setIndex] = useState(0);
+  const [attempt, setAttempt] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [snapshot, setSnapshot] = useState<FocusSnapshot>(INITIAL);
@@ -48,6 +50,16 @@ export function LearnScreen({
   const toggleMuted = useAppStore((state) => state.toggleMuted);
   const reduceMotion = useReducedMotion();
   const card = deck[index] ?? null;
+  const studyRecord = useStudyStore((state) => (card ? state.state.cards[card.w] : undefined));
+  const variant: 'context' | 'recall' | 'cloze' | undefined = DEMO
+    ? studyRecord && studyRecord.card.reps >= 2
+      ? 'cloze'
+      : index % 3 === 1
+        ? 'recall'
+        : index % 3 === 2
+          ? 'cloze'
+          : 'context'
+    : undefined;
 
   useEffect(() => {
     const sequence = new FocusSequence(setSnapshot);
@@ -70,11 +82,11 @@ export function LearnScreen({
       return;
     }
     void sequence.start(card);
-  }, [active, card, index]);
+  }, [active, card, index, attempt]);
 
   useEffect(() => {
     setExpanded(false);
-  }, [index]);
+  }, [index, attempt]);
 
   useEffect(() => {
     if (!active) return;
@@ -114,7 +126,7 @@ export function LearnScreen({
   }, []);
 
   const rate = useCallback(
-    async (rating: 'hard' | 'good') => {
+    async (rating: 'again' | 'hard' | 'good') => {
       if (!card || busyRef.current) return;
       busyRef.current = true;
       setBusy(true);
@@ -128,6 +140,12 @@ export function LearnScreen({
       await sequenceRef.current?.stop({ fadeOut: true });
       busyRef.current = false;
       setBusy(false);
+      if (rating === 'again') {
+        // Same-session repair: keep the card, restart its sequence, let the
+        // learner try again before moving on.
+        setAttempt((value) => value + 1);
+        return;
+      }
       if (index + 1 >= deck.length) onComplete();
       else setIndex(index + 1);
     },
@@ -153,7 +171,7 @@ export function LearnScreen({
       {card ? (
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={index}
+            key={`${index}-${attempt}`}
             className="focus-card-slot"
             initial={reduceMotion ? false : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -172,6 +190,8 @@ export function LearnScreen({
               activeLine={snapshot.activeLine}
               muted={muted}
               busy={busy}
+              demo={DEMO}
+              variant={variant}
               onToggle={toggleExpanded}
               onReplay={replayFragment}
               onSpeak={speakWord}

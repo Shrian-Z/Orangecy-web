@@ -18,6 +18,8 @@ export const MAX_IMPORT_WORDS = 6000;
 export const MAX_CARDS_PER_TRACK = 10;
 export const TRACK_BUCKET = 3;
 
+export type ImportMode = 'words' | 'music';
+
 const WORD_RE = /[A-Za-z]+(?:['’][A-Za-z]+)*/g;
 
 export interface ImportPlayInfo {
@@ -45,6 +47,8 @@ export interface ImportedBookMeta {
   count: number;
   source: string;
   importedAt: string;
+  /** `words` = pure word cards; `music` = playlist lyrics matched when possible. */
+  mode?: ImportMode;
   stats: ImportStats;
 }
 
@@ -63,6 +67,16 @@ export interface PresetWordbook {
   words: WordbookWord[];
 }
 
+/** A user-supplied wordbook, with any metadata the file carried. */
+export interface ParsedWordbook {
+  name: string;
+  tagline: string;
+  source: string;
+  license?: string;
+  words: WordbookWord[];
+  format: 'json' | 'text';
+}
+
 interface WordbookRaw {
   id?: string;
   name?: string;
@@ -71,6 +85,7 @@ interface WordbookRaw {
   license?: string;
   count?: number;
   words?: unknown[];
+  data?: unknown[];
 }
 
 interface RawEntry {
@@ -128,10 +143,54 @@ function fromObject(value: unknown): RawEntry | null {
   return { w, p, m, s: s || undefined, syn: syn?.length ? syn : undefined };
 }
 
+function splitFields(line: string) {
+  const fields: string[] = [];
+  let value = '';
+  let quoted = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+    if (char === '"') {
+      if (quoted && line[index + 1] === '"') {
+        value += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+      continue;
+    }
+    if (!quoted && (char === ',' || char === '\t' || char === '|')) {
+      fields.push(value.trim());
+      value = '';
+      continue;
+    }
+    value += char;
+  }
+  fields.push(value.trim());
+  return fields;
+}
+
+function looksLikeHeader(line: string) {
+  const fields = splitFields(line);
+  if (fields.length < 2) return false;
+  const first = fields[0].toLowerCase();
+  if (!['word', 'words', 'term', '单词', '词汇', '词条'].includes(first)) return false;
+  return (
+    fields.length >= 3 ||
+    fields
+      .slice(1)
+      .some((field) =>
+        /phonetic|pronunciation|meaning|definition|sense|音标|释义|翻译|example|例句/i.test(field),
+      )
+  );
+}
+
 function fromTextLine(line: string): RawEntry | null {
-  const raw = line.replace(/^\uFEFF/, '').trim();
+  const raw = line
+    .replace(/^\uFEFF/, '')
+    .trim()
+    .replace(/^\d+[.)、]\s*/, '');
   if (!raw || raw.startsWith('#') || raw.startsWith('//')) return null;
-  const fields = raw.split(/\t|\s*\|\s*|\s*,\s*/).map((part) => part.trim());
+  const fields = splitFields(raw);
   let w = normalizeWord(fields[0] ?? '');
   if (!validWord(w)) {
     const match = raw.match(/^([A-Za-z][A-Za-z'’.-]*)\s+(.*)$/);
@@ -144,9 +203,22 @@ function fromTextLine(line: string): RawEntry | null {
     return { w, p: fields[1] ?? '', m: fields.slice(2).join(', ').trim() };
   }
   if (fields.length === 2) {
-    return { w, p: '', m: fields[1] };
+    const second = fields[1];
+    const phonetic = /^[/[].+[/\]]$/.test(second)
+      ? second.replace(/^[/[]/, '').replace(/[/\]]$/, '').trim()
+      : '';
+    if (phonetic) return { w, p: phonetic, m: '' };
+    return { w, p: '', m: second };
   }
   return { w, p: '', m: '' };
+}
+
+function fromJsonEntry(value: unknown): RawEntry | null {
+  if (typeof value === 'string') {
+    if (looksLikeHeader(value)) return null;
+    return fromTextLine(value);
+  }
+  return fromTuple(value) ?? fromObject(value);
 }
 
 function uniqueEntries(entries: RawEntry[]) {
@@ -169,34 +241,72 @@ function uniqueEntries(entries: RawEntry[]) {
   return words;
 }
 
-/** Accepts a plain word-per-line list, a CSV-ish list, or a wordbook JSON file. */
-export function parseWordList(raw: string): WordbookWord[] {
+/**
+ * Accepts a plain word-per-line list, a CSV-ish list, or a wordbook JSON file.
+ * JSON may carry its own name / tagline / source; the fallback is the file name
+ * or a generic label supplied by the caller.
+ */
+export function parseWordbook(raw: string, fallbackName = ''): ParsedWordbook | null {
   const text = raw.replace(/^\uFEFF/, '').trim();
-  if (!text) return [];
+  if (!text) return null;
+  const fallback = clean(fallbackName);
   const first = text[0];
 
   if (first === '[' || first === '{') {
     try {
       const parsed = JSON.parse(text) as unknown;
-      const list = Array.isArray(parsed)
-        ? parsed
-        : parsed && typeof parsed === 'object' && Array.isArray((parsed as WordbookRaw).words)
-          ? ((parsed as WordbookRaw).words as unknown[])
-          : [];
+      let list: unknown[] = [];
+      let name = '';
+      let tagline = '';
+      let source = '';
+      let license = '';
+      if (Array.isArray(parsed)) {
+        list = parsed;
+      } else if (parsed && typeof parsed === 'object') {
+        const record = parsed as WordbookRaw & { title?: string };
+        if (Array.isArray(record.words)) list = record.words;
+        else if (Array.isArray(record.data)) list = record.data;
+        name = clean(record.name) || clean(record.title);
+        tagline = clean(record.tagline);
+        source = clean(record.source);
+        license = clean(record.license);
+      }
       const entries = list
-        .map((item) => fromTuple(item) ?? fromObject(item))
+        .map((item) => fromJsonEntry(item))
         .filter((item): item is RawEntry => Boolean(item));
-      if (entries.length) return uniqueEntries(entries);
+      if (entries.length) {
+        return {
+          name: name || fallback || '导入词书',
+          tagline: tagline || '个人词表',
+          source: source || '用户导入',
+          license: license || undefined,
+          words: uniqueEntries(entries),
+          format: 'json',
+        };
+      }
     } catch {
       // Not JSON after all; fall through to the line parser.
     }
   }
 
-  const entries = text
+  const lines = text
     .split(/\r?\n/)
-    .map(fromTextLine)
-    .filter((item): item is RawEntry => Boolean(item));
-  return uniqueEntries(entries);
+    .map((line) => line.replace(/^\uFEFF/, '').trim())
+    .filter(Boolean);
+  if (lines.length && looksLikeHeader(lines[0])) lines.shift();
+  const entries = lines.map(fromTextLine).filter((item): item is RawEntry => Boolean(item));
+  if (!entries.length) return null;
+  return {
+    name: fallback || '导入词书',
+    tagline: '个人词表',
+    source: '用户导入',
+    words: uniqueEntries(entries),
+    format: 'text',
+  };
+}
+
+export function parseWordList(raw: string): WordbookWord[] {
+  return parseWordbook(raw)?.words ?? [];
 }
 
 function round2(value: number) {
@@ -375,7 +485,7 @@ export function loadGaokaoWordbook() {
         if (!response.ok) throw new Error(`词表加载失败（${response.status}）`);
         const raw = (await response.json()) as WordbookRaw;
         const entries = (raw.words ?? [])
-          .map((item) => fromTuple(item) ?? fromObject(item))
+          .map((item) => fromJsonEntry(item))
           .filter((item): item is RawEntry => Boolean(item));
         const words = uniqueEntries(entries);
         if (!words.length) throw new Error('词表是空的');

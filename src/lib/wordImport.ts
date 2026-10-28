@@ -2,6 +2,7 @@ import { api } from '@/api';
 import { parseLyric } from '@/lyrics/parse';
 import {
   buildImportCards,
+  type ImportMode,
   type ImportPlayInfo,
   type ImportStats,
   type ImportedBookMeta,
@@ -40,6 +41,8 @@ export interface ImportWordbookInput {
   tagline: string;
   source: string;
   words: WordbookWord[];
+  /** `words` skips the playlist pipeline and makes pure word cards immediately. */
+  mode?: ImportMode;
   onProgress?: (progress: ImportProgress) => void;
   signal?: AbortSignal;
 }
@@ -110,81 +113,93 @@ export async function importWordbook(input: ImportWordbookInput): Promise<Import
   const started = Date.now();
   const progress = (next: ImportProgress) => input.onProgress?.(next);
   const signal = input.signal;
+  const mode: ImportMode = input.mode ?? 'music';
+  const withMusic = mode === 'music';
 
-  progress({ phase: 'playlists', done: 0, total: 1 });
-  let playlists: Playlist[] = [];
-  let loggedIn = false;
-  try {
-    const result = await api.playlists();
-    loggedIn = result.loggedIn;
-    playlists = result.playlists;
-  } catch (error) {
-    console.warn('[import] 歌单读取失败，只导入词表', error);
-  }
-  abortIfNeeded(signal);
-  progress({ phase: 'playlists', done: 1, total: 1 });
-
-  const selected = playlists;
-  const songs = loggedIn
-    ? await collectTracks(selected, progress, signal)
-    : ([] as Song[]);
-
+  let selected: Playlist[] = [];
+  let songs: Song[] = [];
   const lyrics = new Map<string, LyricLine[]>();
-  let lyricDone = 0;
   let tracksWithLyrics = 0;
-  if (songs.length) {
-    progress({ phase: 'lyrics', done: 0, total: songs.length });
-    await mapLimit(songs, LYRIC_CONCURRENCY, async (song) => {
-      if (signal?.aborted) return;
-      try {
-        const payload = await api.lyric(song.id);
-        const lines = parseLyric(payload);
-        lyrics.set(song.id, lines);
-        if (lines.length) tracksWithLyrics += 1;
-      } catch (error) {
-        lyrics.set(song.id, []);
-        console.warn('[import] 歌词读取失败', song.id, error);
-      } finally {
-        lyricDone += 1;
-        if (lyricDone % 5 === 0 || lyricDone === songs.length) {
-          progress({ phase: 'lyrics', done: lyricDone, total: songs.length });
-        }
-      }
-    });
-  }
-  abortIfNeeded(signal);
-
-  const draft = buildImportCards({ words: input.words, songs, lyrics });
-  const trackIds = [...new Set(draft.map((card) => card.fragment?.trackId).filter(Boolean))] as string[];
+  const trackIds: string[] = [];
   const playInfo = new Map<string, ImportPlayInfo>();
   let playable = 0;
-  if (trackIds.length) {
-    let checked = 0;
-    progress({ phase: 'playback', done: 0, total: trackIds.length });
-    await mapLimit(trackIds, PLAY_CONCURRENCY, async (id) => {
-      if (signal?.aborted) return;
-      try {
-        const info = await api.play(id);
-        playInfo.set(id, {
-          available: info.available,
-          trial: info.trial ? { start: info.trial.start, end: info.trial.end } : null,
-        });
-        if (info.available) playable += 1;
-      } catch (error) {
-        playInfo.set(id, { available: false, trial: null });
-        console.warn('[import] 可播检查失败', id, error);
-      } finally {
-        checked += 1;
-        if (checked % 3 === 0 || checked === trackIds.length) {
-          progress({ phase: 'playback', done: checked, total: trackIds.length });
+
+  if (withMusic) {
+    progress({ phase: 'playlists', done: 0, total: 1 });
+    let loggedIn = false;
+    try {
+      const result = await api.playlists();
+      loggedIn = result.loggedIn;
+      selected = result.playlists;
+    } catch (error) {
+      console.warn('[import] 歌单读取失败，只导入词表', error);
+    }
+    abortIfNeeded(signal);
+    progress({ phase: 'playlists', done: 1, total: 1 });
+
+    songs = loggedIn ? await collectTracks(selected, progress, signal) : [];
+
+    if (songs.length) {
+      let lyricDone = 0;
+      progress({ phase: 'lyrics', done: 0, total: songs.length });
+      await mapLimit(songs, LYRIC_CONCURRENCY, async (song) => {
+        if (signal?.aborted) return;
+        try {
+          const payload = await api.lyric(song.id);
+          const lines = parseLyric(payload);
+          lyrics.set(song.id, lines);
+          if (lines.length) tracksWithLyrics += 1;
+        } catch (error) {
+          lyrics.set(song.id, []);
+          console.warn('[import] 歌词读取失败', song.id, error);
+        } finally {
+          lyricDone += 1;
+          if (lyricDone % 5 === 0 || lyricDone === songs.length) {
+            progress({ phase: 'lyrics', done: lyricDone, total: songs.length });
+          }
         }
-      }
-    });
+      });
+    }
+    abortIfNeeded(signal);
+
+    const draft = buildImportCards({ words: input.words, songs, lyrics });
+    trackIds.push(
+      ...new Set(draft.map((card) => card.fragment?.trackId).filter(Boolean) as string[]),
+    );
+    if (trackIds.length) {
+      let checked = 0;
+      progress({ phase: 'playback', done: 0, total: trackIds.length });
+      await mapLimit(trackIds, PLAY_CONCURRENCY, async (id) => {
+        if (signal?.aborted) return;
+        try {
+          const info = await api.play(id);
+          playInfo.set(id, {
+            available: info.available,
+            trial: info.trial ? { start: info.trial.start, end: info.trial.end } : null,
+          });
+          if (info.available) playable += 1;
+        } catch (error) {
+          playInfo.set(id, { available: false, trial: null });
+          console.warn('[import] 可播检查失败', id, error);
+        } finally {
+          checked += 1;
+          if (checked % 3 === 0 || checked === trackIds.length) {
+            progress({ phase: 'playback', done: checked, total: trackIds.length });
+          }
+        }
+      });
+    }
+    abortIfNeeded(signal);
+    progress({ phase: 'build', done: 0, total: 1 });
+  } else {
+    // A plain wordbook needs no network: every word becomes a TTS-only card.
+    progress({ phase: 'build', done: 0, total: 1 });
   }
   abortIfNeeded(signal);
 
-  progress({ phase: 'build', done: 0, total: 1 });
-  const cards = buildImportCards({ words: input.words, songs, lyrics, playInfo });
+  const cards = withMusic
+    ? buildImportCards({ words: input.words, songs, lyrics, playInfo })
+    : [];
   const stats: ImportStats = {
     words: input.words.length,
     matchedWords: cards.length,
@@ -204,6 +219,7 @@ export async function importWordbook(input: ImportWordbookInput): Promise<Import
     count: input.words.length,
     source: input.source,
     importedAt: new Date().toISOString(),
+    mode,
     stats,
   };
   await saveImportedBook({ ...meta, words: input.words, cards });

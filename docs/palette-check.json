@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T08:03:44.570Z",
+  "generatedAt": "2026-10-27T12:38:05.412Z",
   "url": "http://127.0.0.1:8787",
   "sourceFiles": [
     "src/App.tsx",
@@ -235,7 +235,7 @@
     },
     {
       "state": "desktop / learn-home",
-      "paintedElements": 32,
+      "paintedElements": 33,
       "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
@@ -251,8 +251,16 @@
     },
     {
       "state": "desktop / import-sheet",
-      "paintedElements": 77,
-      "uniquePaintValues": 7,
+      "paintedElements": 80,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "desktop / import-preview",
+      "paintedElements": 88,
+      "uniquePaintValues": 9,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -299,7 +307,7 @@
     },
     {
       "state": "desktop / done",
-      "paintedElements": 33,
+      "paintedElements": 37,
       "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
@@ -339,7 +347,7 @@
     },
     {
       "state": "mobile-390 / learn-home",
-      "paintedElements": 32,
+      "paintedElements": 33,
       "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
@@ -355,8 +363,16 @@
     },
     {
       "state": "mobile-390 / import-sheet",
-      "paintedElements": 77,
-      "uniquePaintValues": 7,
+      "paintedElements": 80,
+      "uniquePaintValues": 8,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-390 / import-preview",
+      "paintedElements": 88,
+      "uniquePaintValues": 8,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -403,7 +419,7 @@
     },
     {
       "state": "mobile-390 / done",
-      "paintedElements": 33,
+      "paintedElements": 37,
       "uniquePaintValues": 6,
       "violations": 0,
       "gradients": 0,
@@ -443,7 +459,7 @@
     },
     {
       "state": "mobile-320 / learn-home",
-      "paintedElements": 32,
+      "paintedElements": 33,
       "uniquePaintValues": 7,
       "violations": 0,
       "gradients": 0,
@@ -459,8 +475,16 @@
     },
     {
       "state": "mobile-320 / import-sheet",
-      "paintedElements": 77,
-      "uniquePaintValues": 7,
+      "paintedElements": 80,
+      "uniquePaintValues": 9,
+      "violations": 0,
+      "gradients": 0,
+      "shadows": 0
+    },
+    {
+      "state": "mobile-320 / import-preview",
+      "paintedElements": 88,
+      "uniquePaintValues": 8,
       "violations": 0,
       "gradients": 0,
       "shadows": 0
@@ -507,32 +531,8 @@
     },
     {
       "state": "mobile-320 / done",
-      "paintedElements": 33,
+      "paintedElements": 37,
       "uniquePaintValues": 6,
-      "violations": 0,
-      "gradients": 0,
-      "shadows": 0
-    },
-    {
-      "state": "mobile-390 / playlists-shelf",
-      "paintedElements": 102,
-      "uniquePaintValues": 5,
-      "violations": 0,
-      "gradients": 0,
-      "shadows": 0
-    },
-    {
-      "state": "mobile-390 / playlists-list-playing",
-      "paintedElements": 650,
-      "uniquePaintValues": 7,
-      "violations": 0,
-      "gradients": 0,
-      "shadows": 0
-    },
-    {
-      "state": "mobile-390 / playlists-lyrics",
-      "paintedElements": 733,
-      "uniquePaintValues": 8,
       "violations": 0,
       "gradients": 0,
       "shadows": 0

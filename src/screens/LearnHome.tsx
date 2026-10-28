@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { BookOpen, CheckCircle2, ChevronRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { BookOpen, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { FocusCardData } from '@/cards';
 import { useAppStore } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
@@ -18,6 +18,8 @@ const MORE_BATCH = 10;
 
 export function LearnHome() {
   const state = useStudyStore((store) => store.state);
+  const [dismissed, setDismissed] = useState(false);
+  const view = useAppStore((store) => store.view);
   const bookId = useAppStore((store) => store.bookId);
   const setPicking = useAppStore((store) => store.setPicking);
   const startSession = useAppStore((store) => store.startSession);
@@ -31,6 +33,11 @@ export function LearnHome() {
   const stats = useMemo(() => todayStats(state, deck), [state, deck]);
   const remaining = useMemo(() => learnableRemaining(state, deck, words), [state, deck, words]);
   const done = Boolean(book) && !data.loading && !learn.length && !review.length;
+  const showDone = done && !dismissed;
+
+  useEffect(() => {
+    if (view === 'learn' || !done) setDismissed(false);
+  }, [view, done]);
 
   const startDaily = () => {
     if (!book) {
@@ -61,25 +68,37 @@ export function LearnHome() {
 
   return (
     <div className="home">
-      <button type="button" className="book-bar" onClick={() => setPicking(true)}>
-        {book ? (
-          <>
-            <span className="book-name">{book.name}</span>
-            <span className="book-progress">
-              {learnedInBook(state, words)} / {book.count}
-            </span>
-            <span className="book-change">换</span>
-          </>
-        ) : (
-          <>
-            <BookOpen size={18} strokeWidth={1.8} aria-hidden="true" />
-            <span className="book-name">选择词书</span>
-            <ChevronRight size={18} strokeWidth={1.8} aria-hidden="true" />
-          </>
-        )}
-      </button>
+      <div className="home-head">
+        {showDone ? (
+          <button
+            type="button"
+            className="icon-action home-back"
+            onClick={() => setDismissed(true)}
+            aria-label="返回主页"
+          >
+            <ChevronLeft size={22} strokeWidth={1.8} aria-hidden="true" />
+          </button>
+        ) : null}
+        <button type="button" className="book-bar" onClick={() => setPicking(true)}>
+          {book ? (
+            <>
+              <span className="book-name">{book.name}</span>
+              <span className="book-progress">
+                {learnedInBook(state, words)} / {book.count}
+              </span>
+              <span className="book-change">换</span>
+            </>
+          ) : (
+            <>
+              <BookOpen size={18} strokeWidth={1.8} aria-hidden="true" />
+              <span className="book-name">选择词书</span>
+              <ChevronRight size={18} strokeWidth={1.8} aria-hidden="true" />
+            </>
+          )}
+        </button>
+      </div>
 
-      {done ? (
+      {showDone ? (
         <div className="home-done">
           <span className="home-done-icon" aria-hidden="true">
             <CheckCircle2 size={26} strokeWidth={1.6} />
@@ -101,7 +120,7 @@ export function LearnHome() {
         </div>
       ) : null}
 
-      {done ? null : (
+      {showDone ? null : (
         <div className="home-actions">
           <button
             type="button"

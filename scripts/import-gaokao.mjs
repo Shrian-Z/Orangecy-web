@@ -227,6 +227,7 @@ async function main() {
     const data = await readImportedBook(page);
     check('book id is stable', data.meta?.id === 'import-gaokao-3500', data.meta?.id ?? '');
     check('book name is 高考 3500', data.meta?.name === MAIN_BOOK, data.meta?.name ?? '');
+    check('preset book records music mode', data.meta?.mode === 'music', data.meta?.mode ?? '');
     check('all bundled words imported', data.words === EXPECTED_WORDS, `${data.words}`);
     check('all imported words unique', data.uniqueWords === data.words, `${data.uniqueWords}`);
     check(
@@ -423,6 +424,10 @@ async function main() {
     await plainPage.waitForSelector('.import-sheet');
     await plainPage.locator('.import-input').fill('quixotic');
     await plainPage.waitForFunction(() => document.querySelector('.import-go')?.textContent?.includes('1'));
+    check(
+      'custom import defaults to the pure-wordbook mode',
+      (await plainPage.locator('.import-mode-option[aria-pressed="true"]').innerText()) === '仅词书',
+    );
     await plainPage.locator('.import-go').click();
     await plainPage.waitForSelector('.import-done', { timeout: 30_000 });
     const plainSummary = (await plainPage.locator('.import-summary').innerText()).replace(/\s+/g, ' ').trim();

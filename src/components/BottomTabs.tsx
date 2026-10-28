@@ -1,4 +1,5 @@
 import { BookOpen, Disc3, User } from 'lucide-react';
+import { DEMO } from '@/demo';
 import type { AppView } from '@/state/app';
 
 const TABS: { view: AppView; label: string; Icon: typeof BookOpen }[] = [
@@ -14,6 +15,9 @@ export function BottomTabs({
   view: AppView;
   onChange: (view: AppView) => void;
 }) {
+  // The static HAA demo is a single focused screen: no playlist/auth tabs that
+  // would need the API server.
+  if (DEMO) return null;
   return (
     <nav className="tabs" aria-label="主导航">
       <div className="tabs-inner">

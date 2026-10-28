@@ -2,6 +2,45 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
+## 最新（2026-10-27）导入词书：JSON / 文件 / 纯词书直出
+
+- **开工存档**：tag `checkpoint-pre-import-book-20261027` → `84f57dd`。
+- **需求**：词书选择页的导入入口要真的能导入一本词书，而不是只接受零散词表；
+  导入后书名、词数、学习链路、刷新恢复都要对。
+- **入口 / 解析**：`FileUp`（aria「导入词书」）→ `ImportSheet`，标题「导入词书」。
+  `parseWordbook()` 支持 `.json` / `.csv` / `.tsv` / `.txt`：
+  - JSON 保留 `name / tagline / source / license`；无元数据时用文件名；
+  - 文本支持表头跳过、双引号字段、`word` / `word,音标,释义`，最多 6000 词、大小写去重；
+  - 输入后先预览书名 / 词数 / 前四个词，再落库。
+- **两种落库方式**：sheet 内「仅词书 / 配歌」切换。
+  - 仅词书（自定义默认）：`importWordbook({ mode: 'words' })` 不读歌单，
+    立即生成纯词卡；无 track / fragment，flip 后只 TTS，不画歌词 / 进度 / seek。
+  - 配歌：原流水线不变；预设「高考 3500」仍固定走配歌，未登录时全部落为纯词卡。
+  - meta 记 `mode`，IndexedDB `orangecy.imports` 两 store 结构不变；旧记录缺 mode 也能读。
+- **学习链路**：导入书进入 `useBookList` / `useBookData`；书条显示真实书名，
+  N 按书内可放卡数，纯词卡走同一 `review()`。刷新后书 / 进度 / 当前书都在。
+- **验收**：smoke **111/111**（新增 17 项：JSON 元数据 / 预览 / 仅词书默认 / 纯词卡落库 /
+  书条切换 / N=3 / 无歌词无进度 / data-plain / 刷新恢复 / CSV 文件名 / 表头跳过 / 文件书切换）；
+  palette **42 状态 0 违规**（新增 import-preview）；trace 13/13；build / check:cards 484/484；
+  browser console 0 error。
+- **截图**：`docs/screenshots/import-sheet.png`、`import-book-preview.png`、
+  `import-book-done.png`、`import-sheet-desktop.png`。
+- **已知限制**：导入书名不可在 sheet 里二次编辑；同一本书重复导入会生成新 id（不去重）；
+  导入只存本机 IndexedDB，不做跨设备同步；配歌仍只接网易歌单。
+- **收工存档**：tag `checkpoint-post-import-book-20261027`（hash 见 git log）。
+- **下一刀**：导入前重名 / 重复检测；词书导出；导入后按书设置每日计划。
+
+## 上一轮（2026-10-26）今日完成 → 左上角返回主页
+
+- **开工存档**：tag `checkpoint-pre-done-back-20261026` → `0cf9dfa`。
+- **改动**：今日完成卡顶部左侧加返回键（aria「返回主页」）；点后收起完成卡，回到标准首页
+  （书条 + 学习/复习两钮，0 时仍灰）；切到别的 tab 再回「学习」，完成卡恢复。
+  `home-head` 统一承载书条与返回键，书条边框移到行容器；两色不变。
+- **验收**：smoke **94/94**（新增 5 项：返回键可见、收起完成卡、恢复两钮、学习 0 禁用、
+  切走再回恢复完成卡）；palette 42 状态 0 违规；build / check:cards 484/484；trace 13/13。
+- **截图**：`docs/screenshots/study-done.png`（含左上角返回键）。
+- **收工存档**：tag `checkpoint-post-done-back-20261026`（hash 见 git log）。
+
 ## 最新（2026-10-25 晚）学习计划 · 我的设置 · 背完自动复习
 
 - **开工存档**：tag `checkpoint-pre-study-plan-20261025` → `1dbc71e`。

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "concurrently -k -n api,web -c yellow,cyan \"node --watch server/index.mjs\" \"vite\"",
     "build": "npm run check:cards && tsc --noEmit && vite build",
+    "build:demo": "tsc --noEmit && vite build",
     "start": "node server/index.mjs",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && vite build",
@@ -18,7 +19,8 @@
     "trace:audio": "node scripts/trace-audio.mjs",
     "accept:import": "node scripts/import-gaokao.mjs",
     "shoot:focus": "node scripts/shoot-focus.mjs",
-    "shoot:nav": "node scripts/shoot-nav.mjs"
+    "shoot:nav": "node scripts/shoot-nav.mjs",
+    "demo:deck": "node scripts/build-demo-deck.mjs"
   },
   "dependencies": {
     "@neteasecloudmusicapienhanced/api": "^4.41.1",

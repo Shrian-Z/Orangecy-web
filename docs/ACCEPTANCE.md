@@ -1,6 +1,6 @@
-# Orangecy 验收清单（v3 三槽导航 + 词汇导入 · 2026-10-25）
+# Orangecy 验收清单（v3 三槽导航 + 词书导入 · 2026-10-27）
 
-更新日期：2026-10-25
+更新日期：2026-10-27
 验收入口：`http://127.0.0.1:8787`（API + dist 同源）；`http://localhost:5173`（Vite）  
 API：`http://127.0.0.1:8787`  
 设计对照：`docs/design/focus-card-v3.md` + 四态 PNG
@@ -18,7 +18,7 @@ npm run shoot:focus
 npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
 ```
 
-最近结果（2026-10-25 晚）：
+最近结果（2026-10-27）：
 
 | 项 | 结果 | 证据 |
 | --- | --- | --- |
@@ -26,15 +26,15 @@ npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
 | check:cards | 484/484 | `docs/cards-check.json` |
 | build | PASS | `dist/` |
 | check:palette | 42 状态 0 违规 / 0 渐变 / 0 阴影 | `docs/palette-check.json` |
-| smoke | 89/89 | 终端输出 |
+| smoke | 111/111 | 终端输出 |
 | trace:audio | 13/13 | `docs/audio-trace.json` |
 | shoot:focus | 3 视口 × 4 态 | `docs/screenshots/focus-*.png` |
-| accept:import | 66/66 | `docs/evidence/gaokao-import.json` |
-| study-plan | 89/89 内嵌于 smoke | 设置 / 自动复习 / 完成 / 复习上限 |
+| accept:import | 上次 66/66；本轮 +2 项 mode 断言 | `docs/evidence/gaokao-import.json` |
+| wordbook-import | 111/111 内嵌于 smoke | 自定义 JSON / 文件 / 纯词卡 / 刷新恢复 |
 
 ## 学习计划 / 设置验收（2026-10-25 晚）
 
-主验收在 `npm run smoke` 里（89/89），下面是本轮新增覆盖：
+主验收在 `npm run smoke` 里（111/111），下面是本轮新增覆盖：
 
 - **设置层级**：我的页有「设置」行 → 设置页显示「学习设置」→ 每日新词/每日复习上限。
 - **每日新词**：默认 10，步长 5，范围 5–100；快捷 10/20/30/50/100；改完立即持久化。
@@ -44,6 +44,8 @@ npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
   复习队列；复习完回首页。
 - **今日完成**：N=0 且 M=0 显示「今日完成」+「10 新词 · 2 复习」+「再学 10 个」。
 - **继续学习**：点「再学 10 个」直接开新一组 `01/10`；只加今日额外，不改进设置。
+- **返回主页**：完成卡左上角返回键收起完成卡，恢复书条 + 学习/复习两钮；
+  切到别的 tab 再回「学习」，完成卡恢复。
 - **复习上限**：fixture 里 20 上限 + 今天已复习 19 → M=1（不是 2）；超出部分不丢。
 - **回归**：`check:palette` 42 状态 0 违规 / 0 渐变 / 0 阴影；`trace:audio` 13/13；
   `accept:import` 仍 66/66；build / check:cards 484/484。
@@ -51,11 +53,34 @@ npm run accept:import   # 需要 server + 已登录网易；约 2.5 分钟
 截图：`docs/screenshots/my-settings.png`、`study-settings.png`、
 `study-settings-desktop.png`、`study-done.png`。
 
-## 词汇导入验收（2026-10-25）
+## 词书导入验收（2026-10-27）
+
+### 自定义词书 / 纯词卡（smoke 111/111）
+
+主验收入口仍是 `npm run smoke`；本轮新增 17 项：
+
+- **入口**：词书选择页右上 `FileUp`（aria「导入词书」）→ `ImportSheet`；
+  标题为「导入词书」。
+- **JSON 元数据**：粘贴 `{ name, tagline, source, words }` → 预览保留书名「精读测试词书」、
+  词数 3、前四个词；默认模式「仅词书」。
+- **纯词书落库**：点「导入 3」→ 不读歌单，IndexedDB 中 `mode: 'words'`、
+  `words: 3`、`cards: 0`；完成态显示书名 +「3 词 · 纯词卡」。
+- **切书 / 学习**：点「用这本书」→ 书条显示导入书名，N=3；进入卡面 `01/03`，
+  无 `.lyrics` / `.progress`，`data-plain="true"`。
+- **刷新恢复**：reload 后书条仍是「精读测试词书」，IndexedDB 数据可用。
+- **文件导入**：选 `托福核心词.csv`（带表头 + 引号字段）→ 书名取文件名，
+  表头被跳过，预览 2 词；导入后成为当前书。
+- **回归**：`check:palette` 42 状态 0 违规 / 0 渐变 / 0 阴影（新增 import-preview 状态）；
+  `trace:audio` 13/13；build / check:cards 484/484；browser console 0 error。
+- 截图：`docs/screenshots/import-sheet.png`、`import-book-preview.png`、
+  `import-book-done.png`、`import-sheet-desktop.png`。
+
+### 高考 3500 · 歌单配歌（历史验收 66/66）
 
 一键命令：`npm run accept:import`。它用真实已登录网易会话跑完整 UI，不接受假数据。
+本轮只改了导入解析与「仅词书」直出；预设配歌行为保持不变。脚本新增 2 项断言：预设 meta.mode = music、自定义默认「仅词书」；上次绿灯 66/66，新增断言待有登录网易会话时重跑。
 
-- **入口**：词书选择页右上 `FileUp`（aria「导入词汇」）→ 导入 sheet；
+- **入口**：词书选择页右上 `FileUp`（aria「导入词书」）→ 导入 sheet；
   内置「高考 3500」预设 + 粘贴 / 文件入口。
 - **词表**：`public/wordbooks/gaozhong.json` 全量 **3738** 词（3500 核心 + 238 扩展），
   全部导入且唯一；其中 **3059** 词从用户 20 个歌单的歌词里找到歌，

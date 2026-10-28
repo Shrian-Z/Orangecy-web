@@ -371,6 +371,17 @@ try {
     await placeholder.locator('.picker-import').click();
     await placeholder.waitForSelector('.import-sheet');
     results.push(await scanState(placeholder, `${viewport.name} / import-sheet`));
+    await placeholder.locator('.import-input').fill(
+      JSON.stringify({
+        name: '预览词书',
+        words: [
+          ['alpha', 'ˈælfə', 'n. 阿尔法'],
+          ['beta', 'ˈbiːtə', 'n. 贝塔'],
+        ],
+      }),
+    );
+    await placeholder.waitForSelector('.import-preview');
+    results.push(await scanState(placeholder, `${viewport.name} / import-preview`));
     await placeholder.locator('.import-sheet .icon-action[aria-label="关闭"]').click();
     await placeholder.locator('.picker-row').first().click();
 

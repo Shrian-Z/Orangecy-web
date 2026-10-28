@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T08:02:22.716Z",
+  "generatedAt": "2026-10-27T12:33:34.339Z",
   "url": "http://127.0.0.1:8787",
   "card": "lose",
   "checks": [
@@ -16,7 +16,7 @@
     {
       "name": "fragment starts after flip + 200ms",
       "ok": true,
-      "detail": "521.7ms"
+      "detail": "522.4ms"
     },
     {
       "name": "fade-in 200ms",
@@ -26,7 +26,7 @@
     {
       "name": "fade-in actually takes ~200ms",
       "ok": true,
-      "detail": "201.5ms"
+      "detail": "202.3ms"
     },
     {
       "name": "fade-out 200ms",
@@ -36,7 +36,7 @@
     {
       "name": "fade-out actually takes ~200ms",
       "ok": true,
-      "detail": "201.2ms"
+      "detail": "202.9ms"
     },
     {
       "name": "fragment pauses at end",
@@ -51,7 +51,7 @@
     {
       "name": "pronunciation starts after the quiet",
       "ok": true,
-      "detail": "501.3ms"
+      "detail": "502.1ms"
     },
     {
       "name": "pronunciation is direct (no fade)",
@@ -90,7 +90,7 @@
       "title": "Counting Stars"
     },
     {
-      "at": 443.1,
+      "at": 222.6,
       "event": "track-ready",
       "trackId": "1850175684",
       "cached": false,
@@ -98,7 +98,7 @@
       "lyricLines": 0
     },
     {
-      "at": 521.7,
+      "at": 522.4,
       "event": "fragment-start",
       "start": 0.59,
       "end": 9.19,
@@ -106,82 +106,82 @@
       "autoPronounce": true
     },
     {
-      "at": 521.7,
+      "at": 522.5,
       "event": "volume",
       "value": 0,
       "stage": "fragment"
     },
     {
-      "at": 521.7,
+      "at": 522.5,
       "event": "seek",
       "time": 0.59,
       "play": true
     },
     {
-      "at": 522,
+      "at": 522.8,
       "event": "play"
     },
     {
-      "at": 522.1,
+      "at": 522.8,
       "event": "fade",
       "from": 0,
       "to": 1,
       "ms": 200
     },
     {
-      "at": 723.7,
+      "at": 725.1,
       "event": "fade-end",
       "to": 1,
       "ms": 200,
-      "elapsed": 201.5
+      "elapsed": 202.3
     },
     {
-      "at": 1723.8,
+      "at": 1724.3,
       "event": "seek-check",
       "present": true,
       "requested": 0.59,
-      "actual": 0.616008,
+      "actual": 0.626104,
       "passed": true,
       "playing": true
     },
     {
-      "at": 8923.2,
+      "at": 8924.1,
       "event": "fade-out",
       "from": 1,
       "to": 0,
       "ms": 200
     },
     {
-      "at": 8923.3,
+      "at": 8924.1,
       "event": "fade",
       "from": 1,
       "to": 0,
       "ms": 200
     },
     {
-      "at": 9124.4,
+      "at": 9127,
       "event": "fade-end",
       "to": 0,
       "ms": 200,
-      "elapsed": 201.2
+      "elapsed": 202.9
     },
     {
-      "at": 9124.5,
+      "at": 9127.4,
       "event": "volume",
       "value": 0,
       "stage": "fragment-end"
     },
     {
-      "at": 9124.5,
+      "at": 9127.4,
       "event": "pause"
     },
     {
-      "at": 9124.6,
+      "at": 9127.7,
       "event": "quiet",
       "ms": 500
     },
     {
-      "at": 9625.8,
+      "at": 9629.5,
       "event": "pronounce",
       "word": "lose",
       "fadeIn": 0,
@@ -190,17 +190,17 @@
       "supportsGainRamp": false
     },
     {
-      "at": 9633.3,
+      "at": 9649.3,
       "event": "pronounce-start",
       "word": "lose"
     },
     {
-      "at": 10564.6,
+      "at": 10578.4,
       "event": "pronounce-end",
       "word": "lose"
     },
     {
-      "at": 10564.6,
+      "at": 10578.4,
       "event": "rest"
     }
   ]

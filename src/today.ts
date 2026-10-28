@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getFocusDeck } from '@/cards';
 import type { FocusCardData } from '@/cards';
+import { DEMO, DEMO_BOOK_ID } from '@/demo';
 import { buildImportedDeck, isImportedBookId } from '@/lib/importDeck';
 import { useImportedBook, useImportedBooks } from '@/lib/importStore';
 import { dayKey, getDueQueue } from '@/lib/srs';
@@ -14,11 +15,13 @@ export interface BookMeta {
 }
 
 /** Same files and counts as public/wordbooks/index.json; display names follow the exam names. */
-export const BOOKS: BookMeta[] = [
-  { id: 'cet4', name: '大学英语四级', count: 4542 },
-  { id: 'cet6', name: '大学英语六级', count: 3991 },
-  { id: 'gaozhong', name: '高中英语', count: 3738 },
-];
+export const BOOKS: BookMeta[] = DEMO
+  ? [{ id: DEMO_BOOK_ID, name: '四级 200 词', count: 200 }]
+  : [
+      { id: 'cet4', name: '大学英语四级', count: 4542 },
+      { id: 'cet6', name: '大学英语六级', count: 3991 },
+      { id: 'gaozhong', name: '高中英语', count: 3738 },
+    ];
 
 export const BOOK_BY_ID = new Map(BOOKS.map((book) => [book.id, book]));
 
@@ -26,10 +29,13 @@ export const BOOK_BY_ID = new Map(BOOKS.map((book) => [book.id, book]));
 export function useBookList() {
   const imported = useImportedBooks();
   return useMemo(
-    () => [
-      ...BOOKS,
-      ...imported.map((book) => ({ id: book.id, name: book.name, count: book.count })),
-    ],
+    () =>
+      DEMO
+        ? BOOKS
+        : [
+            ...BOOKS,
+            ...imported.map((book) => ({ id: book.id, name: book.name, count: book.count })),
+          ],
     [imported],
   );
 }
@@ -51,7 +57,7 @@ export function useBookData(id: string | null): BookData {
   const [preset, setPreset] = useState<{ id: string; words: Set<string> } | null>(null);
 
   useEffect(() => {
-    if (!id || isImportedBookId(id)) return;
+    if (!id || isImportedBookId(id) || (DEMO && id === DEMO_BOOK_ID)) return;
     let alive = true;
     loadWordbook(id)
       .then((book) => {
@@ -65,6 +71,15 @@ export function useBookData(id: string | null): BookData {
 
   return useMemo(() => {
     if (!id) return { meta: null, words: null, deck: null, loading: false };
+    if (DEMO && id === DEMO_BOOK_ID) {
+      const deck = getFocusDeck();
+      return {
+        meta: BOOK_BY_ID.get(id) ?? null,
+        words: new Set(deck.map((card) => card.w)),
+        deck,
+        loading: false,
+      };
+    }
     if (isImportedBookId(id)) {
       if (!imported) return { meta: null, words: null, deck: null, loading: true };
       return {

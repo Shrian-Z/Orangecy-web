@@ -11,6 +11,8 @@ Orangecy 的网站测试版使用了以下第三方数据/依赖。Folia（AGPL-
 
 完整许可文本随数据放在 `public/wordbooks/LICENSE-KyleBing.txt`。
 
+HAA 静态 demo 的 `src/data/demo-200.json` 是这份 CET4 词书的 200 词切片，不包含歌曲音频或歌词；构建命令为 `npm run demo:deck`。
+
 ## 2. @neteasecloudmusicapienhanced/api
 
 - 项目：https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced
