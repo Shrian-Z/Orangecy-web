@@ -17,6 +17,7 @@ It is not product documentation; the repo README remains the source of truth.
 - FSRS via `ts-fsrs`; progress persists in `localStorage`.
 - Demo data: `src/data/demo-200.json`; source/license: KyleBing/english-vocabulary, BSD-3-Clause.
 - Tests: normal app `npm run smoke` 111/111; demo build is static.
+- Reproduce deploy: `npm run deploy:pages` (builds with `VITE_DEMO=1`, pushes `dist` to `gh-pages`).
 
 ## What is in the repo but not public
 

@@ -2,7 +2,30 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
-## 最新（2026-10-27）导入词书：JSON / 文件 / 纯词书直出
+## 最新（2026-10-28）HAA 静态 demo：200 词 + 卡链 + GitHub Pages
+
+- **开工存档**：tag `checkpoint-pre-haa-demo-20261028` → `02f2d31`。
+- **目标 / 截止**：HAA 申请，2026-11-05；只做 200 词精品闭环，不做全量词书。
+- **内容**：从 CET4 词书生成 `src/data/demo-200.json`（200 词，音标 / 核心义 /
+  例句 / 翻译；源 KyleBing，BSD-3-Clause）；生成脚本 `scripts/build-demo-deck.mjs`。
+- **静态 demo 模式**：`VITE_DEMO=1` 单书「四级 200 词」，无 API / 登录 / 歌单 tab；
+  200 张纯词卡，browser TTS，FSRS 本地持久化。
+- **卡链**：context（例句 + 目标高亮）→ recall（词 + 音标，释义藏起）→ cloze
+  （例句挖空 + 中文提示）；三键「忘记 / 模糊 / 认识」；忘记同卡重试；普通 app 仍是
+  模糊 / 认识两键，FocusCard 正常路径未改。
+- **部署**：GitHub Pages，源 `gh-pages` 分支；因本地 PAT 无 `workflow` scope，
+  首次用 `scripts/deploy-pages.sh` 把 `dist` 推到 `gh-pages`；工作流模板留在
+  `docs/haa/pages-workflow.yml`，之后可切 GitHub Actions。
+- **公开链接**：<https://shrian-z.github.io/Orangecy-web/>。
+- **验收**：普通 build / smoke 111/111、palette 42 状态 0 违规；静态 demo
+  390/1440/320 无横向溢出，三卡型 / 三键 / TTS / 刷新恢复手测通过，console 0 error。
+- **HAA 材料**：`docs/haa/README.md`（proof-of-work 叙事）、`demo-script.md`（90 秒）、
+  `sprint-7-days.md`（到 11-05 的 7 天冲刺）。
+- **已知限制**：公开 demo 没有歌曲音频/歌词（版权 + 后端），真实音乐模式仍只在本地；
+  200 词不是完整词书；Browser TTS 非真人音频；无用户 / 留存数据。
+- **下一刀**：真实设备检查、5 人试用、录 90 秒视频、填 HAA 个人故事。
+
+## 上一轮（2026-10-27）导入词书：JSON / 文件 / 纯词书直出
 
 - **开工存档**：tag `checkpoint-pre-import-book-20261027` → `84f57dd`。
 - **需求**：词书选择页的导入入口要真的能导入一本词书，而不是只接受零散词表；

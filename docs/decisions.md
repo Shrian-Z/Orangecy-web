@@ -40,3 +40,7 @@
 | 2026-10-27 | `ImportedBookMeta` 增加可选 `mode: 'words' \\| 'music'`；IndexedDB 两 store 结构不变 | 完成态与验收需要知道是纯词书还是配歌；不迁移旧库，旧记录缺 mode 时按配歌展示 |
 | 2026-10-27 | 导入入口 aria 从「导入词汇」改为「导入词书」；`ImportSheet` 可见「导入词书 / 仅词书 / 配歌 / 文件 / 预览」；FocusCard 零废话不变 | 用户要的是导入词书，不是零散词表；文案只进工具 sheet，卡面仍只有数据 + 模糊 / 认识 |
 | 2026-10-27 | 验收新增 smoke 的纯词书 JSON / CSV 文件 / 刷新恢复 17 项，palette 增加 import-preview 状态 | 导入必须证明书能出现、能学、能持久化；不能只截图 sheet |
+| 2026-10-28 | HAA 申请只做 200 词静态 demo，不先做 3,000–5,000 词全量；用真实 CET4 词书切片，TTS，三卡型 | 截止 11-05，proof of work 先证明卡链 / 部署 / 诚实边界；全量内容不是一周内可保证质量的变量 |
+| 2026-10-28 | 静态 demo 隐藏歌单 / 我的 tab，单书「四级 200 词」，无 API / 登录；完整音乐模式仍留本地 | GitHub Pages 不能跑 server / 登录 / 版权音频；先让评审打开即背 |
+| 2026-10-28 | 公开 demo 卡链：context / recall / cloze；三键「忘记 / 模糊 / 认识」；忘记同卡重试；普通 app 保持两键 | 三键补上 Again 失败信号；卡链展示同一词的不同提取方向；不重写 FSRS |
+| 2026-10-28 | 首次部署用 `gh-pages` 分支 + `scripts/deploy-pages.sh`，工作流模板放 docs；本地 PAT 无 workflow scope | 先拿到公开 URL；以后换 token / Actions 不需要改产品代码 |

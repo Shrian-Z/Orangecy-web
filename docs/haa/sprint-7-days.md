@@ -15,8 +15,8 @@ No 90-day plan. The only goal is: **a public, polished, honest proof of work by 
 
 ## Day 1 — deploy and QA (Oct 29)
 
-- [ ] Push to `main`; confirm GitHub Pages URL.
-- [ ] Test the public URL on a phone (Safari iOS + Chrome Android).
+- [x] Push to `main`; confirm GitHub Pages URL.
+- [x] Test the public URL on a phone emulator; real-device check still open.
 - [ ] Check: first card, TTS, three modes, 忘记 retry, refresh persistence, 10-card completion.
 - [ ] Fix only blockers: overflow, unreadable text, broken TTS, broken route.
 - [ ] Add a short "what this is" README block at the top of the repo.
