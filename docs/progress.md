@@ -2,7 +2,18 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
-## 最新（2026-10-28）HAA 静态 demo：200 词 + 卡链 + GitHub Pages
+## 最新（2026-11-05）产品完成度评估与主流化路线图（docs only）
+
+- **开工存档**：tag `checkpoint-pre-roadmap-20261105` → `fbb82dea`。
+- **产出**：`docs/plan/product-readiness-and-roadmap-20261105.md`。
+- **结论**：阶段 L1.5 / L4；demo 目标已达成，个人日用约 60–65%，公开产品约 40%（保守 35–45%）。
+- **最紧急事实**：预设词书可学卡只有四级 50 / 六级 9 / 高中 46；判完后首页会假报「全部学完」，
+  而书条仍是 50 / 4542。定为 P0。
+- **计划主轴**：Phase 0 全量纯词卡 + 三键 + 导出；Phase 1 复习内核；Phase 2 内容 v2；
+  Phase 3 词书/onboarding；Phase 4 账户/同步/上线；Phase 5 语境分发与实验。
+- **未改代码**；`typecheck` 通过。下一步待你选：先做 6 周单书个人版，还是直接冲公开 beta。
+
+## 上一轮（2026-10-28）HAA 静态 demo：200 词 + 卡链 + GitHub Pages
 
 - **开工存档**：tag `checkpoint-pre-haa-demo-20261028` → `02f2d31`。
 - **目标 / 截止**：HAA 申请，2026-11-05；只做 200 词精品闭环，不做全量词书。
