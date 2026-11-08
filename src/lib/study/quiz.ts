@@ -13,13 +13,15 @@ import type { Quiz, QuizOption, Sense, WordEntry } from './types.ts';
  * 语义只做一件事：排除「意思一样」的候选，避免两个选项都对。同义词表只用来
  * 排除，不用来挑选；不碰 embedding / 反义词 / 主题分组。
  *
- * 降级链（每一级独立成组，凑够 3 个就停，绝不跨级混凑）：
- *   1. 编辑距离 ≤ 2 的真词
+ * 降级链（更像的先留，不够再向下补）：
+ *   1. 编辑距离 ≤ 2 的真词（短词收得更紧）
  *   2. 发音相近的真词
  *   3. 同词性 + 长度相近
  *   4. 同词性
  *   5. 任意词（最后手段）
- * 某一级凑不满 3 个就整级跳过，换下一级；宁可少一个选项，也不硬凑。
+ * 某一级只有 1–2 个形近词时也留下来，缺的名额才向下一级借。
+ * 全部加起来仍不够，就一个都不给，不硬凑。
+ * 调用方应传入当前词书的全表；只给当天十几张卡时，第 1 级几乎永远凑不满。
  */
 
 const FORM_LIMIT = 2;
@@ -173,28 +175,48 @@ function byRank(a: Ranked, b: Ranked): number {
   return a.entry.word.localeCompare(b.entry.word);
 }
 
-function takeFrom(list: Ranked[], need: number, rng: Rng): WordEntry[] {
-  // 只在前几名里打乱，保证「像」的同时，同一个词反复出现时选项不总是一样。
-  const head = list.slice(0, Math.min(list.length, need + 2));
-  const tail = list.slice(head.length);
-  const ordered = [...shuffle(head, rng), ...tail];
+function sameRank(a: Ranked, b: Ranked): boolean {
+  const length = Math.max(a.rank.length, b.rank.length);
+  for (let index = 0; index < length; index += 1) {
+    if ((a.rank[index] ?? 0) !== (b.rank[index] ?? 0)) return false;
+  }
+  return true;
+}
+
+function takeFrom(
+  list: Ranked[],
+  need: number,
+  rng: Rng,
+  usedMeanings: Set<string>,
+): WordEntry[] {
+  // 先按形、再按音排好。只在排名完全相同的词之间打乱，避免 adapt 的
+  // adopt（距离 1）被距离 2 的词换掉，也避免同音里拼得更像的词被换掉。
+  const groups: Ranked[][] = [];
+  for (const item of list.slice().sort(byRank)) {
+    const last = groups[groups.length - 1];
+    if (!last || !sameRank(last[0], item)) groups.push([item]);
+    else last.push(item);
+  }
+
   const picked: WordEntry[] = [];
-  const used = new Set<string>();
-  for (const item of ordered) {
-    const sense = primarySense(item.entry);
-    if (!sense) continue;
-    const key = normalizeMeaning(sense.meaning);
-    if (!key || used.has(key)) continue;
-    used.add(key);
-    picked.push(item.entry);
+  for (const group of groups) {
     if (picked.length >= need) break;
+    for (const item of shuffle(group, rng)) {
+      const sense = primarySense(item.entry);
+      if (!sense) continue;
+      const key = normalizeMeaning(sense.meaning);
+      if (!key || usedMeanings.has(key)) continue;
+      usedMeanings.add(key);
+      picked.push(item.entry);
+      if (picked.length >= need) break;
+    }
   }
   return picked;
 }
 
 /**
- * 按降级链挑干扰项。返回真正用了哪一级，方便测试与排查。
- * 每一级独立成组：凑够 need 个就用这一级，否则整级跳过。
+ * 按降级链挑干扰项。`level` 是为了凑满名额而用到的最低一级。
+ * 更高一级有几个留几个；全部加起来仍不够 `need` 个时返回空，不硬凑。
  */
 export function pickDistractors(
   correct: WordEntry,
@@ -284,15 +306,41 @@ export function pickDistractors(
       shuffle(eligible, rng).map((entry) => ({ entry, rank: [0] })),
   ];
 
+  const usedMeanings = new Set<string>();
+  const usedWords = new Set<string>();
+  const picked: WordEntry[] = [];
+  let deepest: Origin | null = null;
+
   for (let index = 0; index < levels.length; index += 1) {
-    const list = levels[index]();
-    if (list.length < wanted) continue;
-    const entries = takeFrom(list, wanted, rng);
-    if (entries.length < wanted) continue;
-    return { level: (index + 1) as Origin, entries };
+    const remaining = wanted - picked.length;
+    if (remaining <= 0) break;
+    const list = levels[index]().filter(
+      (item) => !usedWords.has(item.entry.word.toLowerCase()),
+    );
+    const batch = takeFrom(list, remaining, rng, usedMeanings);
+    if (!batch.length) continue;
+    for (const entry of batch) {
+      picked.push(entry);
+      usedWords.add(entry.word.toLowerCase());
+    }
+    deepest = (index + 1) as Origin;
+    if (picked.length >= wanted) return { level: deepest, entries: picked };
   }
 
   return { level: null, entries: [] };
+}
+
+/**
+ * Quiz distractors should come from the open book. The session queue is only
+ * a fallback while that book is not loaded yet: a day's ten cards almost
+ * never contain three look-alikes, so the ladder would otherwise fall
+ * through to same-POS or random glosses.
+ */
+export function distractorSource<T>(
+  book: readonly T[] | null | undefined,
+  session: readonly T[],
+): readonly T[] {
+  return book && book.length > 0 ? book : session;
 }
 
 function optionOf(entry: WordEntry, sense: Sense): QuizOption {
@@ -306,10 +354,11 @@ function optionOf(entry: WordEntry, sense: Sense): QuizOption {
 /**
  * Build a meaning-recognition question.
  *
- * Distractors come only from the caller's pool (the real wordbook) and only
- * through the form / sound ladder above. Other senses of the same word are not
- * used as distractors: "book 书" vs "book 预订" is two right answers, not a quiz.
- * If the ladder cannot find three, the quiz is shorter rather than padded.
+ * Distractors come only from the caller's pool. Pass the open book's word
+ * list (`distractorSource`); the ladder then prefers morphological look-alikes
+ * and shows their Chinese glosses. Other senses of the same word are not
+ * distractors: "book 书" vs "book 预订" is two right answers, not a quiz.
+ * If the ladder cannot find enough options, the quiz is shorter rather than padded.
  */
 export function buildQuiz(
   correct: WordEntry,

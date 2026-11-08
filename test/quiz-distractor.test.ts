@@ -1,7 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import {
   buildQuiz,
+  distractorSource,
   editDistance,
   overlapsMeaning,
   phoneticForm,
@@ -109,7 +112,7 @@ test('第 2 级：拼写差得多但读音一样', () => {
     entry('wright', 'n', '工匠', '/raɪt/'),
   ];
 
-  // wright 只差一个字母，第 1 级只有 1 个，凑不满 3 个 → 整级跳过
+  // wright 只差一个字母，第 1 级只有它。留下它，再用同音的 write / rite 补满。
   assert.ok(editDistance('right', 'wright') <= 2);
   assert.ok(editDistance('right', 'write') > 2);
   assert.ok(editDistance('right', 'rite') > 2);
@@ -211,4 +214,144 @@ test('四选一：正确答案在正确位置，干扰项全部来自词库', ()
   assert.equal(new Set(words).size, 4);
   const known = new Set(['adapt', ...pool.map((item) => item.word)]);
   for (const word of words) assert.ok(known.has(word));
+});
+
+test('干扰项池优先用当前词书，会话队列只是还没加载时的退路', () => {
+  const book = ['adapt', 'adopt', 'adept', 'adult'];
+  const session = ['adapt', 'banana', 'castle'];
+  assert.equal(distractorSource(book, session), book);
+  assert.deepEqual([...distractorSource(null, session)], session);
+  assert.deepEqual([...distractorSource(undefined, session)], session);
+  assert.deepEqual([...distractorSource([], session)], session);
+});
+
+function bookSizedFiller(count: number): WordEntry[] {
+  return Array.from({ length: count }, (_, index) =>
+    entry(
+      `zz${String(index).padStart(4, '0')}qqqq`,
+      index % 2 === 0 ? 'n' : 'v',
+      `无关${index}`,
+    ),
+  );
+}
+
+test('整本词书规模的池子仍优先形近词，不拿无关词充数', () => {
+  const filler = bookSizedFiller(3500);
+  const lookalikes = [
+    entry('adopt', 'v', '采用', "/ə'dɒpt/"),
+    entry('adept', 'adj', '熟练的', "/ə'dept/"),
+    entry('adult', 'n', '成年人', "/'ædʌlt/"),
+    entry('accent', 'n', '口音', '/ˈæksent/'),
+    entry('except', 'prep', '除了', '/ɪkˈsept/'),
+    entry('access', 'n', '通道', '/ˈækses/'),
+    entry('defect', 'n', '缺陷', '/ˈdiːfekt/'),
+    entry('aspect', 'n', '方面', '/ˈæspekt/'),
+    entry('effect', 'n', '影响', '/ɪˈfekt/'),
+  ];
+  const pool = [...filler.slice(0, 800), ...lookalikes, ...filler.slice(800)];
+
+  const adapt = pickDistractors(entry('adapt', 'v', '适应', "/ə'dæpt/"), pool, 3, rng);
+  assert.equal(adapt.level, 1);
+  assert.deepEqual(
+    new Set(adapt.entries.map((item) => item.word)),
+    new Set(['adopt', 'adept', 'adult']),
+  );
+  for (const item of adapt.entries) assert.ok(editDistance(item.word, 'adapt') <= 2);
+
+  const accept = pickDistractors(entry('accept', 'v', '接受', '/əkˈsept/'), pool, 3, rng);
+  assert.equal(accept.level, 1);
+  assert.ok(accept.entries.some((item) => item.word === 'accent'));
+  assert.ok(accept.entries.some((item) => item.word === 'except' || item.word === 'access'));
+  for (const item of accept.entries) {
+    assert.ok(editDistance(item.word, 'accept') <= 2);
+    assert.equal(item.word.startsWith('zz'), false);
+  }
+
+  // effect 和 affect 的中文都有「影响」，必须排除；剩下的形近词不够 3 个也要留下。
+  const affect = pickDistractors(entry('affect', 'v', '影响', '/əˈfekt/'), pool, 3, rng);
+  const affectWords = affect.entries.map((item) => item.word);
+  assert.equal(affect.entries.length, 3);
+  assert.equal(affectWords.includes('effect'), false);
+  assert.equal(affectWords.includes('defect'), true);
+  assert.equal(affectWords.includes('aspect'), true);
+});
+
+test('更近的形近词不会被同级里更远的词挤掉', () => {
+  const correct = entry('adapt', 'v', '适应');
+  const pool = [
+    entry('adopt', 'v', '采用'),
+    entry('adept', 'adj', '熟练的'),
+    entry('adult', 'n', '成年人'),
+    entry('admit', 'v', '承认'),
+    entry('apart', 'adv', '分开'),
+    entry('await', 'v', '等待'),
+  ];
+
+  for (let seed = 1; seed <= 24; seed += 1) {
+    const roll = () => ((seed * 17) % 100) / 100;
+    const pick = pickDistractors(correct, pool, 3, roll);
+    assert.equal(pick.level, 1);
+    assert.ok(pick.entries.some((item) => item.word === 'adopt'));
+    for (const item of pick.entries) assert.ok(editDistance(item.word, 'adapt') <= 2);
+  }
+});
+
+test('四级词书全表：adapt / accept 的干扰项是形近词的中文释义', () => {
+  const file = fileURLToPath(new URL('../public/wordbooks/cet4.json', import.meta.url));
+  const raw = JSON.parse(readFileSync(file, 'utf8')) as {
+    words: Array<
+      [
+        string,
+        string,
+        string,
+        string | null,
+        string[] | null,
+        [string, string] | null,
+      ]
+    >;
+  };
+  const pool: WordEntry[] = raw.words.map((row) => ({
+    id: row[0],
+    word: row[0],
+    phoneticUS: row[1],
+    gloss: row[2],
+    confusables: Array.isArray(row[4]) ? row[4] : undefined,
+  }));
+  assert.ok(pool.length > 3000);
+
+  const byWord = new Map(pool.map((item) => [item.word.toLowerCase(), item]));
+  const adapt = byWord.get('adapt');
+  const accept = byWord.get('accept');
+  const affect = byWord.get('affect');
+  assert.ok(adapt && accept && affect);
+
+  const adaptPick = pickDistractors(adapt, pool, 3, rng);
+  assert.equal(adaptPick.level, 1);
+  assert.equal(adaptPick.entries.length, 3);
+  assert.ok(adaptPick.entries.some((item) => item.word.toLowerCase() === 'adopt'));
+  for (const item of adaptPick.entries) {
+    assert.ok(editDistance(item.word, 'adapt') <= 2);
+    assert.equal(overlapsMeaning('适应', item.gloss ?? ''), false);
+  }
+
+  const acceptPick = pickDistractors(accept, pool, 3, rng);
+  assert.equal(acceptPick.level, 1);
+  assert.deepEqual(
+    new Set(acceptPick.entries.map((item) => item.word.toLowerCase())),
+    new Set(['accent', 'except', 'access']),
+  );
+
+  const affectPick = pickDistractors(affect, pool, 3, rng);
+  const affectWords = affectPick.entries.map((item) => item.word.toLowerCase());
+  assert.equal(affectWords.includes('effect'), false);
+  assert.equal(affectWords.includes('defect'), true);
+  assert.equal(affectWords.includes('aspect'), true);
+  const quiz = buildQuiz(accept, pool, 4, rng);
+  assert.ok(quiz);
+  assert.equal(quiz.options.length, 4);
+  assert.equal(quiz.promptWord, 'accept');
+  assert.equal(quiz.options[quiz.correctIndex].meaning.length > 0, true);
+  for (const option of quiz.options) {
+    assert.equal(/[\u4e00-\u9fff]/.test(option.meaning), true);
+  }
 });
