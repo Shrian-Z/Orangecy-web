@@ -240,8 +240,8 @@ button {
   }
 }
 
-/* Demo-only context/cloze prompt. The full app keeps lyrics as the only
-   context surface; the static HAA demo uses the wordbook example. */
+/* Context/cloze prompt for cards without a lyric. Music cards keep the lyric
+   as their only context surface; wordbook cards use the example sentence. */
 .prompt {
   margin: 0;
 }
@@ -274,15 +274,15 @@ button {
   color: var(--ink-40);
 }
 
-.focus-card[data-demo='true'] .card-body {
+.focus-card[data-prompt='true'] .card-body {
   padding-top: clamp(48px, 14vh, 130px);
 }
 
-.focus-card[data-demo='true'][data-variant='context'] .word-block {
+.focus-card[data-prompt='true'][data-variant='context'] .word-block {
   margin-top: clamp(30px, 8vh, 78px);
 }
 
-.focus-card[data-demo='true'][data-variant='cloze'] .word-block {
+.focus-card[data-prompt='true'][data-variant='cloze'] .word-block {
   margin-top: 30px;
 }
 
@@ -299,12 +299,13 @@ button {
   outline: none;
 }
 
-/* Imported word with no singable lyric: no lyric block, no fragment progress. */
-.focus-card[data-plain='true'] .card-body {
+/* Wordbook card with no singable lyric: no lyric block, no fragment progress.
+   Cards with a context/cloze prompt use the prompt spacing above instead. */
+.focus-card[data-plain='true']:not([data-prompt='true']) .card-body {
   padding-top: clamp(64px, 20vh, 190px);
 }
 
-.focus-card[data-plain='true'] .word-block {
+.focus-card[data-plain='true']:not([data-prompt='true']) .word-block {
   margin-top: clamp(16px, 5vh, 48px);
 }
 
@@ -388,7 +389,8 @@ button {
     visibility 0ms linear 320ms;
 }
 
-.focus-card[data-expanded='true'] .actions {
+.focus-card[data-expanded='true'] .actions,
+.focus-card[data-actions='true'] .actions {
   opacity: 1;
   transform: none;
   pointer-events: auto;
@@ -397,6 +399,11 @@ button {
     opacity 240ms ease 80ms,
     transform 240ms var(--ease) 80ms,
     visibility 0ms linear 0ms;
+}
+
+.focus-card[data-meaning='hidden'] .meaning {
+  grid-template-rows: 0fr;
+  opacity: 0;
 }
 
 .actions button {
@@ -415,6 +422,73 @@ button {
 .actions button:disabled {
   opacity: 0.55;
   cursor: default;
+}
+
+.focus-card[data-quiz='true'] .actions {
+  display: none;
+}
+
+.quiz {
+  display: grid;
+  gap: 8px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ink-08);
+}
+
+.quiz-option {
+  appearance: none;
+  min-height: 46px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 11px 13px;
+  border: 1px solid var(--ink-18);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink-80);
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.quiz-option:hover:not(:disabled) {
+  border-color: var(--ink-28);
+  background: var(--ink-08);
+}
+
+.quiz-option:disabled {
+  cursor: default;
+}
+
+.quiz-option.is-correct {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--white);
+}
+
+.quiz-option.is-wrong {
+  border-style: dashed;
+  opacity: 0.42;
+}
+
+.quiz-pos {
+  flex: 0 0 auto;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--ink-40);
+}
+
+.quiz-option.is-correct .quiz-pos {
+  color: var(--white);
+  opacity: 0.7;
 }
 
 .ghost {
@@ -1778,6 +1852,7 @@ button {
 .word-block:focus-visible,
 .mute:focus-visible,
 .actions button:focus-visible,
+.quiz-option:focus-visible,
 .tab:focus-visible,
 .icon-action:focus-visible,
 .platform-choice:focus-visible,

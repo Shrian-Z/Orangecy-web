@@ -1,0 +1,5 @@
+Word Atlas dataset portions used under CC BY 4.0.
+Attribution: Word Atlas contributors — CC BY 4.0
+https://creativecommons.org/licenses/by/4.0/
+Adapted: filtered to CET-4/CET-6 headword lists and mapped to Orangecy wordbook JSON.
+ECDICT MIT used only for headwords missing from Word Atlas.

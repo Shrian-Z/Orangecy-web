@@ -21,6 +21,8 @@ export interface WordbookWord {
   s?: string;
   syn?: string[];
   exam?: [string, string];
+  /** Higher = less frequent / harder; used only to interleave hard words. */
+  rank?: number;
 }
 
 export interface Wordbook {
@@ -177,7 +179,17 @@ const IRREGULAR: Record<string, string> = {
 export class WordbookUnavailable extends Error {}
 
 let indexPromise: Promise<WordbookIndex> | null = null;
+let ranksPromise: Promise<Record<string, Record<string, number>>> | null = null;
 const bookCache = new Map<string, Promise<Wordbook>>();
+
+function loadRanks() {
+  if (!ranksPromise) {
+    ranksPromise = fetch('/wordbooks/ranks.json')
+      .then((response) => (response.ok ? response.json() : {}))
+      .catch(() => ({}));
+  }
+  return ranksPromise;
+}
 const matchCache = new Map<string, SongMatchIndex>();
 
 export function loadWordbookIndex() {
@@ -216,6 +228,7 @@ export function loadWordbook(id: string) {
           ([string, string] | null)?,
         ][];
       };
+      const ranks = (await loadRanks())[raw.id] ?? {};
       const words: WordbookWord[] = raw.words.map(([w, p, m, s, syn, exam]) => ({
         w,
         p,
@@ -223,6 +236,7 @@ export function loadWordbook(id: string) {
         s: s ?? undefined,
         syn: Array.isArray(syn) ? syn : undefined,
         exam: Array.isArray(exam) ? exam : undefined,
+        rank: ranks[w] ?? ranks[w.toLowerCase()],
       }));
       const dict = new Map(words.map((word) => [word.w, word]));
       return {

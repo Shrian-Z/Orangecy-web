@@ -116,7 +116,14 @@ async function enterLearn(page, selector = '.home-learn') {
 
 async function boot(
   context,
-  { muted = false, freeze = false, reduce = false, book = 'cet4', study = null, enter = true } = {},
+  {
+    muted = false,
+    freeze = false,
+    reduce = false,
+    book = 'cet4',
+    study = null,
+    enter = true,
+  } = {},
 ) {
   await context.addInitScript(
     ({ mute, hold, bookId, seed }) => {
@@ -627,6 +634,26 @@ try {
     check(`${viewport.name}px actions exist`, metrics.actionsVisible);
     await responsive.close();
   }
+
+  // ── 辨识题（识别词义） ──────────────────────────────────────────────────
+  const quizContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const quizPage = await boot(quizContext, { muted: true, reduce: true });
+  await quizPage.waitForSelector('.quiz-option');
+  const quizWord = await word(quizPage);
+  check('learn stage hides 模糊/认识', (await quizPage.locator('.actions').count()) === 0);
+  const quizOptions = quizPage.locator('.quiz-option');
+  check('recognition quiz has 4 meanings', (await quizOptions.count()) === 4);
+  check(
+    'recognition quiz has exactly one correct meaning',
+    (await quizPage.locator('.quiz-option[data-correct="true"]').count()) === 1,
+  );
+  await quizPage.locator('.quiz-option[data-correct="true"]').click();
+  await quizPage.waitForFunction(
+    (previous) => document.querySelector('.word')?.textContent !== previous,
+    quizWord,
+  );
+  check('correct recognition advances to the next card', (await word(quizPage)) !== quizWord);
+  await quizContext.close();
 
   // ── 今日新学走完 ───────────────────────────────────────────────────────────
   const completeContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });

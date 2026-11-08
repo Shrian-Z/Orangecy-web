@@ -4,6 +4,18 @@ import { LyricFragment } from '@/components/LyricFragment';
 import type { FocusCardData } from '@/cards';
 import type { SequencePhase } from '@/audio/sequence';
 
+export interface FocusQuizOption {
+  pos?: string;
+  meaning: string;
+}
+
+export interface FocusQuiz {
+  options: FocusQuizOption[];
+  correctIndex: number;
+  picked: number | null;
+  onPick: (index: number) => void;
+}
+
 function Example({ value }: { value: string }) {
   const [text, translation] = value.split('||');
   return (
@@ -73,6 +85,10 @@ export function FocusCard({
   busy,
   demo = false,
   variant = 'recall',
+  quiz,
+  hideMeaning = false,
+  actionsAlwaysVisible = false,
+  showActions = true,
   onToggle,
   onReplay,
   onSpeak,
@@ -87,6 +103,10 @@ export function FocusCard({
   busy: boolean;
   demo?: boolean;
   variant?: 'context' | 'recall' | 'cloze';
+  quiz?: FocusQuiz;
+  hideMeaning?: boolean;
+  actionsAlwaysVisible?: boolean;
+  showActions?: boolean;
   onToggle: () => void;
   onReplay: () => void;
   onSpeak: () => void;
@@ -94,8 +114,9 @@ export function FocusCard({
 }) {
   const playing = phase === 'fragment';
   const fragment = card.fragment;
-  const showPrompt = demo && variant !== 'recall' && Boolean(card.s);
-  const hideWord = demo && variant === 'cloze' && !expanded;
+  const showPrompt = variant !== 'recall' && Boolean(card.s);
+  const hideWord = variant === 'cloze' && !expanded;
+  const promptTarget = card.exampleSurface ?? card.w;
 
   return (
     <article
@@ -105,7 +126,11 @@ export function FocusCard({
       data-muted={muted}
       data-plain={fragment ? undefined : 'true'}
       data-demo={demo ? 'true' : undefined}
-      data-variant={demo ? variant : undefined}
+      data-variant={variant}
+      data-prompt={showPrompt ? 'true' : undefined}
+      data-quiz={quiz ? 'true' : undefined}
+      data-meaning={hideMeaning ? 'hidden' : undefined}
+      data-actions={actionsAlwaysVisible ? 'true' : undefined}
       tabIndex={0}
       role="group"
       aria-label="学习卡片"
@@ -134,7 +159,7 @@ export function FocusCard({
         {showPrompt && card.s ? (
           <ExamplePrompt
             value={card.s}
-            target={card.w}
+            target={promptTarget}
             blank={variant === 'cloze'}
           />
         ) : null}
@@ -165,13 +190,51 @@ export function FocusCard({
           <div>
             <p className="sense">{card.m}</p>
             {card.k ? <p className="knowledge">{card.k}</p> : null}
-            {card.s && !(demo && variant === 'context') ? <Example value={card.s} /> : null}
+            {card.s && variant !== 'context' ? <Example value={card.s} /> : null}
           </div>
         </section>
+
+        {quiz ? (
+          <section
+            className="quiz"
+            aria-label="词义辨识"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {quiz.options.map((option, index) => {
+              const picked = quiz.picked;
+              const isCorrect = picked !== null && index === quiz.correctIndex;
+              const isWrong = picked === index && index !== quiz.correctIndex;
+              return (
+                <button
+                  type="button"
+                  key={`${option.meaning}-${index}`}
+                  className={`quiz-option ${isCorrect ? 'is-correct' : ''} ${
+                    isWrong ? 'is-wrong' : ''
+                  }`}
+                  data-correct={index === quiz.correctIndex ? 'true' : undefined}
+                  disabled={busy || picked !== null}
+                  aria-pressed={picked === index}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    quiz.onPick(index);
+                  }}
+                >
+                  {option.pos ? <span className="quiz-pos">{option.pos}</span> : null}
+                  <span>{option.meaning}</span>
+                </button>
+              );
+            })}
+          </section>
+        ) : null}
       </div>
 
-      <div className="actions" role="group" aria-label="判断" aria-hidden={!expanded}>
-        {demo ? (
+      {showActions ? (
+        <div
+          className="actions"
+          role="group"
+          aria-label="判断"
+          aria-hidden={!expanded && !actionsAlwaysVisible}
+        >
           <button
             type="button"
             className="ghost action-again"
@@ -185,30 +248,30 @@ export function FocusCard({
           >
             <RotateCcw size={19} strokeWidth={1.8} aria-hidden="true" />
           </button>
-        ) : null}
-        <button
-          type="button"
-          className="ghost"
-          disabled={busy}
-          onClick={(event) => {
-            event.stopPropagation();
-            onRate('hard');
-          }}
-        >
-          模糊
-        </button>
-        <button
-          type="button"
-          className="solid"
-          disabled={busy}
-          onClick={(event) => {
-            event.stopPropagation();
-            onRate('good');
-          }}
-        >
-          认识
-        </button>
-      </div>
+          <button
+            type="button"
+            className="ghost"
+            disabled={busy}
+            onClick={(event) => {
+              event.stopPropagation();
+              onRate('hard');
+            }}
+          >
+            模糊
+          </button>
+          <button
+            type="button"
+            className="solid"
+            disabled={busy}
+            onClick={(event) => {
+              event.stopPropagation();
+              onRate('good');
+            }}
+          >
+            认识
+          </button>
+        </div>
+      ) : null}
     </article>
   );
 }

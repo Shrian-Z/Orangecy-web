@@ -9,6 +9,7 @@
     "build:demo": "tsc --noEmit && vite build",
     "start": "node server/index.mjs",
     "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.ts",
     "check": "npm run typecheck && vite build",
     "catalog": "node scripts/build-catalog.mjs",
     "catalog:cross": "node scripts/build-cross-catalog.mjs",
@@ -21,7 +22,9 @@
     "shoot:focus": "node scripts/shoot-focus.mjs",
     "shoot:nav": "node scripts/shoot-nav.mjs",
     "demo:deck": "node scripts/build-demo-deck.mjs",
-    "deploy:pages": "bash scripts/deploy-pages.sh"
+    "deploy:pages": "bash scripts/deploy-pages.sh",
+    "audio:sync": "node scripts/sync-word-audio.mjs",
+    "check:pronunciation": "node scripts/check-pronunciation.mjs"
   },
   "dependencies": {
     "@neteasecloudmusicapienhanced/api": "^4.41.1",

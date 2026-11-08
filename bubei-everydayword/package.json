@@ -1,0 +1,15 @@
+{
+  "name": "bubei-everydayword",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A behaviour-first reconstruction of 不背单词's daily new-word quota.",
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "typecheck": "../node_modules/.bin/tsc -p tsconfig.json",
+    "demo": "node demo/everyday-demo.ts",
+    "check": "npm run typecheck && npm test && npm run build && npm run smoke:demo",
+    "build": "../node_modules/.bin/vite build",
+    "smoke:demo": "node test/demo-smoke.mjs"
+  }
+}

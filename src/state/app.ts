@@ -38,6 +38,7 @@ function readBook() {
   }
 }
 
+
 interface AppState {
   view: AppView;
   muted: boolean;

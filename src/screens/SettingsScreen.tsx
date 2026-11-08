@@ -139,6 +139,7 @@ export function SettingsScreen({ onBack }: { onBack: () => void }) {
         <p className="settings-hint">
           到期复习超过上限时，剩下的明天继续；不会丢。
         </p>
+
       </section>
     </div>
   );

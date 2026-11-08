@@ -106,8 +106,9 @@
     无 track / fragment，flip 后只 TTS，不画歌词 / 进度 / seek。
   - `配歌`：`/api/playlists` 20 个歌单 → 自建 / 喜欢全量 + 收藏各前 300 首
     （总上限 4000）→ `/api/playlist/:id/tracks` 200 一页 → `/api/song/:id/lyric`
-    并发 6 → `/api/song/:id/play` 并发 5 校验可播 → 每曲最多 10 卡、每 3 张一轮
-    跨曲分散；同一曲内相邻卡不重叠同一段音频。未登录时不会丢词，全部落为纯词卡。
+    并发 6 → `/api/song/:id/play` 并发 5 校验可播 → **单词 → 歌曲**：逐个词在全库歌词里
+    找合格句（词形还原 + 连字符 + 短语动词；词性 / 人名地名 / 语气词过滤），不设每曲
+    入场上限；卡片顺序按「同一首歌连续 3–5 张再换歌」。未登录时不会丢词，全部落为纯词卡。
 - 有词：真实 1–2 句歌词 + 真实时间戳 + 目标 surface；无词：纯词卡。
 - 存储：IndexedDB `orangecy.imports`（`meta` / `data` 两 store）；meta 记
   `mode: 'words' | 'music'`、书名 / 词数 / 来源 / 导入时间，`data` 存 words + cards。

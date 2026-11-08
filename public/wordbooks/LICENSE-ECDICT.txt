@@ -1,0 +1,3 @@
+ECDICT (https://github.com/skywind3000/ECDICT) is used for fallback
+phonetic/translation fields when a headword is missing from Word Atlas.
+License: MIT. See upstream LICENSE.

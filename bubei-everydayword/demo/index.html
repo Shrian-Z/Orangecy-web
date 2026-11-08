@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>每日单词量 · 行为重建</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">不背单词 · 行为重建</p>
+          <h1>每日单词量</h1>
+        </div>
+        <button id="mode" class="mode" type="button" aria-pressed="true">计划模式</button>
+      </header>
+
+      <section class="hero" aria-live="polite">
+        <p class="hero-kicker" id="kicker">今天还要学</p>
+        <p class="hero-number"><span id="quota">30</span><span class="unit">词</span></p>
+        <p class="hero-sub" id="sub">复习 30 · 预计 2027-03-02 学完</p>
+      </section>
+
+      <section class="progress-block" aria-label="今日进度">
+        <div class="progress-head">
+          <span>今日进度</span>
+          <span id="progress-text">0 / 30</span>
+        </div>
+        <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+      </section>
+
+      <section class="group-row">
+        <span class="group-label">今日分组</span>
+        <div id="groups" class="groups"></div>
+      </section>
+
+      <section class="controls">
+        <label class="field">
+          <span>每日新学</span>
+          <select id="daily" aria-label="每日新学"></select>
+        </label>
+        <label class="field">
+          <span>学习节奏</span>
+          <select id="group-size" aria-label="学习节奏">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>剩余词数</span>
+          <input id="remaining" type="number" min="0" max="9999" step="1" value="3500" />
+        </label>
+        <label class="field">
+          <span>今日已学</span>
+          <input id="learned" type="number" min="0" max="9999" step="1" value="0" />
+        </label>
+        <label class="field">
+          <span>今日到期复习</span>
+          <input id="due" type="number" min="0" max="9999" step="1" value="30" />
+        </label>
+        <label class="field">
+          <span>学习日</span>
+          <select id="clock" aria-label="学习日时间">
+            <option value="03:59">今天 03:59</option>
+            <option value="09:00" selected>今天 09:00</option>
+            <option value="23:59">今天 23:59</option>
+            <option value="04:00">今天 04:00</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="actions">
+        <button id="learn" class="primary" type="button">学习一组</button>
+        <button id="extra" class="ghost" type="button" hidden>再学一组</button>
+        <button id="review" class="ghost" type="button">复习一组</button>
+      </section>
+
+      <p id="hint" class="hint">一组 = min(今日额度, 学习节奏)。组走完再重算额度。</p>
+
+      <footer class="foot">
+        <p>学习日从本地 04:00 开始；漏学不补额度，只推迟预计完成。</p>
+        <p id="dayline">学习日 2026-11-06</p>
+      </footer>
+    </main>
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

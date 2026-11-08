@@ -67,7 +67,12 @@ export function LearnHome() {
   };
 
   return (
-    <div className="home">
+    <div
+      className="home"
+      data-book={book?.id ?? ''}
+      data-deck={deck.length}
+      data-learnable={remaining}
+    >
       <div className="home-head">
         {showDone ? (
           <button

@@ -114,10 +114,12 @@ async function readImportedBook(page) {
     const trackIds = [...new Set(cards.map((card) => card.track?.id).filter(Boolean))];
     let badTargets = 0;
     for (const card of cards) {
-      const target = String(card.fragment?.target ?? '').toLowerCase();
-      const lineHit = (card.fragment?.lines ?? []).some((line) =>
-        new Set(String(line.text).toLowerCase().match(/[a-z]+(?:['’][a-z]+)*/g) ?? []).has(target),
-      );
+      const targetTokens =
+        String(card.fragment?.target ?? '').toLowerCase().match(/[a-z]+(?:['’][a-z]+)*/g) ?? [];
+      const lineHit = (card.fragment?.lines ?? []).some((line) => {
+        const words = new Set(String(line.text).toLowerCase().match(/[a-z]+(?:['’][a-z]+)*/g) ?? []);
+        return targetTokens.length > 0 && targetTokens.every((token) => words.has(token));
+      });
       if (!lineHit) badTargets += 1;
     }
     return {

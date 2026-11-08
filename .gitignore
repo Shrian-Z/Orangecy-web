@@ -12,3 +12,6 @@ data/
 *.log
 
 .auth-state/
+
+# Word Atlas pronunciation MP3s (local / regenerated; CC BY 4.0)
+public/wordbooks/audio/**/*.mp3

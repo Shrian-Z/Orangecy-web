@@ -2,7 +2,82 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
-## 最新（2026-11-05）产品完成度评估与主流化路线图（docs only）
+## 最新（2026-11-08）四选一干扰项改为形近 / 音近
+
+- **问题**：旧 `buildQuiz` 优先用 `syn` 同义词当干扰项，再用 `similarWordKeys` 的「同词性 + 同长度 + 同首字母」
+  随机补。干扰项一眼能排除，四选一变成送分题；同义项还会造成两个都对。
+- **新内核**：`src/lib/study/quiz.ts`
+  - 相似度只算形与音：字符编辑距离（短词收紧到 1，避免 cat/dog 也算形近）、音标编辑距离
+    （缺音标才退 Soundex 尾码）；语义只做「排除」，不参与排序。
+  - 五级降级链：①编辑距离 ≤2 ②发音相近 ③同词性 + 长度相近 ④同词性 ⑤任意词。每级独立成组，
+    凑够 3 个就停，不跨级混凑；某级不满 3 个就整级跳过；都不满就少给选项，不硬凑。
+  - 同义词表（`confusables`）与中文释义重合只用于排除；不再拿同一词的其他义项当干扰项。
+  - 干扰项全部来自当前词书 deck，不生成假词。
+- **删除**：`similarWordKeys`（学习核心里的首字母/长度打分兜底）；`LearnScreen` 不再给 correct 注入近义词。
+- **实测**（CET4 4542 词，每个词当一次正确答案）：L1 2379 / L2 532 / L3 1627 / L4 4，平均 6.5ms/次。
+  样例：praise → prize / cruise / phrase；reward → regard / award / inward；mill → mile / hill / milk；
+  gallery → cottage / store / legend（L3 同词性 + 同长度）。
+- **验证**：`npm test` 36/36（新增 `test/quiz-distractor.test.ts` 12 项）；`tsc --noEmit` 通过；`vite build` 通过。
+
+## 最新（2026-11-07）导入配歌改为「单词 → 歌曲」
+
+- **问题**：旧 `buildImportCards` 是「先遍历歌曲 → 再在歌词里找词书词」，每首只取前 10 个命中、每行只取第一个。
+  结果一首歌最前面几句的简单词先吃满名额，生僻词 / 术语永远排不上；`WORD_RE` 还把 `hard-working` 拆成两半。
+- **新内核**：`src/lib/lyricMatch.ts`（词形 `lemma.ts` + 词性 `pos.ts`）
+  - 给词书里**每个词**建全库歌词索引，再逐词挑一句最合适的；某首已有很多卡也不禁止入场，只有全库都找不到合格句才退回纯词卡。
+  - 词形只做「同一个词换衣服」：时态 / 三单 / 复数 / 比较级 / 副词 / 英式拼写 / 连字符；短语动词按整词匹配并允许首词变形（gave up）。
+  - 词性：词书只标一个词性、且这一句明确是另一词性 → 该句不合格；`n.+v.` 双标词不过滤。
+  - 人名 / 地名（句中大写）与语气词不进候选；同一句歌词可以服务多个词。
+- **卡片顺序**：`orderMatchedCards` 按歌分组轮转，同一首歌连续 3–5 张再换歌；1–2 张的歌让下一首多留一张。
+  复习卡按到期日单独排队，复习同一个词仍读卡上原来的歌词片段（`deck.find(w)`，IndexedDB 里的 card 带 fragment）。
+- **导入解析**：`validWord` 接受连字符与 2–3 个词的短语动词；`give up, 放弃` / `give up 放弃` 都能落成 `w = "give up"`。
+- **高亮**：`WordHighlight` 支持多词 target（短语动词连起来高亮）；连字符词仍是单 token。
+- **验证**：`npm test` 24/24（新增 `test/import-match.test.ts` 10 项）；`tsc --noEmit` 通过。
+  合成压测（3991 词 × 1000 曲 × 40 行）：配歌 99.4%，首次 270ms、缓存后 106ms；单曲连播 max 5。
+- **未做**：预设三本书仍用内置 50 张歌卡，不跑这条流水线（本轮范围只到「导入词书 · 配歌」）。
+
+## 最新（2026-11-06）辨识题 + 五级队列 + 音乐恢复
+
+- **开工存档**：tag `pre-bubei-integration` → `bb80815b`（工作区已有改动，用 stash commit 保住）。
+- **收工存档**：tag `bubei-integration-final` → `793958e0`；音乐恢复 tag `music-restored-final` → `41d87190`。
+- **接入内容**：`src/lib/study/` 复制不背单词行为核心（释义解析 / 四选一 / 五级队列 / SM-2 模块）；
+  `FocusCard` 增加可选辨识题；学习阶段一进卡就生成 4 个释义选项，不再显示模糊/认识。
+- **结果映射**：学习阶段选对 → `review('good')`；选错 → `review('again')`。复习阶段仍用「忘记/模糊/认识」→ `review('again'|'hard'|'good')`。
+  学习会话已改用五级 Leitner 队列（同词会复现；顶部显示已掌握/总数）；复习会话仍走 FSRS。
+  FSRS 只记录每个词本次会话的第一次作答，`review()` 仍是唯一入口，`srs.ts / studyStore.ts / api.ts` 未改。
+- **阶段分工**：学习阶段只出词义选项；复习阶段只出「忘记/模糊/认识」。不再需要辨识题开关。
+- **相似项**：原 App 用服务端 `v2Confuses`；Orangecy 用 `syn` + 本地「同词性 / 长度 / 首字母」兜底，
+  不足才从当前卡组随机补。
+- **手测**：学习阶段 4 个选项、底部无模糊/认识；选对进下一张，同词后续复现；选错回队列。
+  复习阶段有「忘记/模糊/认识」且无选项；390px 无横向溢出；console 0 error。
+- **已知阻塞（非本次引入）**：预设词书已改成全量词卡；50 张带歌词的卡之后是纯词卡。
+  旧 `smoke` 仍按 seed-50 的 `lose` 顺序断言；`palette` 仍按旧卡序等待。需要下一步更新
+  smoke/palette 的 fixture。
+- **音乐恢复与顺序**：`buildPresetDeck` 改为「1 张歌曲卡 + 1 张难词卡」交替，难词按 `public/wordbooks/ranks.json`
+  （Collins 星级 + frq/bnc + 词长）排序；`createLearnSession({ shuffleNewWords: false })` 保留顺序。
+  实测开头：original（歌曲）→ considerate（难词）→ ahead（歌曲）→ punctual（难词）→ …。
+  音频 trace 仍有 `fragment-start / seek / play / fade`，phase = `fragment`。没有随机/词书顺序切换。
+- **验证**：`npm test` 14/14（新增歌曲卡顺序保留测试）；`npm run typecheck` / `npm run build:demo` 通过。
+- **下一刀**：修 full-deck 下的 smoke/palette；观察五级队列的组内节奏（groupLayer=4）是否合适；
+  若要全量词书持续有音乐，需要扩大歌词匹配/卡库，而不是改播放器。
+  难词混排已做；下一步可观察 1:1 比例是否合适，再调成 2:1 或 3:1。
+
+## 上一轮（2026-11-06）每日额度内核接入
+
+- **接入内容**：新增 `src/lib/everyday.ts`（不背单词每日额度内核：quota / reviewQuota / 进度 / ETA / 分组）
+  与 `src/lib/everydayPlan.ts`（StudyState 适配 + `todayPlanSnapshot`）。
+  `src/today.ts` 的 N/M/统计改为调用内核；首页组件、CSS、文案、交互零改动。
+- **口径**：`ORANGECY_DAY_CUTOFF_HOUR = 0`，仍按本地日历日切天；到期仍是当天 23:59:59.999；
+  复习仍保留 0/100/200/300/500 的每日上限。不背单词的 04:00 学习日、分组、ETA 保留为引擎能力，
+  未改变现有可见行为。
+- **验证**：`npm run typecheck` 通过；`npm test` 13/13（含学习/复习额度与旧公式逐值等价）；
+  `npm run build` 通过（484/484 卡校验）；首页 smoke 的「学习 N = 10 / 复习 M = 0」通过。
+- **已知阻塞（非本次引入）**：smoke 12/17，失败集中在全量 deck 的卡序与三键「忘记/模糊/认识」旧断言；
+  palette 仍因旧卡序报 `Music traces missing`。两项都在上一轮 progress 里记录，未改前端。
+- **下一刀**：若确认要切 04:00，需要同步 `ensureToday` / `endOfToday` / `isReviewedToday` 与 `today.ts`，
+  并接受 00:00–04:00 的可见数字变化；分组要接 `splitSessions` 到 FocusCard 队列，会改顶部总数。
+
+## 上一轮（2026-11-05）产品完成度评估与主流化路线图（docs only）
 
 - **开工存档**：tag `checkpoint-pre-roadmap-20261105` → `fbb82dea`。
 - **产出**：`docs/plan/product-readiness-and-roadmap-20261105.md`。

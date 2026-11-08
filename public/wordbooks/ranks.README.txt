@@ -1,0 +1,8 @@
+Difficulty scores for the preset wordbooks.
+
+Source: ECDICT (MIT), fields `collins`, `frq`, `bnc`, and the word length.
+Higher score = less common / longer / more likely to be a hard word.
+Words missing from the ECDICT frequency table get a length-based fallback.
+
+These scores are only used to interleave harder words with song-matched cards.
+They are not a formal CEFR level or an exam-difficulty claim.

@@ -21,9 +21,13 @@ export interface FocusCardData {
   w: string;
   p: string;
   m: string;
+  /** Surface form of `w` inside `s`; examples often use an inflected form. */
+  exampleSurface?: string;
   s?: string;
   syn?: string[];
   exam?: [string, string];
+  /** Higher = less frequent / harder; not rendered. */
+  rank?: number;
   k?: string;
   /** Absent on imported words that no lyric in the user's library can sing. */
   track?: Song;

@@ -1,3 +1,4 @@
+import { matchWordsToSongs } from './lyricMatch.ts';
 import { lookupWord } from './wordbook.ts';
 import type { FocusCardData, FocusFragment } from '@/cards';
 import type { LyricLine, Song } from '@/types';
@@ -7,20 +8,23 @@ import type { WordbookWord } from '@/lib/wordbook';
  * Personal wordbook import.
  *
  * The bundled 50-word deck is hand-curated from a catalog. An imported book is
- * different: the user brings the words, and the words get whatever the user's
- * own playlists can actually sing. The card builder is deliberately pure so
- * the browser and the acceptance script produce the same deck from the same
- * lyric payloads.
+ * different: the user brings the words, and every word is looked up across the
+ * user's whole lyric library — word first, song second. `lyricMatch.ts` owns the
+ * matching; this module turns matches into cards and orders them for listening.
  */
 
 export const IMPORT_PREFIX = 'import-';
 export const MAX_IMPORT_WORDS = 6000;
-export const MAX_CARDS_PER_TRACK = 10;
-export const TRACK_BUCKET = 3;
+
+/**
+ * 卡片顺序：同一首歌连续 3–5 张再换歌。只有 1–2 张歌的歌会让下一首多留一张，
+ * 免得节奏被极短的歌切成一张一换。
+ */
+const RUN_PATTERN = [3, 4, 5] as const;
 
 export type ImportMode = 'words' | 'music';
 
-const WORD_RE = /[A-Za-z]+(?:['’][A-Za-z]+)*/g;
+const WORD_RE = /[A-Za-z]+(?:['’\-][A-Za-z]+)*/g;
 
 export interface ImportPlayInfo {
   available: boolean;
@@ -105,9 +109,28 @@ function normalizeWord(value: string) {
   return value.trim().replace(/^[“”"'‘’]+|[“”"'‘’]+$/g, '');
 }
 
+/** 短语动词的第二、三个词，只有这些尾词才允许「两个词算一个词条」。 */
+const PHRASAL_TAIL =
+  /^(up|down|off|on|in|out|away|back|over|after|for|with|through|about|at|into|to|from|of|by|around|along|across|apart|aside|forward|together|upon|against|without)$/;
+
 function validWord(value: string) {
   if (!value || value.length > 40) return false;
-  return /^[A-Za-z][A-Za-z'’.-]*$/.test(value);
+  // 连字符词（hard-working）和短语动词（give up / look after）都是一个整词。
+  return /^[A-Za-z][A-Za-z'’.-]*(?: [A-Za-z][A-Za-z'’.-]*){0,2}$/.test(value);
+}
+
+/** 「give up 放弃」这种空格分隔的行：只有尾词是小品词时才把前两个词当成一个词条。 */
+function splitPhraseLine(raw: string) {
+  const match = raw.match(/^([A-Za-z][A-Za-z'’.-]*(?: [A-Za-z][A-Za-z'’.-]*){0,2})\s+(.+)$/);
+  if (!match) return null;
+  const head = match[1].trim();
+  const tail = match[2].trim();
+  if (!tail) return null;
+  const words = head.split(/\s+/);
+  if (words.length > 1 && !PHRASAL_TAIL.test((words.at(-1) ?? '').toLowerCase())) {
+    return { w: words[0], m: `${words.slice(1).join(' ')} ${tail}`.trim() };
+  }
+  return { w: head, m: tail };
 }
 
 function fromTuple(value: unknown): RawEntry | null {
@@ -193,11 +216,11 @@ function fromTextLine(line: string): RawEntry | null {
   const fields = splitFields(raw);
   let w = normalizeWord(fields[0] ?? '');
   if (!validWord(w)) {
-    const match = raw.match(/^([A-Za-z][A-Za-z'’.-]*)\s+(.*)$/);
-    if (!match) return null;
-    w = normalizeWord(match[1]);
+    const phrase = splitPhraseLine(raw);
+    if (!phrase) return null;
+    w = normalizeWord(phrase.w);
     if (!validWord(w)) return null;
-    return { w, p: '', m: match[2].trim() };
+    return { w, p: '', m: phrase.m };
   }
   if (fields.length >= 3) {
     return { w, p: fields[1] ?? '', m: fields.slice(2).join(', ').trim() };
@@ -309,10 +332,6 @@ export function parseWordList(raw: string): WordbookWord[] {
   return parseWordbook(raw)?.words ?? [];
 }
 
-function round2(value: number) {
-  return Number(value.toFixed(2));
-}
-
 function knowledgeFor(entry: WordbookWord, surface?: string) {
   const synonyms = entry.syn?.filter(Boolean).slice(0, 3) ?? [];
   if (synonyms.length) return `近义：${synonyms.join(' · ')}`;
@@ -322,61 +341,43 @@ function knowledgeFor(entry: WordbookWord, surface?: string) {
   return undefined;
 }
 
-function fragmentFor(
-  lines: LyricLine[],
-  index: number,
-  song: Song,
-  surface: string,
-  trial: { start: number; end: number } | null,
-): FocusFragment | null {
-  const first = lines[index];
-  if (!first || !first.text) return null;
-
-  const second = lines[index + 1];
-  const after = lines[index + 2];
-  const twoLines = Boolean(second) && second.time - first.time <= 12 && second.time - first.time >= 0.5;
-  const picked = twoLines && second ? [first, second] : [first];
-  const fallbackEnd = first.time + (twoLines ? 12 : 9);
-  const rawEnd = twoLines
-    ? (after?.time ?? first.time + 8)
-    : (second?.time ?? first.time + 6);
-  let end = Math.min(rawEnd, fallbackEnd);
-  if (end - first.time < 2.5) end = first.time + 2.5;
-
-  if (twoLines && second && second.time >= end - 0.2) {
-    // The second line was cut; keep the single real line and its timestamp.
-    picked.length = 1;
-    end = Math.max(second.time, first.time + 3);
+/**
+ * Wordbook examples often use an inflected form ("lost" for lose, "counted"
+ * for count). Find the exact surface so the prompt highlights the word that is
+ * actually in the sentence; fall back to the headword when nothing matches.
+ */
+export function findExampleSurface(
+  example: string | undefined,
+  entry: WordbookWord,
+  dict: Map<string, WordbookWord>,
+) {
+  if (!example) return undefined;
+  const text = example.split('||')[0] ?? '';
+  if (!text) return undefined;
+  const target = entry.w.toLowerCase();
+  let inflected: string | undefined;
+  for (const match of text.matchAll(WORD_RE)) {
+    const surface = match[0];
+    const hit = lookupWord(surface, dict);
+    if (!hit || hit.w.toLowerCase() !== target) continue;
+    if (surface.toLowerCase() === target) return surface;
+    inflected ??= surface;
   }
-
-  if (trial) {
-    if (first.time < trial.start) return null;
-    if (!(trial.end > first.time + 2.5)) return null;
-    end = Math.min(end, trial.end - 0.25);
-  }
-
-  const duration = song.durationMs / 1000;
-  if (Number.isFinite(duration) && duration > 0) {
-    end = Math.min(end, duration - 0.5);
-    if (first.time >= duration - 2.5) return null;
-  }
-
-  if (end - first.time < 2.5) return null;
-
-  return {
-    trackId: song.id,
-    target: surface,
-    start: round2(first.time),
-    end: round2(end),
-    lines: picked.map((line) => ({ text: line.text, time: round2(line.time) })),
-  };
+  return inflected;
 }
 
-function cardFor(song: Song, entry: WordbookWord, surface: string, fragment: FocusFragment): FocusCardData {
+function cardFor(
+  song: Song,
+  entry: WordbookWord,
+  surface: string,
+  fragment: FocusFragment,
+  dict: Map<string, WordbookWord>,
+): FocusCardData {
   return {
     w: entry.w,
     p: entry.p,
     m: entry.m,
+    exampleSurface: findExampleSurface(entry.s, entry, dict),
     s: entry.s,
     syn: entry.syn,
     exam: entry.exam,
@@ -386,19 +387,30 @@ function cardFor(song: Song, entry: WordbookWord, surface: string, fragment: Foc
   };
 }
 
-export function plainCardFor(entry: WordbookWord): FocusCardData {
+export function plainCardFor(
+  entry: WordbookWord,
+  dict?: Map<string, WordbookWord>,
+): FocusCardData {
   return {
     w: entry.w,
     p: entry.p,
     m: entry.m,
+    exampleSurface: dict ? findExampleSurface(entry.s, entry, dict) : undefined,
     s: entry.s,
     syn: entry.syn,
     exam: entry.exam,
+    rank: entry.rank,
     k: knowledgeFor(entry),
   };
 }
 
-/** Matched music cards for the words that the user's own lyrics can actually sing. */
+/**
+ * 配歌：每个词去全库找一句唱到它的歌词。
+ *
+ * 没有「每首最多 10 张」的入场限制——10 只是排卡片顺序时的节奏。只要某个词在
+ * 任何一首歌里找到合格句子，它就一定有歌；找不到的词由 buildImportedDeck
+ * 退回纯词卡，不会丢。
+ */
 export function buildImportCards(input: {
   words: WordbookWord[];
   songs: Song[];
@@ -407,66 +419,76 @@ export function buildImportCards(input: {
 }): FocusCardData[] {
   const dict = new Map<string, WordbookWord>();
   for (const word of input.words) dict.set(word.w.toLowerCase(), word);
-  const remaining = new Set(dict.keys());
-  const cards: FocusCardData[] = [];
-  const trackOrder = new Map<string, number>();
-  const rankInTrack = new Map<string, number>();
-  const ordered: { card: FocusCardData; bucket: number; track: number; start: number }[] = [];
 
-  input.songs.forEach((song, songIndex) => {
-    const check = input.playInfo?.get(song.id);
-    if (input.playInfo && (!check || !check.available)) return;
-    const lines = input.lyrics.get(song.id);
-    if (!lines?.length) return;
-    if (!trackOrder.has(song.id)) trackOrder.set(song.id, songIndex);
-
-    let picked = 0;
-    let lastEnd = -1;
-    for (let index = 0; index < lines.length && picked < MAX_CARDS_PER_TRACK; index += 1) {
-      const line = lines[index];
-      if (!line.text) continue;
-      for (const match of line.text.matchAll(WORD_RE)) {
-        const entry = lookupWord(match[0], dict);
-        if (!entry) continue;
-        const key = entry.w.toLowerCase();
-        if (!remaining.has(key)) continue;
-        const fragment = fragmentFor(lines, index, song, match[0], check?.trial ?? null);
-        if (!fragment) continue;
-        // Do not play the same seconds twice on two neighbouring cards.
-        if (fragment.start < lastEnd - 0.05) continue;
-
-        remaining.delete(key);
-        lastEnd = fragment.end;
-        const card = cardFor(song, entry, match[0], fragment);
-        cards.push(card);
-        const rank = rankInTrack.get(song.id) ?? 0;
-        rankInTrack.set(song.id, rank + 1);
-        ordered.push({
-          card,
-          bucket: Math.floor(rank / TRACK_BUCKET),
-          track: trackOrder.get(song.id) ?? songIndex,
-          start: fragment.start,
-        });
-        picked += 1;
-        break;
-      }
-    }
+  const matches = matchWordsToSongs({
+    words: input.words,
+    songs: input.songs,
+    lyrics: input.lyrics,
+    playInfo: input.playInfo,
   });
 
-  // Two cards from the same track stay together; after that, rotate the whole
-  // library before asking the same song again. A 10-card day hears 3–4 songs.
-  ordered.sort(
-    (a, b) => a.bucket - b.bucket || a.track - b.track || a.start - b.start,
+  const cards = matches.map((match) =>
+    cardFor(match.song, match.word, match.surface, match.fragment, dict),
   );
-  return ordered.map((item) => item.card);
+  return orderMatchedCards(cards, input.songs);
+}
+
+/**
+ * 卡片顺序：同一首歌连续 3–5 张再换歌，换歌时按歌单顺序轮转。
+ * 只有 1–2 张卡片的歌会让下一首多留一张，避免极短歌把节奏切碎。
+ * 复习卡不走这里（复习按到期日单独排队），所以这条节奏只约束新词卡。
+ */
+function orderMatchedCards(cards: FocusCardData[], songs: readonly Song[]): FocusCardData[] {
+  const library = new Map(songs.map((song, index) => [song.id, index]));
+  const groups = new Map<string, FocusCardData[]>();
+  for (const card of cards) {
+    const id = card.track?.id;
+    if (!id) continue;
+    const group = groups.get(id) ?? [];
+    group.push(card);
+    groups.set(id, group);
+  }
+
+  const order = [...groups.keys()].sort(
+    (a, b) => (library.get(a) ?? 0) - (library.get(b) ?? 0) || a.localeCompare(b),
+  );
+  for (const id of order) {
+    groups.get(id)!.sort((a, b) => (a.fragment?.start ?? 0) - (b.fragment?.start ?? 0));
+  }
+
+  const out: FocusCardData[] = [];
+  const orphans: FocusCardData[] = [];
+  for (const card of cards) if (!card.track?.id) orphans.push(card);
+  let block = 0;
+  let carry = 0;
+  let cursor = 0;
+
+  while (out.length + orphans.length < cards.length) {
+    const live = order.filter((id) => (groups.get(id)?.length ?? 0) > 0);
+    if (!live.length) break;
+    const id = live[cursor % live.length];
+    const group = groups.get(id)!;
+    const target = (RUN_PATTERN[block % RUN_PATTERN.length] ?? 3) + carry;
+    carry = 0;
+
+    const before = group.length;
+    out.push(...group.splice(0, Math.min(before, target)));
+    if (before <= 2) carry = 1;
+
+    block += 1;
+    cursor += 1;
+  }
+
+  return [...out, ...orphans];
 }
 
 /** Matched cards first, the rest of the list as word-only cards, never dropped. */
 export function buildImportedDeck(words: WordbookWord[], cards: FocusCardData[]): FocusCardData[] {
+  const dict = new Map(words.map((word) => [word.w.toLowerCase(), word]));
   const seen = new Set(cards.map((card) => card.w.toLowerCase()));
   const plain = words
     .filter((word) => !seen.has(word.w.toLowerCase()))
-    .map((word) => plainCardFor(word));
+    .map((word) => plainCardFor(word, dict));
   return [...cards, ...plain];
 }
 
