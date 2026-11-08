@@ -49,8 +49,12 @@
 - 切 tab：200ms 淡出并暂停；回来重开当前卡序列。
 - 首启自动播放被拦：时间轴照走；第一次 pointerdown/keydown 后从当前位置
   200ms 淡入补播，不弹提示。
-- 发音 provider：`src/audio/pronunciation.ts` 的 `browserTts`，
-  `supportsGainRamp = false`；后期换真人音频 provider 只换实现。
+- 发音：`pronunciation.speak`（自动发音和点单词同一条）。先请求
+  `/wordbooks/audio/us/{key}.mp3`，404 / 网络 / 解码错误再试 `uk/`，
+  两者都失败才 `browserTts`。`cancel` 会停掉正在播的 MP3。
+  `supportsGainRamp` 仍是 false，发音直出，不淡入淡出。
+- 录音：Word Atlas contributors，CC BY 4.0（Alice / Sarah）。MP3 不进 git；
+  `node scripts/sync-word-audio.mjs` 从本机 `~/Desktop/word-atlas/public/atlas/audio` 硬链接。
 - 验收：`npm run trace:audio`（13 项断言，写 `docs/audio-trace.json`）。
 
 ## 学习计划 / 设置（2026-10-25 晚）
@@ -119,7 +123,8 @@
 
     src/audio/source.ts        音源单例（旧 player.ts 迁入，内核行为不变）
     src/audio/store.ts         音频状态（song/lines/playInfo/time/duration/volume/playing）
-    src/audio/pronunciation.ts browserTts provider
+    src/audio/pronunciation.ts Word Atlas MP3，缺失时 browserTts
+    src/audio/wordAudio.ts     词干 / us→uk URL
     src/audio/sequence.ts      新序列器（只调 volume/seek/play）
     src/lyrics/parse.ts        LRC 解析（旧 lib/lrc 迁入）
     src/lyrics/timing.ts       逐词三态（旧 lib/wordTiming 迁入）

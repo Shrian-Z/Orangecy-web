@@ -44,3 +44,4 @@
 | 2026-10-28 | 静态 demo 隐藏歌单 / 我的 tab，单书「四级 200 词」，无 API / 登录；完整音乐模式仍留本地 | GitHub Pages 不能跑 server / 登录 / 版权音频；先让评审打开即背 |
 | 2026-10-28 | 公开 demo 卡链：context / recall / cloze；三键「忘记 / 模糊 / 认识」；忘记同卡重试；普通 app 保持两键 | 三键补上 Again 失败信号；卡链展示同一词的不同提取方向；不重写 FSRS |
 | 2026-10-28 | 首次部署用 `gh-pages` 分支 + `scripts/deploy-pages.sh`，工作流模板放 docs；本地 PAT 无 workflow scope | 先拿到公开 URL；以后换 token / Actions 不需要改产品代码 |
+| 2026-11-08 | 单词发音先播 `public/wordbooks/audio/us/{key}.mp3`，失败再 `uk/`，再失败才浏览器 TTS；点词和自动发音都走 `pronunciation.speak`；MP3 不进 git | 词书已有 Word Atlas 录音（CC BY 4.0，Alice / Sarah）；没有文件的词必须保持原来的 TTS |

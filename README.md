@@ -156,6 +156,10 @@ type FocusCardData = {
   歌词存在、每句时间戳逐行命中、目标词在句内。校验失败构建失败，
   不拿假时间轴补。
 - 词义 / 音标 / 例句 / 近义 / 真题来自词书（KyleBing，BSD-3-Clause）。
+- 单词发音优先播放 `public/wordbooks/audio/us/{词}.mp3`，没有美音再试 `uk/`。
+  两处都 404 或出错才用浏览器 TTS。点单词和自动发音走同一条路径。
+  成品录音来自 **Word Atlas contributors**，**CC BY 4.0**（英音 ElevenLabs Alice，美音 Sarah）。
+  MP3 不进 git；本机用 `node scripts/sync-word-audio.mjs` 从 word-atlas 检出硬链接。
 - 学习状态只存在浏览器 `localStorage`（`orangecy.study.v1`）。
 
 ## 验收
@@ -167,6 +171,7 @@ npm run build           # 已包含 check:cards
 npm run check:palette   # 42 状态 / 0 违规 / 0 渐变 / 0 阴影
 npm run smoke           # 111 项
 npm run trace:audio     # 0.2s 淡入淡出 / 0.5s 安静 / 发音直出
+npm run check:pronunciation  # us → uk → TTS
 npm run shoot:focus     # 双端四态截图
 npm run accept:import   # 3738 词真实配歌 66 项（需登录网易，约 2.5 分钟）
 ```
@@ -179,7 +184,7 @@ npm run accept:import   # 3738 词真实配歌 66 项（需登录网易，约 2.
 ```
 src/audio/source.ts        音源单例（旧 player 迁入，内核行为不变）
 src/audio/store.ts         音频状态（song / lines / playInfo / time / volume / playing）
-src/audio/pronunciation.ts browserTts provider
+src/audio/pronunciation.ts Word Atlas MP3，缺失时 browserTts
 src/audio/sequence.ts      每卡序列器（只调既有 volume / seek / play）
 src/lyrics/parse.ts        LRC 解析（旧 lib/lrc 迁入）
 src/lyrics/timing.ts       逐词三态（旧 lib/wordTiming 迁入）

@@ -1,4 +1,4 @@
-import { browserTts } from '@/audio/pronunciation';
+import { pronunciation, pronunciationSource } from '@/audio/pronunciation';
 import { player } from '@/audio/source';
 import { currentLineIndex, usePlayerStore } from '@/audio/store';
 import type { FocusCardData } from '@/cards';
@@ -41,7 +41,7 @@ function sleep(ms: number) {
  *
  *   flip 320ms -> 200ms intro -> fragment seek -> 200ms fade-in
  *   -> lyric lines -> fade-out starting 200ms before the fragment end
- *   -> pause at end -> 500ms quiet -> word pronunciation (hard start, no fade)
+ *   -> pause at end -> 500ms quiet -> word pronunciation (MP3 if present, else TTS; hard start)
  *   -> rest.
  *
  * The visual clock is independent of the audio element so the timeline still
@@ -141,7 +141,7 @@ export class FocusSequence {
     if (!this.card) return;
 
     if (muted) {
-      browserTts.cancel();
+      pronunciation.cancel();
       if (this.phase === 'fragment') {
         void this.rampVolume(usePlayerStore.getState().volume, 0, FRAGMENT_FADE_MS).then(() => this.pauseAudio());
       } else if (this.phase === 'pronounce') {
@@ -180,7 +180,7 @@ export class FocusSequence {
     this.stopped = true;
     this.clearTimers();
     this.volumeToken += 1;
-    browserTts.cancel();
+    pronunciation.cancel();
     this.phase = 'idle';
     this.emit();
     this.trace('stop', { fade: shouldFade ? FRAGMENT_FADE_MS : 0 });
@@ -400,13 +400,14 @@ export class FocusSequence {
       word,
       fadeIn: 0,
       fadeOut: 0,
-      provider: 'browserTts',
-      supportsGainRamp: browserTts.supportsGainRamp,
+      provider: 'wordAtlas',
+      supportsGainRamp: pronunciation.supportsGainRamp,
     });
-    void browserTts
+    // Manual speakWord and the auto pronounce both land here.
+    void pronunciation
       .speak(word, {
-        onStart: () => this.trace('pronounce-start', { word }),
-        onEnd: () => this.trace('pronounce-end', { word }),
+        onStart: () => this.trace('pronounce-start', { word, source: pronunciationSource() }),
+        onEnd: () => this.trace('pronounce-end', { word, source: pronunciationSource() }),
       })
       .then(() => {
         if (this.phase === 'pronounce') this.rest();

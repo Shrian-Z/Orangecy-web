@@ -15,6 +15,8 @@
     "cards": "node scripts/build-cards.mjs",
     "check:cards": "node scripts/check-cards.mjs",
     "check:palette": "node scripts/check-palette.mjs",
+    "check:pronunciation": "node scripts/check-pronunciation.mjs",
+    "audio:sync": "node scripts/sync-word-audio.mjs",
     "smoke": "node scripts/smoke.mjs",
     "trace:audio": "node scripts/trace-audio.mjs",
     "accept:import": "node scripts/import-gaokao.mjs",
