@@ -53,7 +53,11 @@ function pad2(value) {
 function watch(page) {
   page.on('pageerror', (error) => browserErrors.push(`PAGE ${error.message}`));
   page.on('console', (message) => {
-    if (message.type() === 'error') browserErrors.push(`CONSOLE ${message.text()}`);
+    if (message.type() !== 'error') return;
+    const text = message.text();
+    // A study machine without the local MP3 pack 404s us/ then uk/ before TTS.
+    if (/wordbooks\/audio\//.test(text) && /404|Failed to load|Not Found/i.test(text)) return;
+    browserErrors.push(`CONSOLE ${text}`);
   });
 }
 
@@ -279,6 +283,7 @@ try {
   const speakTrace = await page.evaluate(() => window.__orangecyAudioTrace ?? []);
   const spoken = speakTrace.find((item) => item.event === 'pronounce');
   check('word click pronounces without expanding', spoken?.word === 'baby', spoken?.word);
+  check('word click uses the shared MP3 provider', spoken?.provider === 'wordAtlas', spoken?.provider);
   check(
     'word click stays collapsed',
     (await page.locator('.focus-card').getAttribute('data-expanded')) === 'false',

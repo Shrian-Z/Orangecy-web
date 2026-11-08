@@ -2,7 +2,18 @@
 
 > 开工先读本文件 + `AGENTS.md`。只记现状，终态见 `OrangecyPRD.md`（含附录 H）。
 
-## 最新（2026-10-28）HAA 静态 demo：200 词 + 卡链 + GitHub Pages
+## 最新（2026-11-08）单词发音优先 Word Atlas MP3
+
+- **开工存档**：tag `checkpoint-pre-word-audio-20261108` → `fbb82de`.
+- **行为**：自动发音和点单词都进 `pronunciation.speak`。先播
+  `/wordbooks/audio/us/{key}.mp3`，404 / 出错再 `uk/`，都没有才 `browserTts`。
+  `cancel` 停掉 MP3（静音、切卡、切词）。`supportsGainRamp` 仍为 false。
+- **文件**：MP3 在 `.gitignore`。`node scripts/sync-word-audio.mjs` 从
+  `~/Desktop/word-atlas/public/atlas/audio` 按 cet4 / cet6 / gaozhong 词表硬链接。
+  `public/wordbooks/audio/README.md` 署名 Word Atlas contributors，CC BY 4.0。
+- **验收**：`npm run check:pronunciation`。没装录音的环境仍走 TTS；控制台里词音频 404 不算 smoke / trace 失败。
+
+## 上一轮（2026-10-28）HAA 静态 demo：200 词 + 卡链 + GitHub Pages
 
 - **开工存档**：tag `checkpoint-pre-haa-demo-20261028` → `02f2d31`。
 - **目标 / 截止**：HAA 申请，2026-11-05；只做 200 词精品闭环，不做全量词书。

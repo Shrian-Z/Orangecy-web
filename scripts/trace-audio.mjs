@@ -6,7 +6,7 @@
  *   - flip -> 200ms intro -> fragment
  *   - 200ms fade-in, 200ms fade-out ending at the fragment end
  *   - 500ms quiet between pause and pronunciation
- *   - pronunciation starts with fadeIn 0 / fadeOut 0 (browser TTS, no ramp)
+ *   - pronunciation starts with fadeIn 0 / fadeOut 0 (MP3 or TTS, no ramp)
  *
  * Writes docs/audio-trace.json.
  */
@@ -47,7 +47,10 @@ try {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
+    if (message.type() !== 'error') return;
+    const text = message.text();
+    if (/wordbooks\/audio\//.test(text) && /404|Failed to load|Not Found/i.test(text)) return;
+    errors.push(text);
   });
 
   await page.goto(URL, { waitUntil: 'domcontentloaded' });

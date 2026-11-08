@@ -52,6 +52,15 @@ PRD 正文与 v3 冲突的旧玩法描述作废，PRD 只保留数据、接口�
   学习设置的 `srs / studyStore` 扩展见上条。
 - 原「50 词走完停在 50 / 50 + 重播图标」作废：队列走完回学习首页。
 
+## 2026-11-08 裁定：单词发音先 MP3
+
+- 自动发音和点单词都走 `pronunciation.speak`，不要绕回单独的 `browserTts.speak`。
+- 有文件就播 `/wordbooks/audio/us/{key}.mp3`；这个请求 404 或出错再试 `uk/`；两处都失败才 TTS。
+- 不靠 manifest 跳过磁盘上存在的文件。`cancel` 必须停掉 MP3。
+- `supportsGainRamp` 保持 false，发音仍然直出。
+- MP3 不进 git。`scripts/sync-word-audio.mjs` 从本机 Word Atlas 硬链接。
+- 录音署名 Word Atlas contributors，CC BY 4.0（Alice / Sarah）。
+
 ## 产品立意（2026-10-24 改写）
 
 - Orangecy 是一台纯粹的背单词机器，音乐是隐形弹药。
