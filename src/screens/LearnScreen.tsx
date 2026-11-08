@@ -12,9 +12,11 @@ import type { SessionKind } from '@/state/app';
 import { useStudyStore } from '@/studyStore';
 import { cardToStudyWord, sourceFromCard } from '@/cards';
 import type { FocusCardData } from '@/cards';
+import { useBookData } from '@/today';
 import {
   buildQuiz,
   createLearnSession,
+  distractorSource,
   fromOrangecyWord,
 } from '@/lib/study';
 import type { CardView as QueueCard, LearnSession as QueueSession, Quiz } from '@/lib/study';
@@ -136,15 +138,17 @@ export function LearnScreen({
     setPicked(null);
   }, [card?.w, index, attempt]);
 
+  const bookData = useBookData(bookId || null);
+  const distractorDeck = distractorSource(bookData.deck, deck);
   const quiz = useMemo<Quiz | null>(() => {
     if (kind !== 'learn' || !card) return null;
     const correct = fromOrangecyWord(card);
-    const pool = deck
-      .filter((item) => item.w !== card.w)
+    const pool = distractorDeck
+      .filter((item) => item.w.toLowerCase() !== card.w.toLowerCase())
       .map((item) => fromOrangecyWord(item));
     const nextQuiz = buildQuiz(correct, pool, 4, Math.random);
     return nextQuiz && nextQuiz.options.length >= 2 ? nextQuiz : null;
-  }, [card, deck, kind]);
+  }, [card, distractorDeck, kind]);
 
   useEffect(() => {
     return () => {

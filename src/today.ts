@@ -92,6 +92,22 @@ export function buildPresetDeck(book: Wordbook): FocusCardData[] {
   return mixed;
 }
 
+type BuiltPreset = {
+  words: Set<string>;
+  deck: FocusCardData[];
+};
+
+/**
+ * Learn Home builds the preset deck, then unmounts when a session starts.
+ * Keep the finished deck here so Learn Screen can use the whole book as the
+ * quiz pool on its first paint, without fetching and mixing the cards again.
+ */
+const presetDeckCache = new Map<string, BuiltPreset>();
+
+function isPresetBook(id: string) {
+  return !isImportedBookId(id) && !(DEMO && id === DEMO_BOOK_ID);
+}
+
 /**
  * One selected book's words and deck. Preset books build a full deck from the
  * wordbook (music cards overlay where available); imported books carry matched
@@ -99,30 +115,32 @@ export function buildPresetDeck(book: Wordbook): FocusCardData[] {
  */
 export function useBookData(id: string | null): BookData {
   const imported = useImportedBook(id);
-  const [preset, setPreset] = useState<{
-    id: string;
-    words: Set<string>;
-    deck: FocusCardData[];
-  } | null>(null);
+  const [preset, setPreset] = useState<{ id: string } & BuiltPreset | null>(null);
 
   useEffect(() => {
-    if (!id || isImportedBookId(id) || (DEMO && id === DEMO_BOOK_ID)) return;
+    if (!id || !isPresetBook(id)) return;
+    const cached = presetDeckCache.get(id);
+    if (cached) {
+      setPreset({ id, words: cached.words, deck: cached.deck });
+      return;
+    }
     let alive = true;
     loadWordbook(id)
       .then((book) => {
-        if (alive) {
-          setPreset({
-            id,
-            words: new Set(book.words.map((entry) => entry.w.toLowerCase())),
-            deck: buildPresetDeck(book),
-          });
-        }
+        const next: BuiltPreset = {
+          words: new Set(book.words.map((entry) => entry.w.toLowerCase())),
+          deck: buildPresetDeck(book),
+        };
+        presetDeckCache.set(id, next);
+        if (alive) setPreset({ id, ...next });
       })
       .catch((error) => console.warn('[book]', error));
     return () => {
       alive = false;
     };
   }, [id]);
+
+  const cachedPreset = id && isPresetBook(id) ? presetDeckCache.get(id) ?? null : null;
 
   return useMemo(() => {
     if (!id) return { meta: null, words: null, deck: null, loading: false };
@@ -144,14 +162,20 @@ export function useBookData(id: string | null): BookData {
         loading: false,
       };
     }
+    const ready =
+      preset?.id === id
+        ? preset
+        : cachedPreset
+          ? { id, words: cachedPreset.words, deck: cachedPreset.deck }
+          : null;
     const meta = BOOK_BY_ID.get(id) ?? null;
     return {
       meta,
-      words: preset?.id === id ? preset.words : null,
-      deck: preset?.id === id ? preset.deck : null,
-      loading: Boolean(meta) && preset?.id !== id,
+      words: ready?.words ?? null,
+      deck: ready?.deck ?? null,
+      loading: Boolean(meta) && !ready,
     };
-  }, [id, imported, preset]);
+  }, [cachedPreset, id, imported, preset]);
 }
 
 function endOfToday(now = new Date()) {
